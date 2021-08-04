@@ -1,2 +1,3 @@
 ﻿  Main.cpp
-  SFML Test.vcxproj -> E:\Semester 2\Visual Studio Practice and Exercises\SFML Test\Debug\SFML Test.exe
+D:\Users\mds00002cf\Documents\GD1P03\SFML Test\Main.cpp(105,21): warning C4018: '<': signed/unsigned mismatch
+  SFML Test.vcxproj -> D:\Users\mds00002cf\Documents\GD1P03\SFML Test\Debug\SFML Test.exe
