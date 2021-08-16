@@ -1,0 +1,11 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (SFML Setup.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  PaintToolManager.cpp
+  main.cpp
+D:\Users\MDS0000217\Documents\GD1P03-GP\SFML Week 2 Exercises\main.cpp(77,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Users\MDS0000217\Documents\GD1P03-GP\SFML Week 2 Exercises\main.cpp(77,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Users\MDS0000217\Documents\GD1P03-GP\SFML Week 2 Exercises\main.cpp(78,56): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Users\MDS0000217\Documents\GD1P03-GP\SFML Week 2 Exercises\main.cpp(78,39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Generating Code...
+D:\Users\MDS0000217\Documents\GD1P03-GP\SFML Week 2 Exercises\main.cpp(146,21): warning C4018: '<': signed/unsigned mismatch
+D:\Users\MDS0000217\Documents\GD1P03-GP\SFML Week 2 Exercises\PaintToolManager.cpp(39): warning C4715: 'CPaintToolManager::OpenPaintDialog': not all control paths return a value
+  SFML Setup.vcxproj -> D:\Users\MDS0000217\Documents\GD1P03-GP\SFML Week 2 Exercises\Debug\SFML Exercises Week 2.exe
