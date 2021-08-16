@@ -36,8 +36,12 @@ void InputChecking(sf::RectangleShape* _rect, sf::Vector2f* _vect) // player con
 // Vector2i means vector2 int, Vector2f means vector2 float
 void MouseInputChecking(sf::Image* _CanvasRef, sf::Vector2i* _MousePos) // mouse needs reference to window relevant 
 {
-	for (int i = 0; i < brushSize; i++)
+	for (int i = -brushSize; i < brushSize / 2; i++)
 	{
+		for (int j = -brushSize; j < brushSize / 2; j++)
+		{
+			_CanvasRef->setPixel(_MousePos->x + j, _MousePos->y + i, *CurrentPenColour);
+		}/*
 		_CanvasRef->setPixel(_MousePos->x, _MousePos->y, *CurrentPenColour);
 	
 		_CanvasRef->setPixel(_MousePos->x + i, _MousePos->y, *CurrentPenColour);
@@ -49,7 +53,7 @@ void MouseInputChecking(sf::Image* _CanvasRef, sf::Vector2i* _MousePos) // mouse
 		_CanvasRef->setPixel(_MousePos->x + i, _MousePos->y + i, *CurrentPenColour);
 		_CanvasRef->setPixel(_MousePos->x - i, _MousePos->y - i, *CurrentPenColour);
 		_CanvasRef->setPixel(_MousePos->x - i, _MousePos->y + i, *CurrentPenColour);
-		_CanvasRef->setPixel(_MousePos->x + i, _MousePos->y - i, *CurrentPenColour);
+		_CanvasRef->setPixel(_MousePos->x + i, _MousePos->y - i, *CurrentPenColour);*/
 	}
 }
 

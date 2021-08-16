@@ -1,0 +1,9 @@
+﻿  main.cpp
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Week 2 Exercises\main.cpp(77,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Week 2 Exercises\main.cpp(77,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Week 2 Exercises\main.cpp(78,56): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Week 2 Exercises\main.cpp(78,39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Week 2 Exercises\main.cpp(123): error C2102: '&' requires l-value
+  PaintToolManager.cpp
+  Generating Code...
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Week 2 Exercises\PaintToolManager.cpp(39): warning C4715: 'CPaintToolManager::OpenPaintDialog': not all control paths return a value
