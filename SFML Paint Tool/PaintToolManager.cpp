@@ -38,22 +38,6 @@ sf::Color* CPaintToolManager::OpenPaintDialog(sf::Window* _windowRef, sf::Color*
 
 }
 
-sf::Vertex* CPaintToolManager::DrawLine(sf::Color* _Colour)
-{
-	sf::Vertex line(sf::LineStrip, 4);
-
-	line[0].position = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
-	line[0].color = *_Colour;
-	line[1].color = *_Colour;
-
-	while (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-	{
-		line[1].position = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
-	}
-
-	return line;
-}
-
 void CPaintToolManager::DrawPen(sf::Texture _CanvasTextRef, sf::Image* _CanvasRef, sf::Vector2i* _MousePos, int _BrushSize, sf::Color* _PenColour)
 {
 	for (int i = -_BrushSize; i < _BrushSize / 2; i++)
