@@ -1,4 +1,5 @@
 #include "PaintToolManager.h"
+#include <math.h>
 
 CPaintToolManager::CPaintToolManager()
 {
@@ -38,22 +39,6 @@ sf::Color* CPaintToolManager::OpenPaintDialog(sf::Window* _windowRef, sf::Color*
 
 }
 
-sf::Vertex* CPaintToolManager::DrawLine(sf::Color* _Colour)
-{
-	sf::Vertex line(sf::LineStrip, 4);
-
-	line[0].position = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
-	line[0].color = *_Colour;
-	line[1].color = *_Colour;
-
-	while (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-	{
-		line[1].position = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
-	}
-
-	return line;
-}
-
 void CPaintToolManager::DrawPen(sf::Texture _CanvasTextRef, sf::Image* _CanvasRef, sf::Vector2i* _MousePos, int _BrushSize, sf::Color* _PenColour)
 {
 	for (int i = -_BrushSize; i < _BrushSize / 2; i++)
@@ -63,4 +48,19 @@ void CPaintToolManager::DrawPen(sf::Texture _CanvasTextRef, sf::Image* _CanvasRe
 			_CanvasRef->setPixel(_MousePos->x + j, _MousePos->y + i, *_PenColour);
 		}
 	}
+}
+
+sf::RectangleShape CPaintToolManager::DrawLine(sf::Vector2i* _MousePos, int _BrushSize, sf::Color* _PenColour)
+{
+	int mouseX = _MousePos->x;
+	int mouseY = _MousePos->y;
+
+	while (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	{
+		mouseX = _MousePos->x;
+		mouseY = _MousePos->y;
+	}
+	sf::RectangleShape rect(sf::Vector2f(sqrt(_MousePos->x^2 + _MousePos->y^2), _BrushSize));
+
+	return rect;
 }

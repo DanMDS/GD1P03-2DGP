@@ -1,12 +1,7 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (SFML Exercises Week 2.vcxproj, SFML Setup.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (SFML Exercises Week 2.vcxproj, SFML Setup.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   main.cpp
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(82,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(82,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(83,56): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(83,39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  PaintToolManager.cpp
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(12,76): error C2572: 'sf::VertexArray::VertexArray': redefinition of default argument: parameter 1
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\include\SFML\Graphics\VertexArray.hpp(64): message : see declaration of 'sf::VertexArray::VertexArray'
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(13,1): warning C4273: 'sf::VertexArray::VertexArray': inconsistent dll linkage
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\include\SFML\Graphics\VertexArray.hpp(64,5): message : see previous definition of '{ctor}'
-  Generating Code...
+D:\Users\mds00002cf\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(35,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Users\mds00002cf\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(35,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Users\mds00002cf\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(36,56): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Users\mds00002cf\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(36,39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  SFML Setup.vcxproj -> D:\Users\mds00002cf\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\Debug\SFML Paint Tool.exe

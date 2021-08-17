@@ -12,59 +12,12 @@ bool bDrawingLineStart = false;
 
 sf::Color* CurrentPenColour;
 
-// Vector2i means vector2 int, Vector2f means vector2 float
-void DrawPen(sf::Image* _CanvasRef, sf::Vector2i* _MousePos) // mouse needs reference to window relevant 
-{
-	if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && !sf::Mouse::isButtonPressed(sf::Mouse::Right))
-	{
-		return;
-	}
-
-	if (bDrawingPen)
-	{
-		for (int i = -brushSize; i < brushSize / 2; i++)
-		{
-			// Square shape pen
-			for (int j = -brushSize; j < brushSize / 2; j++)
-			{
-				_CanvasRef->setPixel(_MousePos->x + j, _MousePos->y + i, *CurrentPenColour);
-			}
-
-			/*// Star shape pen
-			_CanvasRef->setPixel(_MousePos->x, _MousePos->y, *CurrentPenColour);
-
-			_CanvasRef->setPixel(_MousePos->x + i, _MousePos->y, *CurrentPenColour);
-			_CanvasRef->setPixel(_MousePos->x - i, _MousePos->y, *CurrentPenColour);
-
-			_CanvasRef->setPixel(_MousePos->x, _MousePos->y + i, *CurrentPenColour);
-			_CanvasRef->setPixel(_MousePos->x, _MousePos->y - i, *CurrentPenColour);
-
-			_CanvasRef->setPixel(_MousePos->x + i, _MousePos->y + i, *CurrentPenColour);
-			_CanvasRef->setPixel(_MousePos->x - i, _MousePos->y - i, *CurrentPenColour);
-			_CanvasRef->setPixel(_MousePos->x - i, _MousePos->y + i, *CurrentPenColour);
-			_CanvasRef->setPixel(_MousePos->x + i, _MousePos->y - i, *CurrentPenColour);*/
-		}
-	}
-}
-
-void DrawLine(sf::Vector2i* _MousePos, sf::Vertex* _Line[])
-{
-	sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition());
-	if (bDrawingLine)
-	{
-		_Line[0]->position = mousePos;
-		_Line[0]->color = *CurrentPenColour;
-	}
-	_Line[1]->position = mousePos;
-	_Line[1]->color = *CurrentPenColour;
-}
-
 int main()
 {
 	// -- Window Properties -- //
 	sf::RenderWindow window(sf::VideoMode(WindowXSize, WindowYSize), "SFML Window");
 
-	std::vector<sf::Vertex*> lines;
+	std::vector<sf::Shape*> shapes;
 
 	MainManager = new CPaintToolManager;
 
@@ -120,12 +73,17 @@ int main()
 			}
 			if (event.mouseButton.button == sf::Mouse::Right)
 			{
-				while (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-				{
-					sf::Vertex* line = MainManager->DrawLine(CurrentPenColour);
-					lines.push_back(line);
-				}
+				sf::Vector2i MousePos = sf::Mouse::getPosition(window);
+
+				sf::RectangleShape rect = MainManager->DrawLine(&MousePos, brushSize, CurrentPenColour);
+
+				shapes.push_back(&rect);
+				window.draw(rect);
+				window.draw(CanvasSprite);
 			}
+			CanvasTexture.loadFromImage(Canvas);
+			window.draw(CanvasSprite);
+			window.display();
 		}
 		
 		if (event.type == sf::Event::MouseButtonReleased) // Calls the mouse input check
@@ -152,6 +110,8 @@ int main()
 
 		window.display();
 	}
+
+	shapes.clear();
 
 	return 0;
 }
