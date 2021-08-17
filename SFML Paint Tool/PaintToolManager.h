@@ -24,6 +24,7 @@ public:
 	~CPaintToolManager();
 	sf::Color* OpenPaintDialog(sf::Window* _windowRef, sf::Color* _Colouref);
 
-	sf::Vertex* DrawLine(sf::Color* _Colour);
 	void DrawPen(sf::Texture _CanvasTextRef, sf::Image* _CanvasRef, sf::Vector2i* _MousePos, int _BrushSize, sf::Color* _PenColour);
+
+	sf::RectangleShape DrawLine(sf::Vector2i* _MousePos, int _BrushSize, sf::Color* _PenColour);
 };
