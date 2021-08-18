@@ -1,7 +1,76 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (SFML Exercises Week 2.vcxproj, SFML Setup.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  main.cpp
-D:\Users\mds00002cf\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(35,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\Users\mds00002cf\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(35,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\Users\mds00002cf\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(36,56): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\Users\mds00002cf\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(36,39): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  SFML Setup.vcxproj -> D:\Users\mds00002cf\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\Debug\SFML Paint Tool.exe
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (SFML Exercises Week 2.vcxproj, SFML Setup.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  PaintToolManager.cpp
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(71,33): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(72,33): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(91,55): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(91,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(98,54): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(98,41): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(102,52): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(102,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(42): warning C4715: 'CPaintToolManager::OpenPaintDialog': not all control paths return a value
+  SFML Setup.vcxproj -> C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\Debug\SFML Paint Tool.exe

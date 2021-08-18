@@ -1,5 +1,7 @@
 #include "PaintToolManager.h"
 #include <math.h>
+#include <iostream>
+#include <cstdlib>
 
 CPaintToolManager::CPaintToolManager()
 {
@@ -50,17 +52,63 @@ void CPaintToolManager::DrawPen(sf::Texture _CanvasTextRef, sf::Image* _CanvasRe
 	}
 }
 
-sf::RectangleShape CPaintToolManager::DrawLine(sf::Vector2i* _MousePos, int _BrushSize, sf::Color* _PenColour)
+sf::RectangleShape* CPaintToolManager::DrawRect(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window)
 {
-	int mouseX = _MousePos->x;
-	int mouseY = _MousePos->y;
+	sf::RectangleShape* rect = new sf::RectangleShape();
+	sf::Vector2f dimensions;
+
+	sf::Vector2i MouseInitial = *_MousePos;
+	sf::Vector2f Position = sf::Vector2f(MouseInitial);
+
+	rect->setFillColor(*_PenColour);
+	rect->setOutlineColor(sf::Color::White);
+	rect->setOutlineThickness(10.0f);
 
 	while (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 	{
-		mouseX = _MousePos->x;
-		mouseY = _MousePos->y;
+		*_MousePos = sf::Mouse::getPosition(*_Window);
+
+		dimensions.x = MouseInitial.x - _MousePos->x;
+		dimensions.y = MouseInitial.y - _MousePos->y;
+
+		if (dimensions.x < 0)
+		{
+			dimensions.x *= -1;
+		}
+		if (dimensions.y < 0)
+		{
+			dimensions.y *= -1;
+		}
+
+		if (MouseInitial.y < _MousePos->y)
+		{
+			if (MouseInitial.x < _MousePos->x)
+			{
+				Position = sf::Vector2f(MouseInitial);
+			}
+			else
+			{
+				Position = sf::Vector2f(_MousePos->x, MouseInitial.y);
+			}
+		}
+		else
+		{
+			if (MouseInitial.x < _MousePos->x)
+			{
+				Position = sf::Vector2f(MouseInitial.x, _MousePos->y);
+			}
+			else
+			{
+				Position = sf::Vector2f(_MousePos->x, _MousePos->y);
+			}
+		}
+
+		rect->setPosition(sf::Vector2f(Position));
+		rect->setSize(sf::Vector2f(dimensions));
+
+		_Window->draw(*rect);
+		_Window->display();
 	}
-	sf::RectangleShape rect(sf::Vector2f(sqrt(_MousePos->x^2 + _MousePos->y^2), _BrushSize));
 
 	return rect;
 }

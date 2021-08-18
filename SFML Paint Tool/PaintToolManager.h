@@ -26,5 +26,5 @@ public:
 
 	void DrawPen(sf::Texture _CanvasTextRef, sf::Image* _CanvasRef, sf::Vector2i* _MousePos, int _BrushSize, sf::Color* _PenColour);
 
-	sf::RectangleShape DrawLine(sf::Vector2i* _MousePos, int _BrushSize, sf::Color* _PenColour);
+	sf::RectangleShape* DrawRect(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window);
 };
