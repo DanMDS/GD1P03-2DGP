@@ -1,5 +1,21 @@
+#pragma once
 #include "PaintToolManager.h"
 #include <iostream>
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <Windows.h>
+#include <wingdi.h>
+
+#include <CommCtrl.h>
+#include <sstream>
+#include <string>
+#include "resource1.h"
+
+#include <commdlg.h>
+
+int drawMode = 1;
+
+HINSTANCE inst;
 
 CPaintToolManager* MainManager;
 int WindowXSize = 1024;
@@ -16,25 +32,23 @@ sf::Color* CurrentPenColour;
 int main()
 {
 	// -- Window Properties -- //
+
 	sf::RenderWindow window(sf::VideoMode(WindowXSize, WindowYSize), "SFML Window");
 
-	std::vector<sf::Shape*> shapes;
+	SetMenu(window.getSystemHandle(), LoadMenu(inst, MAKEINTRESOURCE(IDR_MENU1)));
 
 	MainManager = new CPaintToolManager;
 
 	CurrentPenColour = new sf::Color(sf::Color::Black);
 
 	// -- Canvas Setup -- //
-	sf::Image Canvas; 
-	Canvas.create(WindowXSize, WindowYSize, sf::Color::White);
+	MainManager->Canvas.create(WindowXSize, WindowYSize, sf::Color::White);
 
-	sf::Texture CanvasTexture;
-	CanvasTexture.loadFromImage(Canvas); // same proccess for creating sprites
+	MainManager->CanvasTexture.loadFromImage(MainManager->Canvas); // same proccess for creating sprites
 
-	sf::Sprite CanvasSprite;
-	CanvasSprite.setTexture(CanvasTexture);
-	CanvasSprite.setOrigin(WindowXSize/2, WindowYSize/2);
-	CanvasSprite.setPosition(WindowXSize / 2, WindowYSize / 2);
+	MainManager->CanvasSprite.setTexture(MainManager->CanvasTexture);
+	MainManager->CanvasSprite.setOrigin(WindowXSize/2, WindowYSize/2);
+	MainManager->CanvasSprite.setPosition(WindowXSize / 2, WindowYSize / 2);
 
 	//// -- Circle Properties -- //
 	sf::CircleShape shape(50.0f);
@@ -46,27 +60,7 @@ int main()
 	shape.setOutlineColor(sf::Color::White);
 	shape.setOutlineThickness(10.0f);
 
-	shapes.push_back(&shape);
-
-	sf::RectangleShape shape2(sf::Vector2f(153.0f, 50.0f));
-	sf::Vector2f shapePos2 = sf::Vector2f(400, 300);
-	shape2.setOrigin(10, 10); // Set circle origin to centre of circle with getRadius()
-	shape2.setPosition(shapePos2);
-	shape2.setFillColor(sf::Color::Black);
-
-	shape2.setOutlineColor(sf::Color::White);
-	shape2.setOutlineThickness(10.0f);
-
-	shapes.push_back(&shape2);
-
-
-	sf::RectangleShape rect(sf::Vector2f(50.0f, 60.0f));
-	rect.setOrigin(10.0f, 10.0f);
-	rect.setFillColor(*CurrentPenColour);
-	rect.setOutlineColor(sf::Color::White);
-	rect.setOutlineThickness(10.0f);
-
-	shapes.push_back(&rect);
+	MainManager->shapes.push_back(&shape);
 
 	while (window.isOpen())
 	{
@@ -83,16 +77,16 @@ int main()
 			sf::Vector2i MousePos = sf::Mouse::getPosition(window);
 			if (!(MousePos.y < 10 || MousePos.y > WindowYSize - 10))
 			{
-				MainManager->DrawPen(CanvasTexture, &Canvas, &MousePos, brushSize, CurrentPenColour);
-				CanvasTexture.loadFromImage(Canvas);
+				MainManager->DrawPen(&MousePos, brushSize, CurrentPenColour);
+				MainManager->CanvasTexture.loadFromImage(MainManager->Canvas);
 			}
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 		{
 			sf::Vector2i MousePos1 = sf::Mouse::getPosition(window);
-			sf::RectangleShape* rect = MainManager->DrawRect(&MousePos1, CurrentPenColour, &window);
-			shapes.push_back(rect);
+			sf::CircleShape* rect = MainManager->DrawCirc(&MousePos1, CurrentPenColour, &window);
+			MainManager->shapes.push_back(rect);
 		}
 
 		if (event.type == sf::Event::MouseButtonReleased) // Calls the mouse input check
@@ -106,10 +100,10 @@ int main()
 		}
 
 		window.clear();
-		window.draw(CanvasSprite);
-		for (int i = 0; i < shapes.size(); i++)
+		window.draw(MainManager->CanvasSprite);
+		for (int i = 0; i < MainManager->shapes.size(); i++)
 		{
-			window.draw(*shapes[i]);
+			window.draw(*MainManager->shapes[i]);
 		}
 		window.display();
 	}
