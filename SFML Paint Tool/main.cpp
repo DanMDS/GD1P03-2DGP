@@ -15,17 +15,25 @@
 
 int drawMode = 1;
 
+int toolChoice = 0;
+enum class tool
+{
+	Pen,
+	Circle,
+	Rectangle,
+	Line,
+	Last
+};
+
+tool Tool = tool::Pen;
+
 HINSTANCE inst;
 
 CPaintToolManager* MainManager;
 int WindowXSize = 1024;
 int WindowYSize = 720;
 
-int brushSize = 5;
-
-bool bDrawingPen = false;
-bool bDrawingLine = false;
-bool bDrawingLineStart = false;
+bool paintDialogOpen = false;
 
 sf::Color* CurrentPenColour;
 
@@ -34,6 +42,8 @@ int main()
 	// -- Window Properties -- //
 
 	sf::RenderWindow window(sf::VideoMode(WindowXSize, WindowYSize), "SFML Window");
+
+	window.setMouseCursorVisible(false);
 
 	SetMenu(window.getSystemHandle(), LoadMenu(inst, MAKEINTRESOURCE(IDR_MENU1)));
 
@@ -50,54 +60,123 @@ int main()
 	MainManager->CanvasSprite.setOrigin(WindowXSize/2, WindowYSize/2);
 	MainManager->CanvasSprite.setPosition(WindowXSize / 2, WindowYSize / 2);
 
+	sf::Vector2i MousePos = sf::Mouse::getPosition(window);
+
 	//// -- Circle Properties -- //
-	sf::CircleShape shape(50.0f);
-	sf::Vector2f shapePos = sf::Vector2f(400, 300);
-	shape.setOrigin(shape.getRadius(), shape.getRadius()); // Set circle origin to centre of circle with getRadius()
-	shape.setPosition(shapePos);
-	shape.setFillColor(sf::Color::Black);
 
-	shape.setOutlineColor(sf::Color::White);
-	shape.setOutlineThickness(10.0f);
-
-	MainManager->shapes.push_back(&shape);
 
 	while (window.isOpen())
 	{
+		MousePos = sf::Mouse::getPosition(window);
+		MainManager->cursor.setPosition(sf::Vector2f(MousePos));
+		MainManager->cursor.setRadius(MainManager->brushSize);
+		MainManager->cursor.setOrigin(MainManager->cursor.getRadius(), MainManager->cursor.getRadius());
+
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
 			// Allows close button to close window
 			if (event.type == sf::Event::Closed)
 			window.close(); 
+			else if (event.type == sf::Event::MouseWheelMoved)
+			{
+				int wheel = event.mouseWheel.delta;
+				MainManager->brushSize += event.mouseWheel.delta * 2;
+			}
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		{
+			toolChoice = 0;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		{
+			toolChoice = 1;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			toolChoice = 2;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
+		{
+			toolChoice = 3;
+		}
+		switch (toolChoice)
+		{
+		case 0:
+			{
+				Tool = tool::Pen;
+				break;
+			}
+		case 1:
+			{
+				Tool = tool::Circle;
+				break;
+			}
+		case 2:
+			{
+				Tool = tool::Rectangle;
+				break;
+			}
+		case 3:
+			{
+				Tool = tool::Line;
+				break;
+			}
+		}
+
+		if (event.type == (sf::Event::KeyPressed))
+		{
+			std::cout << "test";
+			if (event.key.code == sf::Keyboard::Q)
+			{
+				std::cout << "test";
+				MainManager->brushSize += 1;
+			}
 		}
 		
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			sf::Vector2i MousePos = sf::Mouse::getPosition(window);
-			if (!(MousePos.y < 10 || MousePos.y > WindowYSize - 10))
+			switch (Tool)
 			{
-				MainManager->DrawPen(&MousePos, brushSize, CurrentPenColour);
-				MainManager->CanvasTexture.loadFromImage(MainManager->Canvas);
+			case tool::Pen:
+				{
+					if (!(MousePos.y < 10 || MousePos.y > WindowYSize - 10))
+					{
+						MainManager->DrawPen(&MousePos, CurrentPenColour);
+						MainManager->CanvasTexture.loadFromImage(MainManager->Canvas);
+					}
+					break;
+				}
+			case tool::Circle:
+				{
+					sf::CircleShape* circ = MainManager->DrawCirc(&MousePos, CurrentPenColour, &window);
+					MainManager->shapes.push_back(circ);
+					break;
+				}
+			case tool::Rectangle:
+				{
+					sf::RectangleShape* rect = MainManager->DrawRect(&MousePos, CurrentPenColour, &window);
+					MainManager->shapes.push_back(rect);
+					break;
+				}
+			case tool::Line:
+				{
+					sf::RectangleShape* line = MainManager->DrawLine(&MousePos, CurrentPenColour, &window);
+					MainManager->shapes.push_back(line);
+					break;
+				}
 			}
-		}
-
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-		{
-			sf::Vector2i MousePos1 = sf::Mouse::getPosition(window);
-			sf::CircleShape* rect = MainManager->DrawCirc(&MousePos1, CurrentPenColour, &window);
-			MainManager->shapes.push_back(rect);
-		}
-
-		if (event.type == sf::Event::MouseButtonReleased) // Calls the mouse input check
-		{
-
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
 		{
+			window.setMouseCursorVisible(true);
 			MainManager->OpenPaintDialog(&window, CurrentPenColour);
 		}
+
+		window.setMouseCursorVisible(false);
 
 		window.clear();
 		window.draw(MainManager->CanvasSprite);

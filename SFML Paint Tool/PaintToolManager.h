@@ -13,8 +13,11 @@ public:
 	sf::Image Canvas;
 	sf::Texture CanvasTexture;
 	sf::Sprite CanvasSprite;
+	sf::CircleShape cursor;
 
-	bool isPaintDialogOpen = false; // functions like a pause menu for the paint software
+	int brushSize;
+
+	bool isPaintDialogOpen;
 
 	CHOOSECOLOR cc; // Common dialog box structure
 	COLORREF acrCustClr[16];// Array of custom colours
@@ -27,8 +30,11 @@ public:
 	~CPaintToolManager();
 	sf::Color* OpenPaintDialog(sf::Window* _windowRef, sf::Color* _Colouref);
 
-	void DrawPen(sf::Vector2i* _MousePos, int _BrushSize, sf::Color* _PenColour);
+	void DrawShapes(sf::RenderWindow* _Window, sf::Shape* _Shape, sf::Vector2i* _MousePos);
+
+	void DrawPen(sf::Vector2i* _MousePos, sf::Color* _PenColour);
 
 	sf::RectangleShape* DrawRect(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window);
 	sf::CircleShape* DrawCirc(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window);
+	sf::RectangleShape* DrawLine(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window);
 };

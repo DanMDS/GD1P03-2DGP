@@ -5,11 +5,25 @@
 
 CPaintToolManager::CPaintToolManager()
 {
-	
+	cursor.setRadius(5.0f);
+	sf::Vector2i cursorPos;
+	cursor.setOrigin(cursor.getRadius(), cursor.getRadius()); // Set circle origin to centre of circle with getRadius()
+	cursor.setPosition(sf::Vector2f(cursorPos));
+	cursor.setFillColor(sf::Color::Black);
+
+	cursor.setOutlineColor(sf::Color::White);
+	cursor.setOutlineThickness(2.0f);
+
+	shapes.push_back(&cursor);
+
+	isPaintDialogOpen = false;
+
+	brushSize = 4;
 }
 
 CPaintToolManager::~CPaintToolManager()
 {
+
 }
 
 sf::Color* CPaintToolManager::OpenPaintDialog(sf::Window* _windowRef, sf::Color* _Colourref)
@@ -41,15 +55,33 @@ sf::Color* CPaintToolManager::OpenPaintDialog(sf::Window* _windowRef, sf::Color*
 
 }
 
-void CPaintToolManager::DrawPen(sf::Vector2i* _MousePos, int _BrushSize, sf::Color* _PenColour)
+void CPaintToolManager::DrawPen(sf::Vector2i* _MousePos, sf::Color* _PenColour)
 {
-	for (int i = -_BrushSize; i < _BrushSize / 2; i++)
+	for (int i = -brushSize; i < brushSize; i++)
 	{
-		for (int j = -_BrushSize; j < _BrushSize / 2; j++)
+		for (int j = -brushSize; j < brushSize; j++)
 		{
 			Canvas.setPixel(_MousePos->x + j, _MousePos->y + i, *_PenColour);
 		}
 	}
+}
+
+void CPaintToolManager::DrawShapes(sf::RenderWindow* _Window, sf::Shape* _Shape, sf::Vector2i* _MousePos)
+{
+	_Window->clear();
+
+	_Window->draw(CanvasSprite);
+
+	for (int i = 0; i < shapes.size(); i++)
+	{
+		_Window->draw(*shapes[i]);
+	}
+
+	_Window->draw(*_Shape);
+
+	cursor.setPosition(sf::Vector2f(*_MousePos));
+
+	_Window->display();
 }
 
 sf::RectangleShape* CPaintToolManager::DrawRect(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window)
@@ -62,9 +94,9 @@ sf::RectangleShape* CPaintToolManager::DrawRect(sf::Vector2i* _MousePos, sf::Col
 
 	rect->setFillColor(*_PenColour);
 	rect->setOutlineColor(sf::Color::White);
-	rect->setOutlineThickness(10.0f);
+	rect->setOutlineThickness(1.0f);
 
-	while (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	while (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		*_MousePos = sf::Mouse::getPosition(*_Window);
 
@@ -106,19 +138,10 @@ sf::RectangleShape* CPaintToolManager::DrawRect(sf::Vector2i* _MousePos, sf::Col
 		rect->setPosition(sf::Vector2f(Position));
 		rect->setSize(sf::Vector2f(dimensions));
 
-		_Window->clear();
-
-		_Window->draw(CanvasSprite);
-
-		for (int i = 0; i < shapes.size(); i++)
-		{
-			_Window->draw(*shapes[i]);
-		}
-
-		_Window->draw(*rect);
-		_Window->display();
+		DrawShapes(_Window, rect, _MousePos);
 	}
 
+	rect->setOutlineThickness(0.0f);
 	return rect;
 }
 
@@ -132,9 +155,9 @@ sf::CircleShape* CPaintToolManager::DrawCirc(sf::Vector2i* _MousePos, sf::Color*
 
 	circ->setFillColor(*_PenColour);
 	circ->setOutlineColor(sf::Color::White);
-	circ->setOutlineThickness(10.0f);
+	circ->setOutlineThickness(1.0f);
 
-	while (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	while (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		*_MousePos = sf::Mouse::getPosition(*_Window);
 
@@ -175,20 +198,49 @@ sf::CircleShape* CPaintToolManager::DrawCirc(sf::Vector2i* _MousePos, sf::Color*
 
 		circ->setRadius(dimensions.x / 2);
 		circ->setPosition(sf::Vector2f(Position));
-		circ->setScale(sf::Vector2f(circ->getScale().x, ((_MousePos->x - MouseInitial.x) / (_MousePos->y - MouseInitial.y))));
 
-		_Window->clear();
+		circ->setScale(sf::Vector2f(circ->getScale().x, abs(MouseInitial.y - _MousePos->y) / circ->getRadius() / 2));
 
-		_Window->draw(CanvasSprite);
-
-		for (int i = 0; i < shapes.size(); i++)
-		{
-			_Window->draw(*shapes[i]);
-		}
-
-		_Window->draw(*circ);
-		_Window->display();
+		DrawShapes(_Window, circ, _MousePos);
 	}
 
+	circ->setOutlineThickness(0.0f);
 	return circ;
+}
+
+sf::RectangleShape* CPaintToolManager::DrawLine(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window)
+{
+	sf::RectangleShape* line = new sf::RectangleShape();
+	sf::Vector2f dimensions;
+
+	line->setPosition(sf::Vector2f(_MousePos->x, _MousePos->y));
+	line->setFillColor(*_PenColour);
+
+	float sideOpp;
+	float sideAdj;
+	float sideHyp;
+	float angle;
+	float pi = 3.141592654f;
+
+	while (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		*_MousePos = sf::Mouse::getPosition(*_Window);
+
+		sf::Vector2f linePosition = sf::Vector2f(line->getPosition().x, line->getPosition().y + brushSize / 2);
+
+		sideOpp = _MousePos->y - linePosition.y;
+		sideAdj = _MousePos->x - linePosition.x;
+		sideHyp = sqrt((sideOpp * sideOpp) + (sideAdj * sideAdj));
+
+		dimensions = sf::Vector2f(sideHyp, brushSize);
+
+		angle = atan2(sideOpp, sideAdj) * (180 / pi);
+
+		line->setRotation(angle);
+		line->setSize(dimensions);
+
+		DrawShapes(_Window, line, _MousePos);
+	}
+
+	return line;
 }
