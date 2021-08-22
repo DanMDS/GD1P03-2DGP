@@ -10,9 +10,24 @@ private:
 
 public:
 	std::vector<sf::Shape*> shapes;
+
 	sf::Image Canvas;
 	sf::Texture CanvasTexture;
 	sf::Sprite CanvasSprite;
+
+	sf::Font font;
+	sf::Text toolbarColourText;
+
+	sf::RectangleShape toolbarMain;
+	sf::Image toolbarPenImage;
+	sf::Texture toolbarPenText;
+	sf::Sprite toolbarPenSprite;
+	sf::RectangleShape toolbarRect;
+	sf::CircleShape toolbarCirc;
+	sf::RectangleShape toolbarLine;
+	sf::RectangleShape toolbarColour;
+	sf::RectangleShape toolbarSelection;
+
 	sf::CircleShape cursor;
 
 	int brushSize;

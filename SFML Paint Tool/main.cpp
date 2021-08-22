@@ -9,7 +9,6 @@
 #include <CommCtrl.h>
 #include <sstream>
 #include <string>
-#include "resource1.h"
 
 #include <commdlg.h>
 
@@ -27,11 +26,11 @@ enum class tool
 
 tool Tool = tool::Pen;
 
-HINSTANCE inst;
-
 CPaintToolManager* MainManager;
 int WindowXSize = 1024;
 int WindowYSize = 720;
+
+float toolbarOffset = WindowYSize / 15;
 
 bool paintDialogOpen = false;
 
@@ -43,15 +42,12 @@ int main()
 
 	sf::RenderWindow window(sf::VideoMode(WindowXSize, WindowYSize), "SFML Window");
 
-	window.setMouseCursorVisible(false);
-
-	SetMenu(window.getSystemHandle(), LoadMenu(inst, MAKEINTRESOURCE(IDR_MENU1)));
-
 	MainManager = new CPaintToolManager;
 
 	CurrentPenColour = new sf::Color(sf::Color::Black);
 
 	// -- Canvas Setup -- //
+
 	MainManager->Canvas.create(WindowXSize, WindowYSize, sf::Color::White);
 
 	MainManager->CanvasTexture.loadFromImage(MainManager->Canvas); // same proccess for creating sprites
@@ -62,11 +58,31 @@ int main()
 
 	sf::Vector2i MousePos = sf::Mouse::getPosition(window);
 
-	//// -- Circle Properties -- //
+	// -- Toolbar Properties -- //
 
+	MainManager->toolbarSelection.setSize(sf::Vector2f(WindowYSize / 15, WindowYSize / 15));
+
+	MainManager->toolbarColour.setPosition(WindowXSize - toolbarOffset + 5, 5);
+	MainManager->toolbarColour.setSize(sf::Vector2f(WindowYSize / 20, WindowYSize / 20));
+	MainManager->toolbarColour.setFillColor(*CurrentPenColour);
+
+	MainManager->toolbarColourText.setPosition(WindowXSize - toolbarOffset * 3, 13);
+
+	MainManager->toolbarMain.setSize(sf::Vector2f(WindowXSize, WindowYSize / 15));
+
+	MainManager->toolbarRect.setPosition(toolbarOffset + 5, 5);
+	MainManager->toolbarRect.setSize(sf::Vector2f(WindowYSize / 20, WindowYSize / 20));
+
+	MainManager->toolbarCirc.setPosition((toolbarOffset * 2) + 5, 5);
+	MainManager->toolbarCirc.setRadius(WindowYSize / 40);
+
+	MainManager->toolbarLine.setSize(sf::Vector2f(WindowYSize / 15, 5));
+	MainManager->toolbarLine.setPosition((toolbarOffset * 3) + 10, 5);
+	MainManager->toolbarLine.setRotation(45);
 
 	while (window.isOpen())
 	{
+		MainManager->toolbarColour.setFillColor(*CurrentPenColour);
 		MousePos = sf::Mouse::getPosition(window);
 		MainManager->cursor.setPosition(sf::Vector2f(MousePos));
 		MainManager->cursor.setRadius(MainManager->brushSize);
@@ -84,47 +100,7 @@ int main()
 				MainManager->brushSize += event.mouseWheel.delta * 2;
 			}
 		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		{
-			toolChoice = 0;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		{
-			toolChoice = 1;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		{
-			toolChoice = 2;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
-		{
-			toolChoice = 3;
-		}
-		switch (toolChoice)
-		{
-		case 0:
-			{
-				Tool = tool::Pen;
-				break;
-			}
-		case 1:
-			{
-				Tool = tool::Circle;
-				break;
-			}
-		case 2:
-			{
-				Tool = tool::Rectangle;
-				break;
-			}
-		case 3:
-			{
-				Tool = tool::Line;
-				break;
-			}
-		}
-
+		
 		if (event.type == (sf::Event::KeyPressed))
 		{
 			std::cout << "test";
@@ -138,53 +114,80 @@ int main()
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			sf::Vector2i MousePos = sf::Mouse::getPosition(window);
-			switch (Tool)
+
+			if (MousePos.y > WindowYSize / 15)
 			{
-			case tool::Pen:
+				switch (Tool)
 				{
-					if (!(MousePos.y < 10 || MousePos.y > WindowYSize - 10))
+				case tool::Pen:
+				{
+					if (!(MousePos.y < 5 || MousePos.y > WindowYSize - 5 || MousePos.x < 5 || MousePos.x > WindowXSize - 5))
 					{
 						MainManager->DrawPen(&MousePos, CurrentPenColour);
 						MainManager->CanvasTexture.loadFromImage(MainManager->Canvas);
 					}
 					break;
 				}
-			case tool::Circle:
+				case tool::Circle:
 				{
 					sf::CircleShape* circ = MainManager->DrawCirc(&MousePos, CurrentPenColour, &window);
 					MainManager->shapes.push_back(circ);
 					break;
 				}
-			case tool::Rectangle:
+				case tool::Rectangle:
 				{
 					sf::RectangleShape* rect = MainManager->DrawRect(&MousePos, CurrentPenColour, &window);
 					MainManager->shapes.push_back(rect);
 					break;
 				}
-			case tool::Line:
+				case tool::Line:
 				{
 					sf::RectangleShape* line = MainManager->DrawLine(&MousePos, CurrentPenColour, &window);
 					MainManager->shapes.push_back(line);
 					break;
 				}
+				}
+			}
+			else
+			{
+				if (MousePos.x < toolbarOffset)
+				{
+					Tool = tool::Pen;
+					MainManager->toolbarSelection.setPosition(0, 0);
+				}
+				else if (MousePos.x < toolbarOffset * 2)
+				{
+					Tool = tool::Rectangle;
+					MainManager->toolbarSelection.setPosition(toolbarOffset, 0);
+				}
+				else if (MousePos.x < toolbarOffset * 3)
+				{
+					Tool = tool::Circle;
+					MainManager->toolbarSelection.setPosition(toolbarOffset * 2, 0);
+				}
+				else if (MousePos.x < toolbarOffset * 4)
+				{
+					Tool = tool::Line;
+					MainManager->toolbarSelection.setPosition(toolbarOffset * 3, 0);
+				}
+				else if (MousePos.x > WindowXSize - toolbarOffset)
+				{
+					window.setMouseCursorVisible(true);
+					MainManager->OpenPaintDialog(&window, CurrentPenColour);
+				}
 			}
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+		if (MousePos.y > WindowYSize / 15)
+		{
+			window.setMouseCursorVisible(false);
+		}
+		else
 		{
 			window.setMouseCursorVisible(true);
-			MainManager->OpenPaintDialog(&window, CurrentPenColour);
 		}
 
-		window.setMouseCursorVisible(false);
-
-		window.clear();
-		window.draw(MainManager->CanvasSprite);
-		for (int i = 0; i < MainManager->shapes.size(); i++)
-		{
-			window.draw(*MainManager->shapes[i]);
-		}
-		window.display();
+		MainManager->DrawShapes(&window, &MainManager->cursor, &MousePos);
 	}
 
 	return 0;

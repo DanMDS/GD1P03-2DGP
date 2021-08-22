@@ -10,15 +10,56 @@ CPaintToolManager::CPaintToolManager()
 	cursor.setOrigin(cursor.getRadius(), cursor.getRadius()); // Set circle origin to centre of circle with getRadius()
 	cursor.setPosition(sf::Vector2f(cursorPos));
 	cursor.setFillColor(sf::Color::Black);
-
 	cursor.setOutlineColor(sf::Color::White);
 	cursor.setOutlineThickness(2.0f);
 
-	shapes.push_back(&cursor);
+	if (!font.loadFromFile("ARIAL.TTF"))
+	{
+		std::cout << "load fail: Font";
+	}
+
+	toolbarColourText.setFont(font);
+	toolbarColourText.setString("Colour Picker: ");
+	toolbarColourText.setCharacterSize(15);
+	toolbarColourText.setFillColor(sf::Color::White);
+
+	if (!toolbarPenImage.loadFromFile("brush.bmp"))
+	{
+		std::cout << "load fail: Brush";
+	}
+	toolbarPenImage.createMaskFromColor(sf::Color::Black);
 
 	isPaintDialogOpen = false;
 
 	brushSize = 4;
+
+	toolbarMain.setFillColor(sf::Color::Black);
+	toolbarMain.setPosition(0, 0);
+
+	toolbarColour.setFillColor(sf::Color::Black);
+	toolbarColour.setOutlineColor(sf::Color::White);
+	toolbarColour.setOutlineThickness(1.0f);
+
+	toolbarPenText.loadFromImage(toolbarPenImage);
+
+	toolbarPenSprite.setTexture(toolbarPenText);
+	toolbarPenSprite.setScale(toolbarPenSprite.getScale().y / 5, toolbarPenSprite.getScale().y / 5);
+	toolbarPenSprite.setPosition(5, 5);
+
+	toolbarRect.setFillColor(sf::Color::White);
+
+	toolbarColour.setFillColor(sf::Color::Black);
+	toolbarColour.setOutlineColor(sf::Color::White);
+	toolbarColour.setOutlineThickness(1.0f);
+
+	toolbarCirc.setFillColor(sf::Color::White);
+
+	toolbarLine.setFillColor(sf::Color::White);
+
+	sf::Color grey(128, 128, 128);
+
+	toolbarSelection.setFillColor(grey);
+	toolbarSelection.setPosition(0, 0);
 }
 
 CPaintToolManager::~CPaintToolManager()
@@ -31,6 +72,7 @@ sf::Color* CPaintToolManager::OpenPaintDialog(sf::Window* _windowRef, sf::Color*
 	hwnd = _windowRef->getSystemHandle();
 
 	// -- Initialise CHOOSECOLOR -- //
+
 	ZeroMemory(&cc, sizeof(cc));
 	cc.lStructSize = sizeof(cc);
 	cc.hwndOwner = hwnd;
@@ -49,7 +91,7 @@ sf::Color* CPaintToolManager::OpenPaintDialog(sf::Window* _windowRef, sf::Color*
 		tempColour.g = GetGValue(cr);
 		tempColour.b = GetBValue(cr);
 
-		*_Colourref = tempColour; // Setting our circle to the new colour
+		*_Colourref = tempColour; // Returning the new colour
 		return _Colourref;
 	}
 
@@ -78,6 +120,15 @@ void CPaintToolManager::DrawShapes(sf::RenderWindow* _Window, sf::Shape* _Shape,
 	}
 
 	_Window->draw(*_Shape);
+	_Window->draw(cursor);
+	_Window->draw(toolbarMain);
+	_Window->draw(toolbarSelection);
+	_Window->draw(toolbarPenSprite);
+	_Window->draw(toolbarRect);
+	_Window->draw(toolbarCirc);
+	_Window->draw(toolbarLine);
+	_Window->draw(toolbarColour);
+	_Window->draw(toolbarColourText);
 
 	cursor.setPosition(sf::Vector2f(*_MousePos));
 
@@ -215,6 +266,8 @@ sf::RectangleShape* CPaintToolManager::DrawLine(sf::Vector2i* _MousePos, sf::Col
 
 	line->setPosition(sf::Vector2f(_MousePos->x, _MousePos->y));
 	line->setFillColor(*_PenColour);
+	line->setOutlineColor(sf::Color::White);
+	line->setOutlineThickness(1.0f);
 
 	float sideOpp;
 	float sideAdj;
@@ -241,6 +294,7 @@ sf::RectangleShape* CPaintToolManager::DrawLine(sf::Vector2i* _MousePos, sf::Col
 
 		DrawShapes(_Window, line, _MousePos);
 	}
+	line->setOutlineThickness(0.0f);
 
 	return line;
 }
