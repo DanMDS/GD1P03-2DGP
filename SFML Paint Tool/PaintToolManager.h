@@ -6,8 +6,6 @@
 
 class CPaintToolManager
 {
-private:
-
 public:
 	std::vector<sf::Shape*> shapes;
 
@@ -27,8 +25,14 @@ public:
 	sf::RectangleShape toolbarLine;
 	sf::RectangleShape toolbarColour;
 	sf::RectangleShape toolbarSelection;
+	sf::Image toolbarStampImage;
+	sf::Texture toolbarStampText;
+	sf::Sprite toolbarStampSprite;
 
-	sf::CircleShape cursor;
+	sf::Image stampToolImage;
+	sf::Texture stampToolText;
+
+	sf::RectangleShape cursor;
 
 	int brushSize;
 
@@ -49,7 +53,10 @@ public:
 
 	void DrawPen(sf::Vector2i* _MousePos, sf::Color* _PenColour);
 
+	void DrawStamp(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window);
+
 	sf::RectangleShape* DrawRect(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window);
 	sf::CircleShape* DrawCirc(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window);
+	sf::CircleShape* DrawPoly(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window);
 	sf::RectangleShape* DrawLine(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window);
 };

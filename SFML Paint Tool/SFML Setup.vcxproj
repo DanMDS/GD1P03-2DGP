@@ -152,10 +152,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CPaintTool.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PaintToolManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CPaintTool.h" />
     <ClInclude Include="PaintToolManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

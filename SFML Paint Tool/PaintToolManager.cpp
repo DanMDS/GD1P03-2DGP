@@ -5,9 +5,9 @@
 
 CPaintToolManager::CPaintToolManager()
 {
-	cursor.setRadius(5.0f);
+	cursor.setSize(sf::Vector2f(5.0f, 5.0f));
 	sf::Vector2i cursorPos;
-	cursor.setOrigin(cursor.getRadius(), cursor.getRadius()); // Set circle origin to centre of circle with getRadius()
+	cursor.setOrigin(cursor.getSize().x / 2, cursor.getSize().y / 2); // Set circle origin to centre of circle with getRadius()
 	cursor.setPosition(sf::Vector2f(cursorPos));
 	cursor.setFillColor(sf::Color::Black);
 	cursor.setOutlineColor(sf::Color::White);
@@ -23,11 +23,34 @@ CPaintToolManager::CPaintToolManager()
 	toolbarColourText.setCharacterSize(15);
 	toolbarColourText.setFillColor(sf::Color::White);
 
-	if (!toolbarPenImage.loadFromFile("brush.bmp"))
+	if (!toolbarPenImage.loadFromFile("images/brush.bmp"))
 	{
 		std::cout << "load fail: Brush";
 	}
 	toolbarPenImage.createMaskFromColor(sf::Color::Black);
+
+	toolbarPenText.loadFromImage(toolbarPenImage);
+
+	toolbarPenSprite.setTexture(toolbarPenText);
+	toolbarPenSprite.setScale(toolbarPenSprite.getScale().y / 5, toolbarPenSprite.getScale().y / 5);
+	toolbarPenSprite.setPosition(4, 5);
+
+	if (!toolbarStampImage.loadFromFile("images/toolbarStamp.bmp"))
+	{
+		std::cout << "load fail: toolbarStamp";
+	}
+	toolbarStampImage.createMaskFromColor(sf::Color::Black);
+
+	toolbarStampText.loadFromImage(toolbarStampImage);
+
+	toolbarStampSprite.setTexture(toolbarStampText);
+	toolbarStampSprite.setScale(toolbarStampSprite.getScale().y / 5, toolbarStampSprite.getScale().y / 5);
+
+	if (!stampToolImage.loadFromFile("images/stamp.bmp"))
+	{
+		std::cout << "load fail: toolbarStamp";
+	}
+	stampToolImage.createMaskFromColor(sf::Color::Black);
 
 	isPaintDialogOpen = false;
 
@@ -39,12 +62,6 @@ CPaintToolManager::CPaintToolManager()
 	toolbarColour.setFillColor(sf::Color::Black);
 	toolbarColour.setOutlineColor(sf::Color::White);
 	toolbarColour.setOutlineThickness(1.0f);
-
-	toolbarPenText.loadFromImage(toolbarPenImage);
-
-	toolbarPenSprite.setTexture(toolbarPenText);
-	toolbarPenSprite.setScale(toolbarPenSprite.getScale().y / 5, toolbarPenSprite.getScale().y / 5);
-	toolbarPenSprite.setPosition(5, 5);
 
 	toolbarRect.setFillColor(sf::Color::White);
 
@@ -120,10 +137,12 @@ void CPaintToolManager::DrawShapes(sf::RenderWindow* _Window, sf::Shape* _Shape,
 	}
 
 	_Window->draw(*_Shape);
+	cursor.setPosition(sf::Vector2f(*_MousePos));
 	_Window->draw(cursor);
 	_Window->draw(toolbarMain);
 	_Window->draw(toolbarSelection);
 	_Window->draw(toolbarPenSprite);
+	_Window->draw(toolbarStampSprite);
 	_Window->draw(toolbarRect);
 	_Window->draw(toolbarCirc);
 	_Window->draw(toolbarLine);
@@ -257,6 +276,109 @@ sf::CircleShape* CPaintToolManager::DrawCirc(sf::Vector2i* _MousePos, sf::Color*
 
 	circ->setOutlineThickness(0.0f);
 	return circ;
+}
+
+sf::CircleShape* CPaintToolManager::DrawPoly(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window)
+{
+	sf::CircleShape* poly = new sf::CircleShape();
+	sf::Vector2f dimensions;
+
+	int tempSize = brushSize;
+	brushSize = 5;
+	sf::Event event;
+
+	sf::Vector2i MouseInitial = *_MousePos;
+	sf::Vector2f Position = sf::Vector2f(MouseInitial);
+
+	poly->setFillColor(*_PenColour);
+	poly->setOutlineColor(sf::Color::White);
+	poly->setOutlineThickness(1.0f);
+
+	while (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		_Window->pollEvent(event);
+		if (event.type == sf::Event::MouseWheelMoved)
+		{
+			brushSize += event.mouseWheel.delta;
+			if (brushSize < 3)
+			{
+				brushSize = 3;
+			}
+		}
+
+		poly->setPointCount(brushSize);
+
+		*_MousePos = sf::Mouse::getPosition(*_Window);
+
+		dimensions.x = MouseInitial.x - _MousePos->x;
+		dimensions.y = MouseInitial.y - _MousePos->y;
+
+		if (dimensions.x < 0)
+		{
+			dimensions.x *= -1;
+		}
+		if (dimensions.y < 0)
+		{
+			dimensions.y *= -1;
+		}
+
+		if (MouseInitial.y < _MousePos->y)
+		{
+			if (MouseInitial.x < _MousePos->x)
+			{
+				Position = sf::Vector2f(MouseInitial);
+			}
+			else
+			{
+				Position = sf::Vector2f(_MousePos->x, MouseInitial.y);
+			}
+		}
+		else
+		{
+			if (MouseInitial.x < _MousePos->x)
+			{
+				Position = sf::Vector2f(MouseInitial.x, _MousePos->y);
+			}
+			else
+			{
+				Position = sf::Vector2f(_MousePos->x, _MousePos->y);
+			}
+		}
+
+		poly->setRadius(dimensions.x / 2);
+		poly->setPosition(sf::Vector2f(Position));
+
+		poly->setScale(sf::Vector2f(poly->getScale().x, abs(MouseInitial.y - _MousePos->y) / poly->getRadius() / 2));
+
+		DrawShapes(_Window, poly, _MousePos);
+	}
+
+	poly->setOutlineThickness(0.0f);
+
+	brushSize = tempSize;
+
+	return poly;
+}
+
+void CPaintToolManager::DrawStamp(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window)
+{
+	for (int i = 0; i < stampToolImage.getSize().x; i++)
+	{
+		if (_MousePos->x + i - stampToolImage.getSize().x / 2 < _Window->getSize().x - 1 && _MousePos->x + i - stampToolImage.getSize().x / 2 > 1)
+		{
+			for (int j = 0; j < stampToolImage.getSize().y; j++)
+			{
+				sf::Color tempColour = stampToolImage.getPixel(i, j);
+				if (_MousePos->y + j - stampToolImage.getSize().y / 2 < _Window->getSize().y - 1 && _MousePos->y + j - stampToolImage.getSize().y / 2 > toolbarMain.getSize().y - 1)
+				{
+					if (stampToolImage.getPixel(i, j).a == 0)
+					{
+						Canvas.setPixel(_MousePos->x - stampToolImage.getSize().x / 2 + i, _MousePos->y - stampToolImage.getSize().y / 2 + j, *_PenColour);
+					}
+				}
+			}
+		}
+	}
 }
 
 sf::RectangleShape* CPaintToolManager::DrawLine(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window)

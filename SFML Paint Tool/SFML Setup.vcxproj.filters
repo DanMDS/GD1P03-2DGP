@@ -21,9 +21,15 @@
     <ClCompile Include="PaintToolManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CPaintTool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PaintToolManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CPaintTool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
