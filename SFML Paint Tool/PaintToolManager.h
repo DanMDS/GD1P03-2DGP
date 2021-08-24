@@ -25,6 +25,15 @@ public:
 	// Toolbar setup
 	sf::RectangleShape toolbarMain;
 	sf::Image toolbarPenImage;
+	sf::Image toolbarUndoImage;
+	sf::Texture toolbarUndoText;
+	sf::Sprite toolbarUndoSprite;
+	sf::Image toolbarSaveImage;
+	sf::Texture toolbarSaveText;
+	sf::Sprite toolbarSaveSprite;
+	sf::Image toolbarLoadImage;
+	sf::Texture toolbarLoadText;
+	sf::Sprite toolbarLoadSprite;
 	sf::Texture toolbarPenText;
 	sf::Sprite toolbarPenSprite;
 	sf::RectangleShape toolbarRect;

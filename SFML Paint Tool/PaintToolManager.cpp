@@ -74,12 +74,44 @@ CPaintToolManager::CPaintToolManager()
 	toolbarStampSprite.setTexture(toolbarStampText);
 	toolbarStampSprite.setScale(toolbarStampSprite.getScale().y / 5, toolbarStampSprite.getScale().y / 5);
 
-	// Stamp tool iamge
+	// Stamp tool image
 	if (!stampToolImage.loadFromFile("images/stamp.bmp"))
 	{
 		std::cout << "load fail: toolbarStamp";
 	}
 	stampToolImage.createMaskFromColor(sf::Color::Black);
+
+	// Undo image
+	if (!toolbarUndoImage.loadFromFile("images/undo.bmp"))
+	{
+		std::cout << "load fail: toolbarUndo";
+	}
+	toolbarUndoImage.createMaskFromColor(sf::Color::Black);
+
+	toolbarUndoText.loadFromImage(toolbarUndoImage);
+	toolbarUndoSprite.setTexture(toolbarUndoText);
+	toolbarUndoSprite.setScale(toolbarUndoSprite.getScale().y / 4, toolbarUndoSprite.getScale().y / 4);
+
+	// Save image
+	if (!toolbarSaveImage.loadFromFile("images/save.bmp"))
+	{
+		std::cout << "load fail: toolbarSave";
+	}
+	toolbarSaveImage.createMaskFromColor(sf::Color::Black);
+
+	toolbarSaveText.loadFromImage(toolbarSaveImage);
+	toolbarSaveSprite.setTexture(toolbarSaveText);
+	toolbarSaveSprite.setScale(toolbarSaveSprite.getScale().y / 5, toolbarSaveSprite.getScale().y / 5);
+
+	if (!toolbarLoadImage.loadFromFile("images/load.bmp"))
+	{
+		std::cout << "load fail: toolbarload";
+	}
+	toolbarLoadImage.createMaskFromColor(sf::Color::Black);
+
+	toolbarLoadText.loadFromImage(toolbarLoadImage);
+	toolbarLoadSprite.setTexture(toolbarLoadText);
+	toolbarLoadSprite.setScale(toolbarLoadSprite.getScale().y / 5, toolbarLoadSprite.getScale().y / 5);
 
 	// Toolbar: Main bar
 	toolbarMain.setFillColor(sf::Color::Black);
@@ -95,7 +127,7 @@ CPaintToolManager::CPaintToolManager()
 	toolbarColour.setFillColor(sf::Color::Black);
 	toolbarColour.setOutlineColor(sf::Color::White);
 	toolbarColour.setOutlineThickness(1.0f);
-
+	
 	// Toolbar: circle
 	toolbarCirc.setFillColor(sf::Color::White);
 
@@ -115,7 +147,7 @@ CPaintToolManager::CPaintToolManager()
 	// Other variables
 	isPaintDialogOpen = false;
 
-	brushSize = 2;
+	brushSize = 10;
 
 	polySides = 3;
 }
@@ -144,7 +176,7 @@ sf::Color* CPaintToolManager::OpenPaintDialog(sf::Window* _windowRef, sf::Color*
 		*_Colourref = tempColour; // Returning the new colour
 		return _Colourref;
 	}
-
+	return NULL;
 }
 
 void CPaintToolManager::DrawPen(sf::Vector2i* _MousePos, sf::Color* _PenColour)
@@ -166,7 +198,7 @@ void CPaintToolManager::DrawShapes(sf::RenderWindow* _Window, sf::Shape* _Shape,
 
 	_Window->draw(CanvasSprite);
 
-	for (int i = 0; i < shapes.size(); i++)	// Draw drawn shapes from the shapes vector
+	for (int i = 0; i < int(shapes.size()); i++)	// Draw drawn shapes from the shapes vector
 	{
 		_Window->draw(*shapes[i]);
 	}
@@ -180,6 +212,9 @@ void CPaintToolManager::DrawShapes(sf::RenderWindow* _Window, sf::Shape* _Shape,
 	_Window->draw(toolbarSelection);
 	_Window->draw(toolbarPenSprite);
 	_Window->draw(toolbarStampSprite);
+	_Window->draw(toolbarUndoSprite);
+	_Window->draw(toolbarSaveSprite);
+	_Window->draw(toolbarLoadSprite);
 	_Window->draw(toolbarRect);
 	_Window->draw(toolbarCirc);
 	_Window->draw(toolbarLine);
@@ -211,8 +246,8 @@ sf::RectangleShape* CPaintToolManager::DrawRect(sf::Vector2i* _MousePos, sf::Col
 	{
 		*_MousePos = sf::Mouse::getPosition(*_Window);						// Setting current mouse position
 
-		dimensions.x = abs(MouseInitial.x - _MousePos->x);					// Setting dimensions to be drawn, made positive to avoid errors
-		dimensions.y = abs(MouseInitial.y - _MousePos->y);
+		dimensions.x = abs(float(MouseInitial.x) - float(_MousePos->x));					// Setting dimensions to be drawn, made positive to avoid errors
+		dimensions.y = abs(float(MouseInitial.y) - float(_MousePos->y));
 
 		if (MouseInitial.y < _MousePos->y)									// If statement to change position depending on where from the mouse the rectangle is drawn
 		{
@@ -222,18 +257,18 @@ sf::RectangleShape* CPaintToolManager::DrawRect(sf::Vector2i* _MousePos, sf::Col
 			}
 			else
 			{
-				Position = sf::Vector2f(_MousePos->x, MouseInitial.y);
+				Position = sf::Vector2f(float(_MousePos->x), float(MouseInitial.y));
 			}
 		}
 		else
 		{
 			if (MouseInitial.x < _MousePos->x)
 			{
-				Position = sf::Vector2f(MouseInitial.x, _MousePos->y);
+				Position = sf::Vector2f(float(MouseInitial.x), float(_MousePos->y));
 			}
 			else
 			{
-				Position = sf::Vector2f(_MousePos->x, _MousePos->y);
+				Position = sf::Vector2f(float(_MousePos->x), float(_MousePos->y));
 			}
 		}
 
@@ -263,8 +298,8 @@ sf::CircleShape* CPaintToolManager::DrawCirc(sf::Vector2i* _MousePos, sf::Color*
 	{
 		*_MousePos = sf::Mouse::getPosition(*_Window);					// Setting current mouse position
 
-		dimensions.x = abs(MouseInitial.x - _MousePos->x);				// Setting dimensions to be drawn, made positive to avoid errors
-		dimensions.y = abs(MouseInitial.y - _MousePos->y);
+		dimensions.x = abs(float(MouseInitial.x) - float(_MousePos->x));				// Setting dimensions to be drawn, made positive to avoid errors
+		dimensions.y = abs(float(MouseInitial.y) - float(_MousePos->y));
 
 		if (MouseInitial.y < _MousePos->y)								// If statement to change position depending on where from the mouse the circle is drawn
 		{
@@ -274,18 +309,18 @@ sf::CircleShape* CPaintToolManager::DrawCirc(sf::Vector2i* _MousePos, sf::Color*
 			}
 			else
 			{
-				Position = sf::Vector2f(_MousePos->x, MouseInitial.y);
+				Position = sf::Vector2f(float(_MousePos->x), float(MouseInitial.y));
 			}
 		}
 		else
 		{
 			if (MouseInitial.x < _MousePos->x)
 			{
-				Position = sf::Vector2f(MouseInitial.x, _MousePos->y);
+				Position = sf::Vector2f(float(MouseInitial.x), float(_MousePos->y));
 			}
 			else
 			{
-				Position = sf::Vector2f(_MousePos->x, _MousePos->y);
+				Position = sf::Vector2f(float(_MousePos->x), float(_MousePos->y));
 			}
 		}
 
@@ -330,8 +365,8 @@ sf::CircleShape* CPaintToolManager::DrawPoly(sf::Vector2i* _MousePos, sf::Color*
 
 		*_MousePos = sf::Mouse::getPosition(*_Window);					// Setting current mouse position
 
-		dimensions.x = abs(MouseInitial.x - _MousePos->x);				// Setting dimensions to be drawn, made positive to avoid errors
-		dimensions.y = abs(MouseInitial.y - _MousePos->y);
+		dimensions.x = abs(float(MouseInitial.x) - float(_MousePos->x));				// Setting dimensions to be drawn, made positive to avoid errors
+		dimensions.y = abs(float(MouseInitial.y) - float(_MousePos->y));
 
 		if (MouseInitial.y < _MousePos->y)
 		{
@@ -341,18 +376,18 @@ sf::CircleShape* CPaintToolManager::DrawPoly(sf::Vector2i* _MousePos, sf::Color*
 			}
 			else
 			{
-				Position = sf::Vector2f(_MousePos->x, MouseInitial.y);
+				Position = sf::Vector2f(float(_MousePos->x), float(MouseInitial.y));
 			}
 		}
 		else
 		{
 			if (MouseInitial.x < _MousePos->x)
 			{
-				Position = sf::Vector2f(MouseInitial.x, _MousePos->y);
+				Position = sf::Vector2f(float(MouseInitial.x), float(_MousePos->y));
 			}
 			else
 			{
-				Position = sf::Vector2f(_MousePos->x, _MousePos->y);
+				Position = sf::Vector2f(float(_MousePos->x), float(_MousePos->y));
 			}
 		}
 
@@ -372,11 +407,11 @@ sf::CircleShape* CPaintToolManager::DrawPoly(sf::Vector2i* _MousePos, sf::Color*
 void CPaintToolManager::DrawStamp(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window)
 {
 	// If statements are for checking if the pixel being drawn if it is out of bounds, doesn't draw it if this is true
-	for (int i = 0; i < stampToolImage.getSize().x; i++)
+	for (int i = 0; i < int(stampToolImage.getSize().x); i++)
 	{
 		if (_MousePos->x + i - stampToolImage.getSize().x / 2 < _Window->getSize().x && _MousePos->x + i - stampToolImage.getSize().x / 2 > 0)
 		{
-			for (int j = 0; j < stampToolImage.getSize().y; j++)
+			for (int j = 0; j < int(stampToolImage.getSize().y); j++)
 			{
 				sf::Color tempColour = stampToolImage.getPixel(i, j);
 				if (_MousePos->y + j - stampToolImage.getSize().y / 2 < _Window->getSize().y && _MousePos->y + j - stampToolImage.getSize().y / 2 > toolbarMain.getSize().y)
@@ -396,7 +431,7 @@ sf::RectangleShape* CPaintToolManager::DrawLine(sf::Vector2i* _MousePos, sf::Col
 	sf::RectangleShape* line = new sf::RectangleShape();					// Create line
 	sf::Vector2f dimensions;
 
-	line->setPosition(sf::Vector2f(_MousePos->x, _MousePos->y));			// Set position and colour
+	line->setPosition(sf::Vector2f(float(_MousePos->x), float(_MousePos->y)));			// Set position and colour
 	line->setFillColor(*_PenColour);
 	line->setOutlineColor(sf::Color::White);
 	line->setOutlineThickness(1.0f);
@@ -417,7 +452,7 @@ sf::RectangleShape* CPaintToolManager::DrawLine(sf::Vector2i* _MousePos, sf::Col
 		sideAdj = _MousePos->x - linePosition.x;
 		sideHyp = sqrt((sideOpp * sideOpp) + (sideAdj * sideAdj));
 
-		dimensions = sf::Vector2f(sideHyp, brushSize);						// Changing line dimensions
+		dimensions = sf::Vector2f(sideHyp, float(brushSize));						// Changing line dimensions
 
 		angle = atan2(sideOpp, sideAdj) * (180 / pi);						// Setting rotation angle
 

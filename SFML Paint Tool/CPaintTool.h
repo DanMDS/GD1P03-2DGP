@@ -5,6 +5,7 @@ class CPaintTool
 {
 	// Variable setup
 	int toolChoice;
+	std::string fileName;
 
 	// Tool enum setup
 	enum class tool
@@ -41,5 +42,7 @@ public:
 	CPaintTool();
 	~CPaintTool();
 
+	void Save(sf::RenderWindow* _Window, std::string* _Name);
+	void Load();
 	void RunProgram();
 };

@@ -1,2 +1,1 @@
-D:\VisualStudioProjects\SFML Setup\Debug\SFML Setup.exe
 C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\Debug\SFML Paint Tool.exe
