@@ -23,7 +23,7 @@ CPaintTool::CPaintTool()
 
 	Tool = tool::Pen;
 
-	WindowXSize = 1024;
+	WindowXSize = 1280;
 	WindowYSize = 720;
 
 	toolbarOffset = 48;

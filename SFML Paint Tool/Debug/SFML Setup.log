@@ -252,7 +252,6 @@ C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolMa
           [
               T=float
           ]
-  main.cpp
   Generating Code...
 C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(148): warning C4715: 'CPaintToolManager::OpenPaintDialog': not all control paths return a value
   SFML Setup.vcxproj -> C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\Debug\SFML Paint Tool.exe
