@@ -1,287 +1,261 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (SFML Exercises Week 2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  PaintToolManager.cpp
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(128,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(167,33): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
+  CPaintTool.cpp
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\CPaintTool.cpp(49,67): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\CPaintTool.cpp(49,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\CPaintTool.cpp(50,69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\CPaintTool.cpp(50,52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\CPaintTool.cpp(67,48): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
-          [
-              T=int
-          ]
-          and
           [
               T=float
           ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(168,33): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\CPaintTool.cpp(92,95): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
-          [
-              T=int
-          ]
-          and
           [
               T=float
           ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(187,55): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\CPaintTool.cpp(92,67): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
-          [
-              T=int
-          ]
-          and
           [
               T=float
           ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(187,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\CPaintTool.cpp(93,68): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\CPaintTool.cpp(93,44): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\CPaintTool.cpp(117,27): warning C4018: '>': signed/unsigned mismatch
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\CPaintTool.cpp(117,63): warning C4018: '>': signed/unsigned mismatch
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\CPaintTool.cpp(122,64): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
           with
-          [
-              T=int
-          ]
-          and
           [
               T=float
           ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(194,54): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(194,41): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(198,52): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(198,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(228,33): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(229,33): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(248,55): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(248,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(255,54): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(255,41): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(259,52): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(259,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(292,62): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-          with
-          [
-              T=int
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(305,33): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(306,33): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(325,55): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(325,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(332,54): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(332,41): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(336,52): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(336,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(368,56): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(368,42): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(389,38): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\CPaintTool.cpp(122,46): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
           with
           [
               T=float
           ]
   main.cpp
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(65,67): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(65,50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(66,69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(66,52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(80,48): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+  PaintToolManager.cpp
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(169,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(214,21): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(99,95): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(215,21): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(99,67): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(225,55): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(225,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(232,54): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(232,41): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(236,52): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(236,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(266,21): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(100,68): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(100,44): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(121,27): warning C4018: '>': signed/unsigned mismatch
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(121,63): warning C4018: '>': signed/unsigned mismatch
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(126,64): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(267,21): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\main.cpp(126,46): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(277,55): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(277,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(284,54): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(284,41): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(288,52): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(288,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(333,21): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(334,21): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(344,55): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(344,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(351,54): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(351,41): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(355,52): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(355,38): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(375,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(379,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(399,56): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(399,42): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(420,38): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
   Generating code
-  1 of 180 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    5 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB not found, fall back to full compilation.
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\PaintToolManager.cpp(148): warning C4715: 'CPaintToolManager::OpenPaintDialog': not all control paths return a value
+  All 188 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   SFML Setup.vcxproj -> C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\Release\SFML Paint Tool.exe

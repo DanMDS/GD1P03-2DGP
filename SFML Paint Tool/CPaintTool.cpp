@@ -14,17 +14,14 @@
 
 CPaintTool::CPaintTool()
 {
+	// Initialising variables
 	MainManager = new CPaintToolManager();
 
 	CurrentPenColour = new sf::Color(sf::Color::Black);
 
-	drawMode = 1;
-
 	toolChoice = 0;
 
 	Tool = tool::Pen;
-
-	modes = sf::VideoMode::getFullscreenModes();
 
 	WindowXSize = 1024;
 	WindowYSize = 720;
@@ -34,17 +31,15 @@ CPaintTool::CPaintTool()
 	paintDialogOpen = false;
 }
 
-CPaintTool::~CPaintTool() {}
+CPaintTool::~CPaintTool() { /* Destructor */ }
 
 void CPaintTool::RunProgram()
 {
-	// -- Window Properties -- //
+	// Window Properties
 
 	sf::RenderWindow window(sf::VideoMode(WindowXSize, WindowYSize), "SFML Window");
 
-	//::ShowWindow(window.getSystemHandle(), SW_MAXIMIZE);
-
-	// -- Canvas Setup -- //
+	// Canvas Setup
 
 	MainManager->Canvas.create(WindowXSize, WindowYSize, sf::Color::White);
 
@@ -56,7 +51,7 @@ void CPaintTool::RunProgram()
 
 	sf::Vector2i MousePos = sf::Mouse::getPosition(window);
 
-	// -- Toolbar Properties -- //
+	// Toolbar Properties
 
 	MainManager->toolbarSelection.setSize(sf::Vector2f(48, 48));
 
@@ -66,45 +61,57 @@ void CPaintTool::RunProgram()
 
 	MainManager->toolbarColourText.setPosition(WindowXSize - toolbarOffset * 3, 13);
 
+	MainManager->toolbarSizeText.setPosition(WindowXSize - toolbarOffset * 6, 13);
+	MainManager->toolbarSizeText.setString("Brush Size: " + MainManager->brushSizeStr);
+
 	MainManager->toolbarMain.setSize(sf::Vector2f(WindowXSize, 48));
 
 	MainManager->toolbarRect.setPosition(toolbarOffset + 6, 5);
 	MainManager->toolbarRect.setSize(sf::Vector2f(36, 36));
 
-	MainManager->toolbarCirc.setPosition((toolbarOffset * 2) + 6, 5);
+	MainManager->toolbarCirc.setPosition((toolbarOffset * 2) + 5, 5);
 	MainManager->toolbarCirc.setRadius(19);
 
 	MainManager->toolbarLine.setSize(sf::Vector2f(48, 5));
 	MainManager->toolbarLine.setPosition((toolbarOffset * 3) + 10, 5);
 	MainManager->toolbarLine.setRotation(45);
 
-	MainManager->toolbarStampSprite.setPosition((toolbarOffset * 4) + 4, 5);
+	MainManager->toolbarPoly.setPosition((toolbarOffset * 4) + 5, 5);
+	MainManager->toolbarPoly.setRadius(19);
 
+	MainManager->toolbarStampSprite.setPosition((toolbarOffset * 5) + 4, 5);
+
+	// Main program loop
 	while (window.isOpen())
 	{
-		MainManager->toolbarColourText.setPosition(WindowXSize - toolbarOffset * 3, 13);
-		MousePos = sf::Mouse::getPosition(window);
+		MainManager->brushSizeStr = std::to_string(MainManager->brushSize / 2);
+		MainManager->toolbarSizeText.setString("Brush Size: " + MainManager->brushSizeStr);					// Setting brush size text to correct number
+
+		MousePos = sf::Mouse::getPosition(window);															// Setting mouse and cursor position
 		MainManager->cursor.setPosition(sf::Vector2f(MousePos));
 		MainManager->cursor.setSize(sf::Vector2f(MainManager->brushSize * 2, MainManager->brushSize * 2));
 		MainManager->cursor.setOrigin(MainManager->brushSize, MainManager->brushSize);
 
-		sf::Event event;
+		sf::Event event;																					// Creating window event and polling it
 		while (window.pollEvent(event))
 		{
-			// Allows close button to close window
-			if (event.type == sf::Event::Closed)
+			if (event.type == sf::Event::Closed)															// Closes window when the X is clicked
 				window.close();
-			else if (event.type == sf::Event::MouseWheelMoved)
+			else if (event.type == sf::Event::MouseWheelMoved)												// Changes brush size with mouse wheel
 			{
-				if (MainManager->brushSize <= 0)
-				{
-					MainManager->brushSize = 2;
-				}
 				MainManager->brushSize += event.mouseWheel.delta * 2;
 			}
 		}
+		if (MainManager->brushSize < 2)
+		{
+			MainManager->brushSize = 2;
+		}
+		if (MainManager->brushSize > 50)
+		{
+			MainManager->brushSize = 50;
+		}
 
-		if (event.type == sf::Event::Resized)
+		if (event.type == sf::Event::Resized)																// Resets window scale if it gets resized too big
 		{
 			// -- Giving the window size a maximum x and y value -- //
 			if (window.getSize().x > WindowXSize || window.getSize().y > WindowYSize)
@@ -116,7 +123,7 @@ void CPaintTool::RunProgram()
 			window.setView(sf::View(visibleArea));
 		}
 
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))													// When the left mouse button is pressed, activate the current selected tool
 		{
 			sf::Vector2i MousePos = sf::Mouse::getPosition(window);
 
@@ -124,40 +131,40 @@ void CPaintTool::RunProgram()
 			{
 				switch (Tool)
 				{
-				case tool::Pen:
+				case tool::Pen:																				// Activate pen tool if drawing isn't out of bounds
 				{
-					if (!(MousePos.y < 5 || MousePos.y > WindowYSize - 5 || MousePos.x < 5 || MousePos.x > WindowXSize - 5))
+					if (!(MousePos.y < MainManager->brushSize|| MousePos.y > WindowYSize - MainManager->brushSize || MousePos.x < MainManager->brushSize || MousePos.x > WindowXSize - MainManager->brushSize))
 					{
 						MainManager->DrawPen(&MousePos, CurrentPenColour);
 						MainManager->CanvasTexture.loadFromImage(MainManager->Canvas);
 					}
 					break;
 				}
-				case tool::Circle:
+				case tool::Circle:																			// Activate circle tool
 				{
 					sf::CircleShape* circ = MainManager->DrawCirc(&MousePos, CurrentPenColour, &window);
 					MainManager->shapes.push_back(circ);
 					break;
 				}
-				case tool::Rectangle:
+				case tool::Rectangle:																		// Activate rectangle tool
 				{
 					sf::RectangleShape* rect = MainManager->DrawRect(&MousePos, CurrentPenColour, &window);
 					MainManager->shapes.push_back(rect);
 					break;
 				}
-				case tool::Line:
+				case tool::Line:																			// Activate line tool
 				{
 					sf::RectangleShape* line = MainManager->DrawLine(&MousePos, CurrentPenColour, &window);
 					MainManager->shapes.push_back(line);
 					break;
 				}
-				case tool::Poly:
+				case tool::Poly:																			// Activate polygon tool
 				{
 					sf::CircleShape* poly = MainManager->DrawPoly(&MousePos, CurrentPenColour, &window);
 					MainManager->shapes.push_back(poly);
 					break;
 				}
-				case tool::Stamp:
+				case tool::Stamp:																			// Activate stamp tool
 				{
 					if (!(MousePos.y < 5 || MousePos.y > WindowYSize - 5 || MousePos.x < 5 || MousePos.x > WindowXSize - 5))
 					{
@@ -168,7 +175,7 @@ void CPaintTool::RunProgram()
 				}
 				}
 			}
-			else
+			else																							// Else statement for setting tool depending on mouse click position in tool bar
 			{
 				if (MousePos.x < toolbarOffset)
 				{
@@ -208,7 +215,7 @@ void CPaintTool::RunProgram()
 			}
 		}
 
-		if (MousePos.y > 48)
+		if (MousePos.y > 48)																				// Hide original mouse cursor unless hovering over toolbar
 		{
 			window.setMouseCursorVisible(false);
 		}
@@ -217,9 +224,9 @@ void CPaintTool::RunProgram()
 			window.setMouseCursorVisible(true);
 		}
 
-		MainManager->DrawShapes(&window, &MainManager->cursor, &MousePos);
+		MainManager->DrawShapes(&window, &MainManager->cursor, &MousePos);									// Draw shapes
 	}
 
-	delete MainManager;
+	delete MainManager;																						// Deallocate memory
 	MainManager = nullptr;
 }

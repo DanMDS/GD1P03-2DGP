@@ -2,20 +2,27 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <windows.h>
-#include <wingdi.h> // windows gdi
+#include <wingdi.h>
+#include <string>
 
 class CPaintToolManager
 {
 public:
+	// Vector to store shapes
 	std::vector<sf::Shape*> shapes;
 
+	// Canvas setup
 	sf::Image Canvas;
 	sf::Texture CanvasTexture;
 	sf::Sprite CanvasSprite;
 
+	// Font setup
 	sf::Font font;
 	sf::Text toolbarColourText;
+	sf::Text toolbarSizeText;
+	sf::Text toolbarSizeNumber;
 
+	// Toolbar setup
 	sf::RectangleShape toolbarMain;
 	sf::Image toolbarPenImage;
 	sf::Texture toolbarPenText;
@@ -25,19 +32,26 @@ public:
 	sf::RectangleShape toolbarLine;
 	sf::RectangleShape toolbarColour;
 	sf::RectangleShape toolbarSelection;
+	sf::CircleShape toolbarPoly;
 	sf::Image toolbarStampImage;
 	sf::Texture toolbarStampText;
 	sf::Sprite toolbarStampSprite;
 
+	// Stamp image setup
 	sf::Image stampToolImage;
 	sf::Texture stampToolText;
 
+	// Cursor setup
 	sf::RectangleShape cursor;
 
+	// Other variables setup
 	int brushSize;
+	int polySides;
+	std::string brushSizeStr;
 
 	bool isPaintDialogOpen;
 
+	// Colour picker setup
 	CHOOSECOLOR cc; // Common dialog box structure
 	COLORREF acrCustClr[16];// Array of custom colours
 	HWND hwnd; // Owne window
@@ -45,6 +59,7 @@ public:
 	DWORD rgbCurrent; // initial colour selection
 	COLORREF cr;
 
+	// Method setup
 	CPaintToolManager();
 	~CPaintToolManager();
 	sf::Color* OpenPaintDialog(sf::Window* _windowRef, sf::Color* _Colouref);

@@ -3,9 +3,10 @@
 
 class CPaintTool
 {
-	int drawMode = 1;
+	// Variable setup
+	int toolChoice;
 
-	int toolChoice = 0;
+	// Tool enum setup
 	enum class tool
 	{
 		Pen,
@@ -17,22 +18,26 @@ class CPaintTool
 		Last
 	};
 
-	tool Tool = tool::Pen;
+	tool Tool;
 
+	// Class object setup
 	CPaintToolManager* MainManager;
 
-	std::vector<sf::VideoMode> modes;
-
+	// Window size variable setup
 	int WindowXSize{};
 	int WindowYSize{};
 
+	// Toolbar offset is for the tool selection square movement
 	float toolbarOffset{};
 
+	// "Is the colour picker open" setup
 	bool paintDialogOpen{};
 
+	// Pen colour setup
 	sf::Color* CurrentPenColour;
 
 public:
+	// Method setup
 	CPaintTool();
 	~CPaintTool();
 

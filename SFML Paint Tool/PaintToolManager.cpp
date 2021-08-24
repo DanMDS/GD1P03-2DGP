@@ -2,27 +2,54 @@
 #include <math.h>
 #include <iostream>
 #include <cstdlib>
+#include <string>
 
 CPaintToolManager::CPaintToolManager()
 {
+	// Initialising variables
+	// 
+	// Initialising colour picker
+	hwnd = NULL;
+
+	ZeroMemory(&cc, sizeof(cc));
+	cc.lStructSize = sizeof(cc);
+	cc.hwndOwner = hwnd;
+
+	cc.lpCustColors = (LPDWORD)acrCustClr;
+	cc.rgbResult = rgbCurrent;
+	cc.Flags = CC_FULLOPEN | CC_RGBINIT;
+
+	//Initialising cursor
 	cursor.setSize(sf::Vector2f(5.0f, 5.0f));
 	sf::Vector2i cursorPos;
-	cursor.setOrigin(cursor.getSize().x / 2, cursor.getSize().y / 2); // Set circle origin to centre of circle with getRadius()
+	cursor.setOrigin(cursor.getSize().x / 2, cursor.getSize().y / 2); 
 	cursor.setPosition(sf::Vector2f(cursorPos));
 	cursor.setFillColor(sf::Color::Black);
 	cursor.setOutlineColor(sf::Color::White);
 	cursor.setOutlineThickness(2.0f);
 
+
+	// Initialising toolbar and icons
+	//
+	// Toolbar: Text for colour picker and brush size
 	if (!font.loadFromFile("ARIAL.TTF"))
 	{
 		std::cout << "load fail: Font";
 	}
+
+	brushSizeStr = std::to_string(brushSize);
 
 	toolbarColourText.setFont(font);
 	toolbarColourText.setString("Colour Picker: ");
 	toolbarColourText.setCharacterSize(15);
 	toolbarColourText.setFillColor(sf::Color::White);
 
+	toolbarSizeText.setFont(font);
+	toolbarSizeText.setString("Brush Size: " + brushSizeStr);
+	toolbarSizeText.setCharacterSize(15);
+	toolbarSizeText.setFillColor(sf::Color::White);
+
+	// Toolbar: brush
 	if (!toolbarPenImage.loadFromFile("images/brush.bmp"))
 	{
 		std::cout << "load fail: Brush";
@@ -35,6 +62,7 @@ CPaintToolManager::CPaintToolManager()
 	toolbarPenSprite.setScale(toolbarPenSprite.getScale().y / 5, toolbarPenSprite.getScale().y / 5);
 	toolbarPenSprite.setPosition(4, 5);
 
+	// Toolbar: stamp
 	if (!toolbarStampImage.loadFromFile("images/toolbarStamp.bmp"))
 	{
 		std::cout << "load fail: toolbarStamp";
@@ -46,19 +74,18 @@ CPaintToolManager::CPaintToolManager()
 	toolbarStampSprite.setTexture(toolbarStampText);
 	toolbarStampSprite.setScale(toolbarStampSprite.getScale().y / 5, toolbarStampSprite.getScale().y / 5);
 
+	// Stamp tool iamge
 	if (!stampToolImage.loadFromFile("images/stamp.bmp"))
 	{
 		std::cout << "load fail: toolbarStamp";
 	}
 	stampToolImage.createMaskFromColor(sf::Color::Black);
 
-	isPaintDialogOpen = false;
-
-	brushSize = 4;
-
+	// Toolbar: Main bar
 	toolbarMain.setFillColor(sf::Color::Black);
 	toolbarMain.setPosition(0, 0);
 
+	// Toolbar: colour picker
 	toolbarColour.setFillColor(sf::Color::Black);
 	toolbarColour.setOutlineColor(sf::Color::White);
 	toolbarColour.setOutlineThickness(1.0f);
@@ -69,34 +96,40 @@ CPaintToolManager::CPaintToolManager()
 	toolbarColour.setOutlineColor(sf::Color::White);
 	toolbarColour.setOutlineThickness(1.0f);
 
+	// Toolbar: circle
 	toolbarCirc.setFillColor(sf::Color::White);
 
+	// Toolbar: line
 	toolbarLine.setFillColor(sf::Color::White);
 
+	// Toolbar: polygon
+	toolbarPoly.setFillColor(sf::Color::White);
+	toolbarPoly.setPointCount(5);
+
+	// Toolbar: selected tool
 	sf::Color grey(128, 128, 128);
 
 	toolbarSelection.setFillColor(grey);
 	toolbarSelection.setPosition(0, 0);
+
+	// Other variables
+	isPaintDialogOpen = false;
+
+	brushSize = 2;
+
+	polySides = 3;
 }
 
 CPaintToolManager::~CPaintToolManager()
 {
-
+	// Destructor
 }
 
 sf::Color* CPaintToolManager::OpenPaintDialog(sf::Window* _windowRef, sf::Color* _Colourref)
 {
+	// Code for opening the colour picker
 	hwnd = _windowRef->getSystemHandle();
-
-	// -- Initialise CHOOSECOLOR -- //
-
-	ZeroMemory(&cc, sizeof(cc));
-	cc.lStructSize = sizeof(cc);
 	cc.hwndOwner = hwnd;
-
-	cc.lpCustColors = (LPDWORD)acrCustClr;
-	cc.rgbResult = rgbCurrent;
-	cc.Flags = CC_FULLOPEN | CC_RGBINIT;
 
 	if (ChooseColor(&cc) == TRUE) // if the user has chosen a colour when closing the color picker window
 	{
@@ -120,24 +153,28 @@ void CPaintToolManager::DrawPen(sf::Vector2i* _MousePos, sf::Color* _PenColour)
 	{
 		for (int j = -brushSize; j < brushSize; j++)
 		{
-			Canvas.setPixel(_MousePos->x + j, _MousePos->y + i, *_PenColour);
+			Canvas.setPixel(_MousePos->x + j, _MousePos->y + i, *_PenColour); // Draw pixels around mouse pointer in the shape of a square
 		}
 	}
 }
 
 void CPaintToolManager::DrawShapes(sf::RenderWindow* _Window, sf::Shape* _Shape, sf::Vector2i* _MousePos)
 {
-	_Window->clear();
+	// Function to draw all shapes to screen
+
+	_Window->clear();	// Clear current window so that shapes can be moved while drawing without leaving trails
 
 	_Window->draw(CanvasSprite);
 
-	for (int i = 0; i < shapes.size(); i++)
+	for (int i = 0; i < shapes.size(); i++)	// Draw drawn shapes from the shapes vector
 	{
 		_Window->draw(*shapes[i]);
 	}
 
 	_Window->draw(*_Shape);
 	cursor.setPosition(sf::Vector2f(*_MousePos));
+
+	// Shapes are ordered this way so that the toolbar shows over the drawn shapes and canvas
 	_Window->draw(cursor);
 	_Window->draw(toolbarMain);
 	_Window->draw(toolbarSelection);
@@ -146,8 +183,10 @@ void CPaintToolManager::DrawShapes(sf::RenderWindow* _Window, sf::Shape* _Shape,
 	_Window->draw(toolbarRect);
 	_Window->draw(toolbarCirc);
 	_Window->draw(toolbarLine);
+	_Window->draw(toolbarPoly);
 	_Window->draw(toolbarColour);
 	_Window->draw(toolbarColourText);
+	_Window->draw(toolbarSizeText);
 
 	cursor.setPosition(sf::Vector2f(*_MousePos));
 
@@ -156,33 +195,26 @@ void CPaintToolManager::DrawShapes(sf::RenderWindow* _Window, sf::Shape* _Shape,
 
 sf::RectangleShape* CPaintToolManager::DrawRect(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window)
 {
-	sf::RectangleShape* rect = new sf::RectangleShape();
+	// Function to draw custom rectangle
+
+	sf::RectangleShape* rect = new sf::RectangleShape();	// Create rectangle
 	sf::Vector2f dimensions;
 
-	sf::Vector2i MouseInitial = *_MousePos;
+	sf::Vector2i MouseInitial = *_MousePos;					// Set initial mouse position for calculations
 	sf::Vector2f Position = sf::Vector2f(MouseInitial);
 
-	rect->setFillColor(*_PenColour);
+	rect->setFillColor(*_PenColour);						// Setting colour of rectangle so it can be seen while drawing as the correct colour
 	rect->setOutlineColor(sf::Color::White);
 	rect->setOutlineThickness(1.0f);
 
-	while (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	while (sf::Mouse::isButtonPressed(sf::Mouse::Left))		// Main loop for drawing the rectangle
 	{
-		*_MousePos = sf::Mouse::getPosition(*_Window);
+		*_MousePos = sf::Mouse::getPosition(*_Window);						// Setting current mouse position
 
-		dimensions.x = MouseInitial.x - _MousePos->x;
-		dimensions.y = MouseInitial.y - _MousePos->y;
+		dimensions.x = abs(MouseInitial.x - _MousePos->x);					// Setting dimensions to be drawn, made positive to avoid errors
+		dimensions.y = abs(MouseInitial.y - _MousePos->y);
 
-		if (dimensions.x < 0)
-		{
-			dimensions.x *= -1;
-		}
-		if (dimensions.y < 0)
-		{
-			dimensions.y *= -1;
-		}
-
-		if (MouseInitial.y < _MousePos->y)
+		if (MouseInitial.y < _MousePos->y)									// If statement to change position depending on where from the mouse the rectangle is drawn
 		{
 			if (MouseInitial.x < _MousePos->x)
 			{
@@ -205,45 +237,36 @@ sf::RectangleShape* CPaintToolManager::DrawRect(sf::Vector2i* _MousePos, sf::Col
 			}
 		}
 
-		rect->setPosition(sf::Vector2f(Position));
+		rect->setPosition(sf::Vector2f(Position));							// Setting size and position of rectangle to draw to screen
 		rect->setSize(sf::Vector2f(dimensions));
 
 		DrawShapes(_Window, rect, _MousePos);
 	}
 
-	rect->setOutlineThickness(0.0f);
+	rect->setOutlineThickness(0.0f);										// Removing outline and returning shape
 	return rect;
 }
 
 sf::CircleShape* CPaintToolManager::DrawCirc(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window)
 {
-	sf::CircleShape* circ = new sf::CircleShape();
+	sf::CircleShape* circ = new sf::CircleShape();						// Create circle
 	sf::Vector2f dimensions;
 
-	sf::Vector2i MouseInitial = *_MousePos;
+	sf::Vector2i MouseInitial = *_MousePos;								// Set initial mouse position for calculations
 	sf::Vector2f Position = sf::Vector2f(MouseInitial);
 
-	circ->setFillColor(*_PenColour);
+	circ->setFillColor(*_PenColour);									// Setting colour of circle so it can be seen while drawing as the correct colour
 	circ->setOutlineColor(sf::Color::White);
 	circ->setOutlineThickness(1.0f);
 
-	while (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	while (sf::Mouse::isButtonPressed(sf::Mouse::Left))					// Main loop for drawing the circle
 	{
-		*_MousePos = sf::Mouse::getPosition(*_Window);
+		*_MousePos = sf::Mouse::getPosition(*_Window);					// Setting current mouse position
 
-		dimensions.x = MouseInitial.x - _MousePos->x;
-		dimensions.y = MouseInitial.y - _MousePos->y;
+		dimensions.x = abs(MouseInitial.x - _MousePos->x);				// Setting dimensions to be drawn, made positive to avoid errors
+		dimensions.y = abs(MouseInitial.y - _MousePos->y);
 
-		if (dimensions.x < 0)
-		{
-			dimensions.x *= -1;
-		}
-		if (dimensions.y < 0)
-		{
-			dimensions.y *= -1;
-		}
-
-		if (MouseInitial.y < _MousePos->y)
+		if (MouseInitial.y < _MousePos->y)								// If statement to change position depending on where from the mouse the circle is drawn
 		{
 			if (MouseInitial.x < _MousePos->x)
 			{
@@ -266,7 +289,7 @@ sf::CircleShape* CPaintToolManager::DrawCirc(sf::Vector2i* _MousePos, sf::Color*
 			}
 		}
 
-		circ->setRadius(dimensions.x / 2);
+		circ->setRadius(dimensions.x / 2);								// Setting size and position of circle to draw to screen
 		circ->setPosition(sf::Vector2f(Position));
 
 		circ->setScale(sf::Vector2f(circ->getScale().x, abs(MouseInitial.y - _MousePos->y) / circ->getRadius() / 2));
@@ -274,53 +297,41 @@ sf::CircleShape* CPaintToolManager::DrawCirc(sf::Vector2i* _MousePos, sf::Color*
 		DrawShapes(_Window, circ, _MousePos);
 	}
 
-	circ->setOutlineThickness(0.0f);
+	circ->setOutlineThickness(0.0f);									// Removing outline and returning shape
 	return circ;
 }
 
 sf::CircleShape* CPaintToolManager::DrawPoly(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window)
 {
-	sf::CircleShape* poly = new sf::CircleShape();
-	sf::Vector2f dimensions;
-
-	int tempSize = brushSize;
-	brushSize = 5;
+	sf::CircleShape* poly = new sf::CircleShape();						// Create polygon
+	sf::Vector2f dimensions;	
 	sf::Event event;
 
-	sf::Vector2i MouseInitial = *_MousePos;
+	sf::Vector2i MouseInitial = *_MousePos;								// Set initial mouse position for calculations
 	sf::Vector2f Position = sf::Vector2f(MouseInitial);
 
-	poly->setFillColor(*_PenColour);
+	poly->setFillColor(*_PenColour);									// Setting colour of polygon so it can be seen while drawing as the correct colour
 	poly->setOutlineColor(sf::Color::White);
 	poly->setOutlineThickness(1.0f);
 
-	while (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	while (sf::Mouse::isButtonPressed(sf::Mouse::Left))					// Main loop for drawing the polygon
 	{
-		_Window->pollEvent(event);
+		_Window->pollEvent(event);										// Event check for changing the amount of sides the polygon has when using the scroll wheel
 		if (event.type == sf::Event::MouseWheelMoved)
 		{
-			brushSize += event.mouseWheel.delta;
-			if (brushSize < 3)
-			{
-				brushSize = 3;
-			}
+			polySides += event.mouseWheel.delta;
 		}
-
-		poly->setPointCount(brushSize);
-
-		*_MousePos = sf::Mouse::getPosition(*_Window);
-
-		dimensions.x = MouseInitial.x - _MousePos->x;
-		dimensions.y = MouseInitial.y - _MousePos->y;
-
-		if (dimensions.x < 0)
+		if (polySides < 3)
 		{
-			dimensions.x *= -1;
+			polySides = 3;
 		}
-		if (dimensions.y < 0)
-		{
-			dimensions.y *= -1;
-		}
+
+		poly->setPointCount(polySides);
+
+		*_MousePos = sf::Mouse::getPosition(*_Window);					// Setting current mouse position
+
+		dimensions.x = abs(MouseInitial.x - _MousePos->x);				// Setting dimensions to be drawn, made positive to avoid errors
+		dimensions.y = abs(MouseInitial.y - _MousePos->y);
 
 		if (MouseInitial.y < _MousePos->y)
 		{
@@ -345,7 +356,7 @@ sf::CircleShape* CPaintToolManager::DrawPoly(sf::Vector2i* _MousePos, sf::Color*
 			}
 		}
 
-		poly->setRadius(dimensions.x / 2);
+		poly->setRadius(dimensions.x / 2);								// Setting size and position of polygon to draw to screen
 		poly->setPosition(sf::Vector2f(Position));
 
 		poly->setScale(sf::Vector2f(poly->getScale().x, abs(MouseInitial.y - _MousePos->y) / poly->getRadius() / 2));
@@ -353,27 +364,26 @@ sf::CircleShape* CPaintToolManager::DrawPoly(sf::Vector2i* _MousePos, sf::Color*
 		DrawShapes(_Window, poly, _MousePos);
 	}
 
-	poly->setOutlineThickness(0.0f);
-
-	brushSize = tempSize;
+	poly->setOutlineThickness(0.0f);									// Removing outline and returning shape
 
 	return poly;
 }
 
 void CPaintToolManager::DrawStamp(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window)
 {
+	// If statements are for checking if the pixel being drawn if it is out of bounds, doesn't draw it if this is true
 	for (int i = 0; i < stampToolImage.getSize().x; i++)
 	{
-		if (_MousePos->x + i - stampToolImage.getSize().x / 2 < _Window->getSize().x - 1 && _MousePos->x + i - stampToolImage.getSize().x / 2 > 1)
+		if (_MousePos->x + i - stampToolImage.getSize().x / 2 < _Window->getSize().x && _MousePos->x + i - stampToolImage.getSize().x / 2 > 0)
 		{
 			for (int j = 0; j < stampToolImage.getSize().y; j++)
 			{
 				sf::Color tempColour = stampToolImage.getPixel(i, j);
-				if (_MousePos->y + j - stampToolImage.getSize().y / 2 < _Window->getSize().y - 1 && _MousePos->y + j - stampToolImage.getSize().y / 2 > toolbarMain.getSize().y - 1)
+				if (_MousePos->y + j - stampToolImage.getSize().y / 2 < _Window->getSize().y && _MousePos->y + j - stampToolImage.getSize().y / 2 > toolbarMain.getSize().y)
 				{
 					if (stampToolImage.getPixel(i, j).a == 0)
 					{
-						Canvas.setPixel(_MousePos->x - stampToolImage.getSize().x / 2 + i, _MousePos->y - stampToolImage.getSize().y / 2 + j, *_PenColour);
+						Canvas.setPixel(_MousePos->x - stampToolImage.getSize().x / 2 + i, _MousePos->y - stampToolImage.getSize().y / 2 + j, *_PenColour);	// Draws pixle if it both matches the stamp and is in bounds
 					}
 				}
 			}
@@ -383,40 +393,40 @@ void CPaintToolManager::DrawStamp(sf::Vector2i* _MousePos, sf::Color* _PenColour
 
 sf::RectangleShape* CPaintToolManager::DrawLine(sf::Vector2i* _MousePos, sf::Color* _PenColour, sf::RenderWindow* _Window)
 {
-	sf::RectangleShape* line = new sf::RectangleShape();
+	sf::RectangleShape* line = new sf::RectangleShape();					// Create line
 	sf::Vector2f dimensions;
 
-	line->setPosition(sf::Vector2f(_MousePos->x, _MousePos->y));
+	line->setPosition(sf::Vector2f(_MousePos->x, _MousePos->y));			// Set position and colour
 	line->setFillColor(*_PenColour);
 	line->setOutlineColor(sf::Color::White);
 	line->setOutlineThickness(1.0f);
 
-	float sideOpp;
+	float sideOpp;															// Setting pythagoras variables and pi for calculations
 	float sideAdj;
 	float sideHyp;
 	float angle;
 	float pi = 3.141592654f;
 
-	while (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	while (sf::Mouse::isButtonPressed(sf::Mouse::Left))						// Main loop for drawing line
 	{
-		*_MousePos = sf::Mouse::getPosition(*_Window);
+		*_MousePos = sf::Mouse::getPosition(*_Window);						// Setting current mouse position
 
-		sf::Vector2f linePosition = sf::Vector2f(line->getPosition().x, line->getPosition().y + brushSize / 2);
+		sf::Vector2f linePosition = sf::Vector2f(line->getPosition().x, line->getPosition().y + brushSize / 2);	// Changing position to match with rotation
 
-		sideOpp = _MousePos->y - linePosition.y;
+		sideOpp = _MousePos->y - linePosition.y;							// Setting pythagoras variables
 		sideAdj = _MousePos->x - linePosition.x;
 		sideHyp = sqrt((sideOpp * sideOpp) + (sideAdj * sideAdj));
 
-		dimensions = sf::Vector2f(sideHyp, brushSize);
+		dimensions = sf::Vector2f(sideHyp, brushSize);						// Changing line dimensions
 
-		angle = atan2(sideOpp, sideAdj) * (180 / pi);
+		angle = atan2(sideOpp, sideAdj) * (180 / pi);						// Setting rotation angle
 
-		line->setRotation(angle);
+		line->setRotation(angle);											// Setting rotation and size
 		line->setSize(dimensions);
 
 		DrawShapes(_Window, line, _MousePos);
 	}
-	line->setOutlineThickness(0.0f);
+	line->setOutlineThickness(0.0f);										// Removing outline and returning shape
 
 	return line;
 }
