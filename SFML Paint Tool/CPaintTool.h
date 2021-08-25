@@ -1,3 +1,14 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2021 Media Design School
+File Name : CPaintTool.h
+Description : Class header for main paint tool code
+Author : Daniel Bolleboom
+Mail : daniel.bolleboom@mds.ac.nz
+**************************************************************************/
 #pragma once
 #include "PaintToolManager.h"
 

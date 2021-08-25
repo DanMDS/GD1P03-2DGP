@@ -1,3 +1,14 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2021 Media Design School
+File Name : PaintToolManager.cpp
+Description : Function declaration for PaintToolManager.h
+Author : Daniel Bolleboom
+Mail : daniel.bolleboom@mds.ac.nz
+**************************************************************************/
 #include "PaintToolManager.h"
 #include <math.h>
 #include <iostream>

@@ -1,3 +1,14 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2021 Media Design School
+File Name : CPaintTool.cpp
+Description : Function declaration for CPaintTool.h
+Author : Daniel Bolleboom
+Mail : daniel.bolleboom@mds.ac.nz
+**************************************************************************/
 #pragma once
 #include "CPaintTool.h"
 #include <iostream>
@@ -69,7 +80,11 @@ void CPaintTool::Load()
 		std::cout << "Error: toolbarLoad";						// Console output error if loading is unsuccessful
 	}
 
-	MainManager->CanvasTexture.loadFromImage(loadImage);		// Apply loaded image to canvas
+	MainManager->shapes.clear();
+
+	MainManager->Canvas = loadImage;
+	MainManager->CanvasTexture.loadFromImage(MainManager->Canvas);		// Apply loaded image to canvas
+	MainManager->CanvasSprite.setTexture(MainManager->CanvasTexture);
 }
 
 void CPaintTool::RunProgram()
