@@ -80,6 +80,11 @@ void CPaintTool::Load()
 		std::cout << "Error: toolbarLoad";						// Console output error if loading is unsuccessful
 	}
 
+	for (int i = 0; i < MainManager->shapes.size(); i++)
+	{
+		delete MainManager->shapes[i];
+	}
+
 	MainManager->shapes.clear();
 
 	MainManager->Canvas = loadImage;
