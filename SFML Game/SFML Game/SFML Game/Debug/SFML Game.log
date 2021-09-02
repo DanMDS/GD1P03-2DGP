@@ -1,0 +1,17 @@
+﻿  Enemy.cpp
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Game\SFML Game\SFML Game\Enemy.cpp(50,19): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Game\SFML Game\SFML Game\Enemy.cpp(51,19): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Game\SFML Game\SFML Game\Enemy.cpp(53,24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  Level.cpp
+  Main.cpp
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Game\SFML Game\SFML Game\Main.cpp(11,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
+  SFML Game.vcxproj -> C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Game\SFML Game\Debug\SFML Game.exe
