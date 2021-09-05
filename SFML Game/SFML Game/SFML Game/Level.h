@@ -5,11 +5,21 @@
 class Level
 {
 private:
-	sf::Texture canvasTexture;
-	sf::Image canvasImage;
+	sf::Image* levelCanvasImage;
+	sf::Texture levelCanvasTexture;
+	sf::Sprite levelCanvasSprite;
 
-	sf::Vector2f dimensions;
+	sf::Vector2f levelDimensions;
 
-	Level();
+	std::string levelName;
+	int levelIndex;
+
+public:
+	void ChangeLevel();
+
+	void Draw(sf::RenderWindow* _window);
+	bool LevelEndCheck(sf::Vector2f _playerPos, int _enemiesRemaining);
+
+	Level(sf::String _spritePath);
 	~Level();
 };

@@ -19,6 +19,7 @@ public:
 
 	sf::Sprite* GetSprite();								// Draw methods
 	sf::Vector2f GetPlayerPosition();
+	void SetPlayerPosition(sf::Vector2f _pos);
 	void UpdatePlayer();
 	void MovePlayer();
 };

@@ -17,7 +17,7 @@ Enemy::Enemy(sf::String _spritePath, sf::Vector2f _objPos)
 	m_EnemyPos = _objPos;
 
 	m_EnemyHealth = 3;
-	m_EnemySpeed = rand() % 6;
+	m_EnemySpeed = rand() % 6 + 1;
 
 	if (m_EnemySpeed == 0)
 	{

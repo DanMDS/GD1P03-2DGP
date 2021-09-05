@@ -6,7 +6,7 @@ class Enemy
 {
 private:
 	int m_EnemyHealth;										// Player health
-	int m_EnemySpeed;
+	float m_EnemySpeed;
 
 	sf::Sprite* m_EnemySprite;								// Player sprite
 	sf::Texture* m_EnemyTexture;							// Player texture

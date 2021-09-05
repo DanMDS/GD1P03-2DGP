@@ -43,6 +43,10 @@ sf::Vector2f Player::GetPlayerPosition()
 	return m_PlayerPos;
 }
 
+void Player::SetPlayerPosition(sf::Vector2f _pos)
+{
+}
+
 void Player::MovePlayer()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
