@@ -4,7 +4,8 @@
 Bullet::Bullet(int _speed, bool _isFriendly, sf::Vector2f _bulletPos, sf::Vector2f _targetPos)
 {
 	// Loading sprite depending if enemy or not
-	if (_isFriendly)
+	m_isFriendly = _isFriendly;
+	if (m_isFriendly)
 	{
 		m_bulletImage.loadFromFile("sprites/player_bullet.png");
 	}
@@ -25,28 +26,26 @@ Bullet::Bullet(int _speed, bool _isFriendly, sf::Vector2f _bulletPos, sf::Vector
 	m_bulletSpeed = 2;
 
 	//Calculating bullet vector, only once since direction won't change
-	if (_isFriendly)
-	{
-		int xDifference = _targetPos.x - _bulletPos.x;
-		int yDifference = _targetPos.y - _bulletPos.y;
+	int xDifference = _targetPos.x - _bulletPos.x;
+	int yDifference = _targetPos.y - _bulletPos.y;
 
-		float moveMultiplier = (abs(xDifference) + abs(yDifference)) / _speed;
+	float moveMultiplier = (abs(xDifference) + abs(yDifference)) / _speed;
 
-		if (moveMultiplier != 0)
-		{
-			m_bulletVector = sf::Vector2f(xDifference / moveMultiplier, yDifference / moveMultiplier);
-		}
-	}
-	else
+	if (moveMultiplier != 0)
 	{
-		BulletEnemyMove(_speed, _targetPos);
+		m_bulletVector = sf::Vector2f(xDifference / moveMultiplier, yDifference / moveMultiplier);
 	}
+	BulletEnemyMove(_speed, _targetPos);
 }
 
 void Bullet::UpdateBullet()
 {
-	// Fix this please and thank you :)
 	m_bulletSprite.setPosition(m_bulletSprite.getPosition().x + m_bulletVector.x * m_bulletSpeed, m_bulletSprite.getPosition().y + m_bulletVector.y * m_bulletSpeed);
+}
+
+bool Bullet::isFriendly()
+{
+	return m_isFriendly;
 }
 
 Bullet::~Bullet()

@@ -148,23 +148,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Collider.h" />
-    <ClInclude Include="Collision.h" />
+    <ClInclude Include="DebugWindow.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Interactable.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Manager.h" />
-    <ClInclude Include="Object.h" />
+    <ClInclude Include="ParticleManager.h" />
+    <ClInclude Include="Particles.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Tile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="DebugWindow.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Interactable.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Manager.cpp" />
-    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ParticleManager.cpp" />
+    <ClCompile Include="Particles.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
