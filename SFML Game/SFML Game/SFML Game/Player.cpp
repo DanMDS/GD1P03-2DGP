@@ -3,14 +3,16 @@
 
 Player::Player(sf::String _spritePath, sf::Vector2f _objPos)
 {
+	// Initialising variables and loading sprites and textures
 	m_alpha = 75;
 	m_playerInvTimer = 0.0f;
-	m_zoomAmount = 0.1f;
 	m_isHit = false;
-	m_isZoomed = false;
+	m_isZooming = false;
 	m_isDamaged = false;
 	m_invUp = false;
 	m_dead = false;
+	m_timerIsSet = false;
+	m_zoomed = true;
 
 	m_PlayerTexture = new sf::Texture();
 	if (!m_PlayerTexture->loadFromFile(_spritePath))
@@ -52,6 +54,7 @@ Player::Player(sf::String _spritePath, sf::Vector2f _objPos)
 
 Player::~Player()
 {
+	// Deallocating memory
 	delete m_playerCol;
 	delete m_PlayerTexture;
 	delete m_PlayerSprite;
@@ -71,6 +74,7 @@ sf::Sprite* Player::GetInteractSprite()
 
 void Player::UpdatePlayer(sf::View* _zoom)
 {
+	// Updating player position, dead boolean, health and zoom and invincibility effects
 	if (m_playerHealthCurrent <= 0)
 	{
 		m_dead = true;
@@ -85,19 +89,33 @@ void Player::UpdatePlayer(sf::View* _zoom)
 
 	if (m_isHit)
 	{
-		if (m_isZoomed)
+		if (m_isZooming)
 		{
-			m_zoomAmount += 0.01;
-			_zoom->zoom(m_zoomAmount);
-			if (m_zoomAmount >= 0.1)
+			if (clock.getElapsedTime().asMilliseconds() - zoomTimer.asMilliseconds() < 1000/30)
 			{
-				m_isZoomed = false;
+				_zoom->zoom(0.99);
+			}
+			else
+			{
+				m_timerIsSet = false;
+				m_isZooming = false;
 			}
 		}
-		else if (m_zoomAmount >= 0)
+		else
 		{
-			m_zoomAmount -= 0.01;
-			_zoom->zoom(m_zoomAmount);
+			if (!m_timerIsSet)
+			{
+				zoomTimer = clock.getElapsedTime();
+				m_timerIsSet = true;
+			}
+			if (clock.getElapsedTime().asMilliseconds() - zoomTimer.asMilliseconds() < 1000/30)
+			{
+				_zoom->zoom(1/0.99);
+			}
+			else
+			{
+				m_zoomed = true;
+			}
 		}
 		if (!m_isDamaged)
 		{
@@ -156,6 +174,11 @@ int Player::PlayerGetHealthCurrent()
 	return m_playerHealthCurrent;
 }
 
+int Player::PlayerGetSpeed()
+{
+	return m_playerSpeed;
+}
+
 void Player::PlayerSetHealthCurrent(int _num)
 {
 	m_playerHealthCurrent += _num;
@@ -164,6 +187,11 @@ void Player::PlayerSetHealthCurrent(int _num)
 void Player::PlayerSetHealthMax(int _num)
 {
 	m_playerHealthMax += _num;
+}
+
+void Player::PlayerSetSpeed(int _num)
+{
+	m_playerSpeed = _num;
 }
 
 void Player::ResetPlayerState()
@@ -185,6 +213,11 @@ bool Player::IsInv()
 
 void Player::UpdateInv(sf::View* _view)
 {
+	// On hit event
+	m_zoomed = false;
+	zoomTimer = clock.getElapsedTime();
+	m_timerIsSet = false;
+	m_isZooming = true;
 	m_isHit = true;
 	timer = clock.getElapsedTime();
 }
@@ -196,6 +229,7 @@ void Player::SetPlayerPosition(sf::Vector2f _pos)
 
 void Player::MovePlayer()
 {
+	// Moving player depending on keyboard input
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !m_playerCol->m_colTop)
 	{
 		m_PlayerPos.y -= m_playerSpeed;

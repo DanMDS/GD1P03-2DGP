@@ -6,27 +6,34 @@
 class Enemy
 {
 private:
-	int m_enemyHealth;										// Player health
+	// Values for calculations
+	int m_enemyHealth;
 	float m_enemySpeed;
 	int m_shootTime;
 
+	// Bool for different enemy types
 	bool m_shooting;
 
+	// Clock for timings
 	sf::Clock clock;
 	sf::Time timer;
 
-	sf::Sprite* m_enemySprite;								// Player sprite
-	sf::Texture* m_enemyTexture;							// Player texture
+	// Sprite
+	sf::Sprite* m_enemySprite;
+	sf::Texture* m_enemyTexture;
 
-	sf::Vector2f m_enemyPos;								// Player position
+	// Position
+	sf::Vector2f m_enemyPos;
 
+	// Collider object
 	Collider* m_enemyCol;
 
 public:
+	// Methods
 	Enemy(sf::String _spritePath, sf::Vector2f _objPos, bool _shooting = false);	// Constructor
-	~Enemy();												// Destructor
+	~Enemy();
 
-	sf::Sprite* GetSprite();								// Draw methods
+	sf::Sprite* GetSprite();
 	sf::Vector2f GetEnemyPosition();
 
 	Collider* GetCollider();

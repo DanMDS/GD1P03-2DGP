@@ -7,12 +7,14 @@
 class Button : public Interactable
 {
 private:
+	// Textures and boolean for pressed and not pressed
 	sf::Texture* m_buttonTextureUp;
 	sf::Texture* m_buttonTextureDown;
 
 	bool m_isPressed;
 
 public:
+	// Methods 
 	bool IsPressed();
 	void Update();
 

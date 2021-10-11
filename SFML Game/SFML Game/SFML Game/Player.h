@@ -6,49 +6,63 @@
 class Player
 {
 private:
-	int m_playerHealthCurrent;								// Player health
+	// Ints for player current and max health, and speed
+	int m_playerHealthCurrent;
 	int m_playerHealthMax;
 	int m_playerSpeed;
 
-	const float m_playerInvDuration = 2.0f;					// Variables for player i-frames
+	// Variables for timings and invincibility 
+	const float m_playerInvDuration = 2.0f;
 	float m_playerInvTimer;
 	bool m_isHit;
-	bool m_isZoomed;
+	bool m_isZooming;
 	bool m_isDamaged;
+	bool m_timerIsSet;
 	bool m_invUp;
 	bool m_dead;
 	int m_alpha;
-	float m_zoomAmount;
 
-	sf::Sprite* m_PlayerSprite;								// Player sprite
-	sf::Texture* m_PlayerTexture;							// Player texture
+	// Player sprite
+	sf::Sprite* m_PlayerSprite;
+	sf::Texture* m_PlayerTexture;
 
-	sf::Image* m_interactImage;								// Interact image
-	sf::Sprite* m_interactSprite;							// Interact sprite
-	sf::Texture* m_interactTexture;							// Interact texture
+	// 'Can interact' sprite
+	sf::Image* m_interactImage;
+	sf::Sprite* m_interactSprite;
+	sf::Texture* m_interactTexture;
 
-	sf::Vector2f m_PlayerPos;								// Player position
+	// Player position
+	sf::Vector2f m_PlayerPos;
 
+	// Collider object
 	Collider* m_playerCol;
 
 public:
-	Player(sf::String _spritePath, sf::Vector2f _objPos);	// Constructor
-	~Player();												// Destructor
+	// Boolean for hit effect
+	bool m_zoomed;
 
-	sf::Sprite* GetSprite();								// Draw methods
-	sf::Sprite* GetInteractSprite();
-	sf::Vector2f GetPlayerPosition();
-
-	sf::Clock clock;										// Timer for cooldowns/i-frames
+	// Clock for timings
+	sf::Clock clock;
 	sf::Time timer;
 	sf::Time shootTimer;
+	sf::Time zoomTimer;
+
+	// Methods
+	Player(sf::String _spritePath, sf::Vector2f _objPos);
+	~Player();
+
+	sf::Sprite* GetSprite();
+	sf::Sprite* GetInteractSprite();
+	sf::Vector2f GetPlayerPosition();
 
 	Collider* GetCollider();
 
 	int PlayerGetHealthMax();
 	int PlayerGetHealthCurrent();
+	int PlayerGetSpeed();
 	void PlayerSetHealthCurrent(int _num);
 	void PlayerSetHealthMax(int _num);
+	void PlayerSetSpeed(int _num);
 	void ResetPlayerState();
 
 	bool IsDead();

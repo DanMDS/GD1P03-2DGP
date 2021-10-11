@@ -7,6 +7,7 @@ sf::CircleShape* Particle::GetParticle()
 
 void Particle::Update()
 {
+	// Updating particle positin and is finished boolean
 	particle->setRadius(particle->getRadius() - 0.2);
 	particle->setPosition(sf::Vector2f(particle->getPosition().x + velocity.x, particle->getPosition().y + velocity.y));
 	
@@ -19,6 +20,7 @@ void Particle::Update()
 
 Particle::Particle(sf::Color _colour, sf::Vector2f _pos)
 {
+	// Initalising variables and particle shapes
 	m_isFinished = false;
 	particle = new sf::CircleShape(5);
 	particle->setOrigin(particle->getGlobalBounds().width, particle->getGlobalBounds().height);
@@ -31,6 +33,7 @@ Particle::Particle(sf::Color _colour, sf::Vector2f _pos)
 
 Particle::~Particle()
 {
+	// Deallocating memory
 	delete particle;
 	particle = nullptr;
 }

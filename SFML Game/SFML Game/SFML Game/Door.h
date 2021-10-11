@@ -8,12 +8,15 @@
 class Door : public Interactable
 {
 private:
+	// Bool for texture changing
 	bool m_locked;
 
+	// Open and closed textures
 	sf::Texture* m_doorClosedTexture;
 	sf::Texture* m_doorOpenTexture;
 
 public:
+	// Methods
 	void Update(bool _levelEnd, sf::Vector2f _playerPos, Player* _player, std::vector<Enemy*> _enemies);
 	void DoorLock();
 

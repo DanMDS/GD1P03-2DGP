@@ -153,6 +153,7 @@
     <ClInclude Include="DebugWindow.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Hud.h" />
     <ClInclude Include="Interactable.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Manager.h" />
@@ -167,6 +168,7 @@
     <ClCompile Include="DebugWindow.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Interactable.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Main.cpp" />

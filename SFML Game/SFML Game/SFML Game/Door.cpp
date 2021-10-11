@@ -3,6 +3,7 @@
 
 void Door::Update(bool _levelEnd, sf::Vector2f _playerPos, Player* _player, std::vector<Enemy*> _enemies)
 {
+	// Updating sprites and interacted boolean
 	if (_levelEnd)
 	{
 		m_intSprite->setTexture(*m_doorOpenTexture);
@@ -24,6 +25,7 @@ void Door::Update(bool _levelEnd, sf::Vector2f _playerPos, Player* _player, std:
 
 void Door::DoorLock()
 {
+	// Locking door
 	m_intSprite->setTexture(*m_doorClosedTexture);
 
 	m_locked = true;
@@ -46,6 +48,7 @@ sf::Vector2f Door::GetDoorPosition()
 
 Door::Door(sf::Vector2f _levelDim)
 {
+	// Initialising variables and loading sprites and textures
 	m_locked = true;
 	m_isDoor = true;
 	m_isButton = false;
@@ -73,6 +76,7 @@ Door::Door(sf::Vector2f _levelDim)
 
 Door::~Door()
 {
+	// Deallocating memory
 	delete m_doorClosedTexture;
 	delete m_doorOpenTexture;
 

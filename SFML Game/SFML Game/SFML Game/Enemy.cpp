@@ -3,6 +3,7 @@
 
 Enemy::Enemy(sf::String _spritePath, sf::Vector2f _objPos, bool _shooting)
 {
+	// Initialising variables and loading sprites and textures
 	m_playerCollision = false;
 
 	m_enemyTexture = new sf::Texture();
@@ -30,11 +31,12 @@ Enemy::Enemy(sf::String _spritePath, sf::Vector2f _objPos, bool _shooting)
 	m_shoot = false;
 
 	m_enemyCol = new Collider(sf::Vector2f(m_enemySprite->getLocalBounds().width, m_enemySprite->getLocalBounds().height));
-	
 }
 
 Enemy::~Enemy()
 {
+	// Deallocating memory
+	delete m_enemyCol;
 	delete m_enemyTexture;
 	delete m_enemySprite;
 }
@@ -56,6 +58,7 @@ Collider* Enemy::GetCollider()
 
 void Enemy::UpdateEnemy(sf::Vector2f _movePos)
 {
+	// Moving enemy or updating shoot timer depending on shooting boolean
 	if (!m_shooting)
 	{
 		MoveEnemy(_movePos);
@@ -70,6 +73,7 @@ void Enemy::UpdateEnemy(sf::Vector2f _movePos)
 
 void Enemy::MoveEnemy(sf::Vector2f _movePos)
 {
+	// Moving enemy towards player if not colliding
 	if (!m_playerCollision)
 	{
 		int xDifference = _movePos.x - m_enemyPos.x;
