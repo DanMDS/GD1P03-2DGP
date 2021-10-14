@@ -15,11 +15,13 @@ private:
 
 public:
 	// Methods 
-	bool IsPressed();
 	void Update();
 
-	sf::Sprite* GetSprite();
+	// Getters
+	sf::Sprite* GetSprite()		{ return m_intSprite; };
+	bool IsPressed()			{ return m_isPressed; };
 
+	// Constructor/destructor
 	Button(sf::Vector2f _pos);
 	~Button();
 };

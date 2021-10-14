@@ -2,79 +2,90 @@
 #include <string>
 #include "Level.h"
 
+/*
+	Function: ChangeLevel()
+	Returns: void
+	Parametres: Player* _player, std::vector<Enemy*> _enemies, int _index
+	Summary: Changes to a specific level depending on index. Index values are as follows:
+		   -4: random level, random between 3 level sprites
+		   -3: title screen, title sprite
+		   -2: tutorial, tutorial sprite
+		   -1: death screen, death sprite
+		0 - 9: specific level, random between 3 level sprites
+*/
 void Level::ChangeLevel(Player* _player, std::vector<Enemy*> _enemies, int _index)
 {
 	// Randomizing level or setting to a specific one depending on _index, setting texture accordingly
 	if (_index == -4)
 	{
-		levelTemp = levelIndex;
-		while (levelIndex == levelTemp)
+		m_levelTemp = m_levelIndex;
+		while (m_levelIndex == m_levelTemp)
 		{
-			levelIndex = rand() % 10;
+			m_levelIndex = rand() % 10;
 		}
-		std::cout << levelIndex;
 
-		levelTemp = levelBg;
-		while (levelBg == levelTemp || levelBg < 0)
+		m_levelTemp = m_levelBg;
+		while (m_levelBg == m_levelTemp || m_levelBg < 0)
 		{
-			levelBg = rand() % 3;
+			m_levelBg = rand() % 3;
 		}
 	}
 	else
 	{
-		levelIndex = _index;
-		switch (levelIndex)
+		m_levelIndex = _index;
+		switch (m_levelIndex)
 		{
 		case -3:
-			levelBg = -3;
+			m_levelBg = -3;
 
 			break;
 		case -2:
-			levelBg = -2;
+			m_levelBg = -2;
 			break;
 
 		case -1:
-			levelBg = -1;
+			m_levelBg = -1;
 
 			break;
 		}
 	}
 
-	switch (levelBg)
+	switch (m_levelBg)
 	{
 	case -3:
-		levelCanvasSprite->setTexture(*levelCanvasTitle);
+		m_levelCanvasSprite->setTexture(*m_levelCanvasTitle);
 		break;
 	case -2:
-		levelCanvasSprite->setTexture(*levelCanvasTutorial);
+		m_levelCanvasSprite->setTexture(*m_levelCanvasTutorial);
 		break;
 	case -1:
-		levelCanvasSprite->setTexture(*levelCanvasTextureDeath);
+		m_levelCanvasSprite->setTexture(*m_levelCanvasTextureDeath);
 		break;
 	case 0:
-		levelCanvasSprite->setTexture(*levelCanvasTexture1);
+		m_levelCanvasSprite->setTexture(*m_levelCanvasTexture1);
 		break;
 	case 1:
-		levelCanvasSprite->setTexture(*levelCanvasTexture2);
+		m_levelCanvasSprite->setTexture(*m_levelCanvasTexture2);
 		break;
 	case 2:
-		levelCanvasSprite->setTexture(*levelCanvasTexture3);
+		m_levelCanvasSprite->setTexture(*m_levelCanvasTexture3);
 		break;
 	}
 
 	// Moving and scaling obstacles based on level index
-	levelCol->UpdateColliders(&levelIndex);
+	m_levelCol->UpdateColliders(&m_levelIndex);
 
 	// Resetting player position
-	_player->SetPlayerPosition(playerSpawnPoint);
+	_player->SetPlayerPosition(m_playerSpawnPoint);
 }
 
-void Level::Draw(sf::RenderWindow* _window)
-{
-	// Drawing level
-	_window->draw(*levelCanvasSprite);
-}
-
+/*
+	Function: LevelEndCheck()
+	Returns: bool
+	Parametres: int _enemiesRemaining, std::vector<Interactable*> _interacts
+	Summary: Checks if the level is over depending on the number of enemies and buttons left, returns true
+		or false accordingly
+*/
 bool Level::LevelEndCheck(int _enemiesRemaining, std::vector<Interactable*> _interacts)
 {
 	// Checking if the level can be ended
@@ -85,7 +96,7 @@ bool Level::LevelEndCheck(int _enemiesRemaining, std::vector<Interactable*> _int
 
 	for (auto& itr : _interacts)
 	{
-		if (itr->m_isButton && !itr->m_interacted)
+		if (itr->GetIsButton() && !itr->GetInteracted())
 		{
 			return false;
 		}
@@ -94,73 +105,68 @@ bool Level::LevelEndCheck(int _enemiesRemaining, std::vector<Interactable*> _int
 	return true;
 }
 
-Collider* Level::GetCollider()
-{
-	return levelCol;
-}
-
 Level::Level(sf::String _spritePath)
 {
 	// Initialising variables and loading sprites, images and textures
-	levelBg = rand() % 3;
-	levelTemp = levelBg;
-	levelIndex = -3;
-	levelsCompleted = 0;
+	m_levelBg = rand() % 3;
+	m_levelTemp = m_levelBg;
+	m_levelIndex = -3;
+	m_levelsCompleted = 0;
 
-	levelCanvasSprite = new sf::Sprite();
-	levelCanvasTitle = new sf::Texture();
-	levelCanvasTutorial = new sf::Texture();
-	levelCanvasTexture1 = new sf::Texture();
-	levelCanvasTexture2 = new sf::Texture();
-	levelCanvasTexture3 = new sf::Texture();
-	levelCanvasTextureDeath = new sf::Texture();
+	m_levelCanvasSprite = new sf::Sprite();
+	m_levelCanvasTitle = new sf::Texture();
+	m_levelCanvasTutorial = new sf::Texture();
+	m_levelCanvasTexture1 = new sf::Texture();
+	m_levelCanvasTexture2 = new sf::Texture();
+	m_levelCanvasTexture3 = new sf::Texture();
+	m_levelCanvasTextureDeath = new sf::Texture();
 
-	if (!levelCanvasTitle->loadFromFile("levels/level_main.png"))
+	if (!m_levelCanvasTitle->loadFromFile("levels/level_main.png"))
 	{
 		std::cout << "Error: loading level image";
 	}
 
-	levelCanvasSprite->setTexture(*levelCanvasTitle);
+	m_levelCanvasSprite->setTexture(*m_levelCanvasTitle);
 
-	if (!levelCanvasTutorial->loadFromFile("levels/tutorial.png"))
+	if (!m_levelCanvasTutorial->loadFromFile("levels/tutorial.png"))
 	{
 		std::cout << "Error: loading level image";
 	}
 
-	if (!levelCanvasTexture1->loadFromFile("levels/level_1.png"))
+	if (!m_levelCanvasTexture1->loadFromFile("levels/level_1.png"))
 	{
 		std::cout << "Error: Loading level image";
 	}
 
-	if (!levelCanvasTexture2->loadFromFile("levels/level_2.png"))
+	if (!m_levelCanvasTexture2->loadFromFile("levels/level_2.png"))
 	{
 		std::cout << "Error: Loading level image";
 	}
 
-	if (!levelCanvasTexture3->loadFromFile("levels/level_3.png"))
+	if (!m_levelCanvasTexture3->loadFromFile("levels/level_3.png"))
 	{
 		std::cout << "Error: Loading level image";
 	}
 
-	if (!levelCanvasTextureDeath->loadFromFile("levels/game_over.png"))
+	if (!m_levelCanvasTextureDeath->loadFromFile("levels/game_over.png"))
 	{
 		std::cout << "Error: Loading level image";
 	}
 
-	levelCol = new Collider(sf::Vector2f(levelCanvasSprite->getLocalBounds().width, levelCanvasSprite->getLocalBounds().height), true);
+	m_levelCol = new Collider(sf::Vector2f(m_levelCanvasSprite->getLocalBounds().width, m_levelCanvasSprite->getLocalBounds().height), true);
 }
 
 Level::~Level()
 {
 	// Deallocating memory
-	delete levelCanvasSprite, levelCanvasTitle, levelCanvasTutorial, levelCanvasTexture1, levelCanvasTexture2, levelCanvasTexture3, levelCanvasTextureDeath, levelCol;
+	delete m_levelCanvasSprite, m_levelCanvasTitle, m_levelCanvasTutorial, m_levelCanvasTexture1, m_levelCanvasTexture2, m_levelCanvasTexture3, m_levelCanvasTextureDeath, m_levelCol;
 
-	levelCanvasSprite = nullptr;
-	levelCanvasTitle = nullptr;
-	levelCanvasTutorial = nullptr;
-	levelCanvasTexture1 = nullptr;
-	levelCanvasTexture2 = nullptr;
-	levelCanvasTexture3 = nullptr;
-	levelCanvasTextureDeath = nullptr;
-	levelCol = nullptr;
+	m_levelCanvasSprite = nullptr;
+	m_levelCanvasTitle = nullptr;
+	m_levelCanvasTutorial = nullptr;
+	m_levelCanvasTexture1 = nullptr;
+	m_levelCanvasTexture2 = nullptr;
+	m_levelCanvasTexture3 = nullptr;
+	m_levelCanvasTextureDeath = nullptr;
+	m_levelCol = nullptr;
 }

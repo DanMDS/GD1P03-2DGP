@@ -23,8 +23,8 @@ private:
 	int m_alpha;
 
 	// Player sprite
-	sf::Sprite* m_PlayerSprite;
-	sf::Texture* m_PlayerTexture;
+	sf::Sprite* m_playerSprite;
+	sf::Texture* m_playerTexture;
 
 	// 'Can interact' sprite
 	sf::Image* m_interactImage;
@@ -32,7 +32,7 @@ private:
 	sf::Texture* m_interactTexture;
 
 	// Player position
-	sf::Vector2f m_PlayerPos;
+	sf::Vector2f m_playerPos;
 
 	// Collider object
 	Collider* m_playerCol;
@@ -47,28 +47,28 @@ public:
 	sf::Time shootTimer;
 	sf::Time zoomTimer;
 
-	// Methods
+	// Constructor/destructor
 	Player(sf::String _spritePath, sf::Vector2f _objPos);
 	~Player();
 
-	sf::Sprite* GetSprite();
-	sf::Sprite* GetInteractSprite();
-	sf::Vector2f GetPlayerPosition();
+	// Getters and setters
+	sf::Sprite* GetSprite()						{ return m_playerSprite;			};
+	sf::Sprite* GetInteractSprite()				{ return m_interactSprite;			};
+	sf::Vector2f GetPlayerPosition()			{ return m_playerPos;				};
+	Collider* GetCollider()						{ return m_playerCol;				};
+	int PlayerGetHealthMax()					{ return m_playerHealthMax;			};
+	int PlayerGetHealthCurrent()				{ return m_playerHealthCurrent;		};
+	int PlayerGetSpeed()						{ return m_playerSpeed;				};
+	bool IsDead()								{ return m_dead;					};
+	bool IsInv()								{ return m_isHit;					};
 
-	Collider* GetCollider();
-
-	int PlayerGetHealthMax();
-	int PlayerGetHealthCurrent();
-	int PlayerGetSpeed();
-	void PlayerSetHealthCurrent(int _num);
-	void PlayerSetHealthMax(int _num);
-	void PlayerSetSpeed(int _num);
+	void PlayerSetHealthCurrent(int _num)		{ m_playerHealthCurrent += _num;	};
+	void PlayerSetSpeed(int _num)				{ m_playerSpeed += _num;			};
 	void ResetPlayerState();
+	void SetPlayerPosition(sf::Vector2f _pos)	{ m_playerPos = _pos;				};
 
-	bool IsDead();
-	bool IsInv();
+	// Methods
 	void UpdateInv(sf::View* _view);
-	void SetPlayerPosition(sf::Vector2f _pos);
 	void UpdatePlayer(sf::View* _zoom);
 	void MovePlayer();
 };

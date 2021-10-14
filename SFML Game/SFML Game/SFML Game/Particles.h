@@ -9,14 +9,18 @@ private:
 	sf::CircleShape* particle;
 	sf::Vector2f velocity;
 
-public:
 	// Bool for deletion
 	bool m_isFinished;
 
-	// Methods
-	sf::CircleShape* GetParticle();
+public:
 
+	// Methods
 	void Update();
+
+	// Getters
+	sf::CircleShape* GetParticle()	{ return particle;		};
+	bool GetIsFinished()			{ return m_isFinished;	};
+;
 
 	Particle(sf::Color _colour, sf::Vector2f _pos);
 	~Particle();

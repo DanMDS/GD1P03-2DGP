@@ -1,18 +1,19 @@
 #include "ParticleManager.h"
 
+/*
+	Function: IsFinished()
+	Returns: bool
+	Parametres: none
+	Summary: Checks if the particles are finished player, returns true or false accordingly
+*/
 bool ParticleManager::IsFinished()
 {
 	// Checking if particles have finished
-	if ((*itParticlesVec)->m_isFinished)
+	if ((*itParticlesVec)->GetIsFinished())
 	{
 		return true;
 	}
 	return false;
-}
-
-std::vector<Particle*> ParticleManager::GetParticles()
-{
-	return particlesVec;
 }
 
 ParticleManager::ParticleManager(sf::Color _colour, sf::Vector2f _pos, int _amount)

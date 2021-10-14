@@ -21,32 +21,37 @@ private:
 	// Background for easy colour changing
 	sf::RectangleShape* m_background;
 
-	// Methods for button presses
-	void ToggleDebugControls();
-	void ToggleColliders();
-	void ToggleEnemySpawn();
-	void ToggleEnemyShoot();
-	void ToggleValueChanging();
-
 	// int for font size
 	int m_fontSize;
 
-public:
-	// Int for selection arrow
-	int m_valueSelectedYPos;
-
-	// Vectors for easy button access
-	std::vector<sf::Drawable*> debugObjects;
-	std::vector<sf::Drawable*>::iterator itButtons;
-
-	// Bools easy access
+	// Bools for easy access
 	bool m_showColliders;
 	bool m_debugControls;
 	bool m_spawnEnemy;
 	bool m_shootingEnemy;
 	bool m_valueChanging;
 
-	// Methods
+	// Int for selection arrow
+	int m_valueSelectedYPos;
+
+public:
+
+	// Vectors for easy button access
+	std::vector<sf::Drawable*> debugObjects;
+	std::vector<sf::Drawable*>::iterator itButtons;
+
+	// Set position for value selection
+	void SetValueSelectedPos(int _num)	{ m_valueSelectedYPos = _num;			};
+
+	// Get functions for button booleans for manager decisions
+	int GetValueSelectedPos()			{ return m_valueSelectedYPos;			};
+	bool GetShowColliders()				{ return m_showColliders;				};
+	bool GetDebugControls()				{ return m_debugControls;				};
+	bool GetSpawnEnemy()				{ return m_spawnEnemy;					};
+	bool GetShootingEnemy()				{ return m_shootingEnemy;				};
+	bool GetValueChanging()				{ return m_valueChanging;				};
+
+	// Update, draw and contructor/destructor methods
 	void Update(sf::RenderWindow* _window, sf::Vector2f _mousePos, bool _mousePressed, int _playerShootDelay, int _playerSpeed, int _playerShootSpeed);
 
 	void Draw(sf::RenderWindow* _window);

@@ -1,14 +1,16 @@
 #include "Particles.h"
 
-sf::CircleShape* Particle::GetParticle()
-{
-	return particle;
-}
-
+/*
+	Function: Update()
+	Returns: void
+	Parametres: none
+	Summary: Updates size, radius and position based on randomised end point, the sets the is finished
+		bool to true
+*/
 void Particle::Update()
 {
 	// Updating particle positin and is finished boolean
-	particle->setRadius(particle->getRadius() - 0.2);
+	particle->setRadius(particle->getRadius() - 0.2f);
 	particle->setPosition(sf::Vector2f(particle->getPosition().x + velocity.x, particle->getPosition().y + velocity.y));
 	
 	if (particle->getRadius() <= 0)
@@ -28,7 +30,7 @@ Particle::Particle(sf::Color _colour, sf::Vector2f _pos)
 	particle->setOutlineThickness(1);
 	particle->setOutlineColor(sf::Color::Black);
 	particle->setPosition(_pos);
-	velocity = sf::Vector2f(rand() % 11 - 5, rand() % 11 - 5);
+	velocity = sf::Vector2f(float(rand() % 11 - 5), float(rand() % 11 - 5));
 }
 
 Particle::~Particle()

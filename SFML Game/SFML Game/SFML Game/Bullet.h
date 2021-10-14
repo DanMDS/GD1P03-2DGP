@@ -20,11 +20,13 @@ private:
 
 public:
 	// Methods
-	sf::Sprite* GetSprite();
 
+	//	Getters
+	sf::Sprite* GetSprite() { return m_bulletSprite;	};
+	bool isFriendly()		{ return m_isFriendly;		};
+
+	// Update function for bullet
 	void UpdateBullet();
-
-	bool isFriendly();
 
 	Bullet(float _speed, bool _isFriendly, sf::Vector2f _startPos, sf::Vector2f _mousePos = sf::Vector2f(0, 0));
 	~Bullet();

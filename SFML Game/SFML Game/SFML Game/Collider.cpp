@@ -1,6 +1,11 @@
 #include "Collider.h"
-#include <iostream>
 
+/*
+	Function: MoveCollider()
+	Returns: void
+	Parametres: sf::Vector2f _pos
+	Description: Moves colliders with the entity they're attached to
+*/
 void Collider::MoveCollider(sf::Vector2f _pos)
 {
 	for (itBoundsVec = boundsVec.begin(); itBoundsVec != boundsVec.end(); itBoundsVec++)
@@ -163,6 +168,12 @@ void Collider::UpdateColliders(int* _levelIndex)
 	}
 }
 
+/*
+	Function: DrawColliders()
+	Returns: void
+	Parametres: sf::RenderWindow* _window, bool _draw
+	Description: Draws colliders to main window with blue outline if draw colliders is enabled in debug window
+*/
 void Collider::DrawColliders(sf::RenderWindow* _window, bool _draw)
 {
 	// Drawing colliders
@@ -178,11 +189,6 @@ void Collider::DrawColliders(sf::RenderWindow* _window, bool _draw)
 		}
 		_window->draw(*itr);
 	}
-}
- 
-int Collider::GetSize()
-{
-	return boundsVec.size();
 }
 
 Collider::Collider(sf::Vector2f _colDim, bool _level)
@@ -202,22 +208,22 @@ Collider::Collider(sf::Vector2f _colDim, bool _level)
 		colWidth = 38;
 
 		// Adding top level collider
-		colObs = new sf::RectangleShape(sf::Vector2f(_colDim.x, colWidth));
+		colObs = new sf::RectangleShape(sf::Vector2f(_colDim.x, float(colWidth)));
 		colObs->setFillColor(*m_colliderColour);
 		colObs->setOutlineColor(sf::Color::Blue);
 		colObs->setOutlineThickness(1);
 		boundsVec.push_back(colObs);
 
 		// Adding bottom level collider
-		colObs = new sf::RectangleShape(sf::Vector2f(_colDim.x, colWidth));
+		colObs = new sf::RectangleShape(sf::Vector2f(_colDim.x, float(colWidth)));
 		colObs->setFillColor(*m_colliderColour);
 		colObs->setOutlineColor(sf::Color::Blue);
 		colObs->setOutlineThickness(1);
-		colObs->setPosition(sf::Vector2f(0, _colDim.y - colWidth));
+		colObs->setPosition(sf::Vector2f(0, _colDim.y - float(colWidth)));
 		boundsVec.push_back(colObs);
 
 		// Adding left level collider
-		colObs = new sf::RectangleShape(sf::Vector2f(colWidth, _colDim.y));
+		colObs = new sf::RectangleShape(sf::Vector2f(float(colWidth), _colDim.y));
 		colObs->setFillColor(*m_colliderColour);
 		colObs->setOutlineColor(sf::Color::Blue);
 		colObs->setOutlineThickness(1);
@@ -225,11 +231,11 @@ Collider::Collider(sf::Vector2f _colDim, bool _level)
 		boundsVec.push_back(colObs);
 
 		// Adding right level collider
-		colObs = new sf::RectangleShape(sf::Vector2f(colWidth, _colDim.y));
+		colObs = new sf::RectangleShape(sf::Vector2f(float(colWidth), _colDim.y));
 		colObs->setFillColor(*m_colliderColour);
 		colObs->setOutlineColor(sf::Color::Blue);
 		colObs->setOutlineThickness(1);
-		colObs->setPosition(sf::Vector2f(_colDim.x - colWidth, 0));
+		colObs->setPosition(sf::Vector2f(_colDim.x - float(colWidth), 0));
 		boundsVec.push_back(colObs);
 
 		// Setting other colliders to null
@@ -240,15 +246,15 @@ Collider::Collider(sf::Vector2f _colDim, bool _level)
 		colWidth = 7;
 
 		// Adding top collider
-		colBoundsTop = new sf::RectangleShape(sf::Vector2f(_colDim.x - 2, colWidth));
+		colBoundsTop = new sf::RectangleShape(sf::Vector2f(_colDim.x - 2, float(colWidth)));
 		colBoundsTop->setOutlineColor(sf::Color::Blue);
 		colBoundsTop->setFillColor(sf::Color::Transparent);
 		colBoundsTop->setOutlineThickness(1);
-		colBoundsTop->setOrigin(colBoundsTop->getSize().x / 2, _colDim.y / 2 + colWidth);
+		colBoundsTop->setOrigin(colBoundsTop->getSize().x / 2, _colDim.y / 2 + float(colWidth));
 		boundsVec.push_back(colBoundsTop);
 
 		// Adding bottom collider
-		colBoundsBottom = new sf::RectangleShape(sf::Vector2f(_colDim.x - 2, colWidth));
+		colBoundsBottom = new sf::RectangleShape(sf::Vector2f(_colDim.x - 2, float(colWidth)));
 		colBoundsBottom->setOutlineColor(sf::Color::Blue);
 		colBoundsBottom->setFillColor(sf::Color::Transparent);
 		colBoundsBottom->setOutlineThickness(1);
@@ -256,15 +262,15 @@ Collider::Collider(sf::Vector2f _colDim, bool _level)
 		boundsVec.push_back(colBoundsBottom);
 
 		// Adding left collider
-		colBoundsLeft = new sf::RectangleShape(sf::Vector2f(colWidth, _colDim.y - 2));
+		colBoundsLeft = new sf::RectangleShape(sf::Vector2f(float(colWidth), _colDim.y - 2));
 		colBoundsLeft->setOutlineColor(sf::Color::Blue);
 		colBoundsLeft->setFillColor(sf::Color::Transparent);
 		colBoundsLeft->setOutlineThickness(1);
-		colBoundsLeft->setOrigin(_colDim.x / 2 + colWidth, colBoundsLeft->getSize().y / 2);
+		colBoundsLeft->setOrigin(_colDim.x / 2 + float(colWidth), colBoundsLeft->getSize().y / 2);
 		boundsVec.push_back(colBoundsLeft);
 
 		// Adding right collider
-		colBoundsRight = new sf::RectangleShape(sf::Vector2f(colWidth, _colDim.y - 2));
+		colBoundsRight = new sf::RectangleShape(sf::Vector2f(float(colWidth), _colDim.y - 2));
 		colBoundsRight->setOutlineColor(sf::Color::Blue);
 		colBoundsRight->setFillColor(sf::Color::Transparent);
 		colBoundsRight->setOutlineThickness(1);

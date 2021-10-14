@@ -1,6 +1,12 @@
 #include <iostream>
 #include "Door.h"
 
+/*
+	Function: Update()
+	Returns: void
+	Parametres: bool _levelEnd, sf::Vector2f _playerPos, Player* _player, std::vector<Enemy*> _enemies
+	Summary: Updates the doors sprite and booleans, locks the door if the level changes
+*/
 void Door::Update(bool _levelEnd, sf::Vector2f _playerPos, Player* _player, std::vector<Enemy*> _enemies)
 {
 	// Updating sprites and interacted boolean
@@ -15,14 +21,20 @@ void Door::Update(bool _levelEnd, sf::Vector2f _playerPos, Player* _player, std:
 		m_locked = true;
 	}
 
+	// Locking door on level change
 	if (m_interacted && _levelEnd)
 	{
-		std::cout << "test";
 		m_interacted = false;
 		DoorLock();
 	}
 }
 
+/*
+	Function: DoorLock()
+	Returns: void
+	Parametres: none
+	Summary: "Locks" the door (sets its texture to locked, sets locked bool to true)
+*/
 void Door::DoorLock()
 {
 	// Locking door
@@ -31,22 +43,7 @@ void Door::DoorLock()
 	m_locked = true;
 }
 
-bool Door::DoorIsOpen()
-{
-	return !m_locked;
-}
-
-sf::Sprite* Door::GetSprite()
-{
-	return m_intSprite;
-}
-
-sf::Vector2f Door::GetDoorPosition()
-{
-	return m_intSprite->getPosition();
-}
-
-Door::Door(sf::Vector2f _levelDim)
+Door::Door(sf::Vector2i _levelDim)
 {
 	// Initialising variables and loading sprites and textures
 	m_locked = true;
@@ -70,7 +67,7 @@ Door::Door(sf::Vector2f _levelDim)
 
 	m_intSprite->setOrigin(m_intSprite->getGlobalBounds().width / 2, m_intSprite->getGlobalBounds().height / 2);
 
-	pos = sf::Vector2f(_levelDim.x - m_intSprite->getGlobalBounds().width / 2, _levelDim.y / 2);
+	pos = sf::Vector2f(float(_levelDim.x - m_intSprite->getGlobalBounds().width / 2), float(_levelDim.y) / 2);
 	m_intSprite->setPosition(pos);
 }
 

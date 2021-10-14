@@ -10,41 +10,45 @@ class Level
 {
 private:
 	// Sprite and textures
-	sf::Sprite* levelCanvasSprite;
-	sf::Texture* levelCanvasTitle;
-	sf::Texture* levelCanvasTutorial;
-	sf::Texture* levelCanvasTexture1;
-	sf::Texture* levelCanvasTexture2;
-	sf::Texture* levelCanvasTexture3;
-	sf::Texture* levelCanvasTextureDeath;
+	sf::Sprite* m_levelCanvasSprite;
+	sf::Texture* m_levelCanvasTitle;
+	sf::Texture* m_levelCanvasTutorial;
+	sf::Texture* m_levelCanvasTexture1;
+	sf::Texture* m_levelCanvasTexture2;
+	sf::Texture* m_levelCanvasTexture3;
+	sf::Texture* m_levelCanvasTextureDeath;
 
 	// Level size
-	sf::Vector2f levelDimensions;
+	sf::Vector2f m_levelDimensions;
 
 	// Int for completed level count
-	int levelsCompleted;
+	int m_levelsCompleted;
 
 	// Collider object
-	Collider* levelCol;
+	Collider* m_levelCol;
 
 	// Ints for random background calculations
-	int levelBg;
-	int levelTemp;
+	int m_levelBg;
+	int m_levelTemp;
 
-public:
 	// Int for random level selection and object placing
-	int levelIndex;
+	int m_levelIndex;
 
 	// Player start position
-	const sf::Vector2f playerSpawnPoint = sf::Vector2f(100, 360);
+	const sf::Vector2f m_playerSpawnPoint = sf::Vector2f(100, 360);
 
+public:
 	// Methods
 	void ChangeLevel(Player* _player, std::vector<Enemy*> _enemies, int _index = 0);
-
-	void Draw(sf::RenderWindow* _window);
 	bool LevelEndCheck(int _enemiesRemaining, std::vector<Interactable*> _interacts);
 
-	Collider* GetCollider();
+	// Draws level sprite
+	void Draw(sf::RenderWindow* _window)		{ _window->draw(*m_levelCanvasSprite);	};
+	
+	// Getters
+	Collider* GetCollider()						{ return m_levelCol;					};
+	int GetLevelIndex()							{ return m_levelIndex;					};
+	const sf::Vector2f GetPlayerSpawnPoint()	{ return m_playerSpawnPoint;			};
 
 	Level(sf::String _spritePath);
 	~Level();

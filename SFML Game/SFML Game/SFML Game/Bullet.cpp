@@ -11,11 +11,17 @@ Bullet::Bullet(float _speed, bool _isFriendly, sf::Vector2f _bulletPos, sf::Vect
 	m_isFriendly = _isFriendly;
 	if (m_isFriendly)
 	{
-		m_bulletImage->loadFromFile("sprites/player_bullet.png");
+		if (!m_bulletImage->loadFromFile("sprites/player_bullet.png"))
+		{
+			std::cout << "Error: loading friendly bullet image";
+		}
 	}
 	else
 	{
-		m_bulletImage->loadFromFile("sprites/enemy_bullet.png");
+		if (!m_bulletImage->loadFromFile("sprites/enemy_bullet.png"))
+		{
+			std::cout << "Error: loading enemy bullet image";
+		}
 	}
 	m_bulletImage->createMaskFromColor(sf::Color::White);
 
@@ -32,8 +38,8 @@ Bullet::Bullet(float _speed, bool _isFriendly, sf::Vector2f _bulletPos, sf::Vect
 	m_bulletSpeed = 2;
 
 	//Calculating bullet vector, only once since direction won't change
-	int xDifference = _targetPos.x - _bulletPos.x;
-	int yDifference = _targetPos.y - _bulletPos.y;
+	int xDifference = int(_targetPos.x - _bulletPos.x);
+	int yDifference = int(_targetPos.y - _bulletPos.y);
 
 	float moveMultiplier = (abs(xDifference) + abs(yDifference)) / _speed;
 
@@ -43,27 +49,26 @@ Bullet::Bullet(float _speed, bool _isFriendly, sf::Vector2f _bulletPos, sf::Vect
 	}
 }
 
-void Bullet::UpdateBullet()
-{
-	// Moving bullet
-	m_bulletSprite->setPosition(m_bulletSprite->getPosition().x + m_bulletVector.x * m_bulletSpeed, m_bulletSprite->getPosition().y + m_bulletVector.y * m_bulletSpeed);
-}
-
-bool Bullet::isFriendly()
-{
-	return m_isFriendly;
-}
-
 Bullet::~Bullet()
 {
 	// Deallocating memory
-	delete m_bulletImage, m_bulletTexture, m_bulletSprite;
+	delete m_bulletImage;
+	delete m_bulletTexture;
+	delete m_bulletSprite;
+
 	m_bulletImage = nullptr;
 	m_bulletTexture = nullptr;
 	m_bulletSprite = nullptr;
 }
 
-sf::Sprite* Bullet::GetSprite()
+/*
+	Function: UpdateBullet()
+	Returns: void
+	Parametres: none
+	Description: Updates bullet position according to pre-calculated bullet vector
+*/
+void Bullet::UpdateBullet()
 {
-	return m_bulletSprite;
+	// Moving bullet
+	m_bulletSprite->setPosition(m_bulletSprite->getPosition().x + m_bulletVector.x * m_bulletSpeed, m_bulletSprite->getPosition().y + m_bulletVector.y * m_bulletSpeed);
 }

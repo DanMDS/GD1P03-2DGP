@@ -28,19 +28,28 @@ private:
 	// Collider object
 	Collider* m_enemyCol;
 
-public:
-	// Methods
-	Enemy(sf::String _spritePath, sf::Vector2f _objPos, bool _shooting = false);	// Constructor
-	~Enemy();
-
-	sf::Sprite* GetSprite();
-	sf::Vector2f GetEnemyPosition();
-
-	Collider* GetCollider();
-
+	// Bools for calculations
 	bool m_playerCollision;
 	bool m_shoot;
 
+public:
+	// Methods
+
+	// Getters and setters
+	void SetPlayerCollision(bool _playerCol)	{ m_playerCollision = _playerCol;	};
+	void SetEnemyShoot(bool _enemyShoot)		{ m_shoot = _enemyShoot;			};
+
+	sf::Sprite* GetSprite()						{ return m_enemySprite;				};
+	sf::Vector2f GetEnemyPosition()				{ return m_enemyPos;				};
+	Collider* GetCollider()						{ return m_enemyCol;				};
+	bool GetPlayerCollision()					{ return m_playerCollision;			};
+	bool GetEnemyShoot()						{ return m_shoot;					};
+
+	// Update/move functions
 	void UpdateEnemy(sf::Vector2f _movePos);
 	void MoveEnemy(sf::Vector2f _movePos);
+
+	// Constructor/destructor
+	Enemy(sf::String _spritePath, sf::Vector2f _objPos, bool _shooting = false);
+	~Enemy();
 };

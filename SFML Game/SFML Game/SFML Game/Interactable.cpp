@@ -1,6 +1,12 @@
 #include "Interactable.h"
-#include <iostream>
 
+/*
+	Function: Interact()
+	Returns: bool
+	Parametres: sf::Vector2f _playerPos, sf::Vector2f _interactPos
+	Description: Checks if interactable can be interacted with based on distance to player,
+		returns true or false accordingly
+*/
 bool Interactable::Interact(sf::Vector2f _playerPos, sf::Vector2f _interactPos)
 {
 	// Checking if player is close enough to interact with object
@@ -18,20 +24,6 @@ bool Interactable::Interact(sf::Vector2f _playerPos, sf::Vector2f _interactPos)
 	}
 
 	return false;
-}
-
-sf::Vector2f Interactable::GetInteractPos()
-{
-	return pos;
-}
-
-sf::Sprite* Interactable::GetSprite()
-{
-	return m_intSprite;
-}
-
-void Interactable::Update()
-{
 }
 
 Interactable::Interactable()

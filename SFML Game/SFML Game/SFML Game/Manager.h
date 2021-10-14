@@ -1,4 +1,3 @@
-#include <iostream>
 #include <iterator>
 #include <vector>
 #include <fstream>
@@ -14,6 +13,7 @@
 #include "Button.h"
 #include "ParticleManager.h"
 #include "Hud.h"
+#include "SoundManager.h"
 
 #pragma once
 
@@ -50,6 +50,12 @@ private:
 	// Int for heart placement
 	int i;
 
+	// Sound manager
+	SoundManager* soundManager;
+
+	// Music bool
+	bool m_isMusic;
+
 	// Title screen buttons
 	sf::RectangleShape* m_beginButton;
 	sf::RectangleShape* m_endButton;
@@ -62,25 +68,6 @@ private:
 	Door* door;
 	Button* button;
 	Hud* hud;
-
-	// Sound objects
-	sf::SoundBuffer* m_bufferHitEnemy;
-	sf::SoundBuffer* m_bufferHitPlayer;
-	sf::SoundBuffer* m_bufferHitWall;
-	sf::SoundBuffer* m_bufferButton;
-	sf::SoundBuffer* m_bufferDoor;
-	sf::SoundBuffer* m_bufferShootPlayer;
-	sf::SoundBuffer* m_bufferShootEnemy;
-	sf::SoundBuffer* m_bufferLose;
-
-	sf::Sound* m_soundHitEnemy;
-	sf::Sound* m_soundHitPlayer;
-	sf::Sound* m_soundHitWall;
-	sf::Sound* m_soundButton;
-	sf::Sound* m_soundDoor;
-	sf::Sound* m_soundShootPlayer;
-	sf::Sound* m_soundShootEnemy;
-	sf::Sound* m_soundLose;
 
 	// View and rectangle for screen transition effect
 	sf::View* zoom;

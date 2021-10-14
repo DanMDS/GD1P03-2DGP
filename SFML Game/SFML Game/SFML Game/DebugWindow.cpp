@@ -1,6 +1,16 @@
-#include <iostream>
-#include "DebugWIndow.h"
+#include "DebugWindow.h"
 
+/*
+	Function: Update()
+	Returns: void
+	Parameters: sf::RenderWindow* _window, 
+		sf::Vector2f _mousePos, 
+		bool _mousePressed, 
+		int _playerShootDelay, 
+		int _playerSpeed, 
+		int _playerShootSpeed
+	Summary: Updates booleans for each button when pressed, and in turn their fill colours to indicate state
+*/
 void DebugWindow::Update(sf::RenderWindow* _window, sf::Vector2f _mousePos, bool _mousePressed, int _playerShootDelay, int _playerSpeed, int _playerShootSpeed)
 {
 	// Checking when buttons are pressed and running functions
@@ -8,23 +18,23 @@ void DebugWindow::Update(sf::RenderWindow* _window, sf::Vector2f _mousePos, bool
 	{
 		if (m_buttonColliders->getGlobalBounds().contains(_window->mapPixelToCoords(sf::Mouse::getPosition(*_window))))
 		{
-			ToggleColliders();
+			m_showColliders = !m_showColliders;
 		}
 		if (m_buttonControls->getGlobalBounds().contains(_window->mapPixelToCoords(sf::Mouse::getPosition(*_window))))
 		{
-			ToggleDebugControls();
+			m_debugControls = !m_debugControls;
 		}
 		if (m_buttonSpawnEnemy->getGlobalBounds().contains(_window->mapPixelToCoords(sf::Mouse::getPosition(*_window))))
 		{
-			ToggleEnemySpawn();
+			m_spawnEnemy = !m_spawnEnemy;
 		}
 		if (m_buttonShootingEnemy->getGlobalBounds().contains(_window->mapPixelToCoords(sf::Mouse::getPosition(*_window))))
 		{
-			ToggleEnemyShoot();
+			m_shootingEnemy = !m_shootingEnemy;
 		}
 		if (m_buttonValueChanging->getGlobalBounds().contains(_window->mapPixelToCoords(sf::Mouse::getPosition(*_window))))
 		{
-			ToggleValueChanging();
+			m_valueChanging = !m_valueChanging;
 		}
 	}
 
@@ -73,36 +83,17 @@ void DebugWindow::Update(sf::RenderWindow* _window, sf::Vector2f _mousePos, bool
 		m_buttonValueChanging->setFillColor(sf::Color::White);
 	}
 
-	m_valueSelected->setPosition(350, m_valueSelectedYPos);
+	m_valueSelected->setPosition(350, float(m_valueSelectedYPos));
 
 	m_values->setString(std::to_string(_playerShootDelay) + "\n" + std::to_string(_playerSpeed) + "\n" + std::to_string(_playerShootSpeed));
 }
 
-void DebugWindow::ToggleDebugControls()
-{
-	m_debugControls = !m_debugControls;
-}
-
-void DebugWindow::ToggleColliders()
-{
-	m_showColliders = !m_showColliders;
-}
-
-void DebugWindow::ToggleEnemySpawn()
-{
-	m_spawnEnemy = !m_spawnEnemy;
-}
-
-void DebugWindow::ToggleEnemyShoot()
-{
-	m_shootingEnemy = !m_shootingEnemy;
-}
-
-void DebugWindow::ToggleValueChanging()
-{
-	m_valueChanging = !m_valueChanging;
-}
-
+/*
+	Function: Draw()
+	Returns: void
+	Parametres: sf::RenderWindow* _window
+	Summary: Draws all of the objects in the debugObjects vector (all text and buttons)
+*/
 void DebugWindow::Draw(sf::RenderWindow* _window)
 {
 	for (auto& itr : debugObjects)
@@ -145,7 +136,6 @@ DebugWindow::DebugWindow()
 	m_buttonControls->setOutlineThickness(2);
 	m_buttonControls->setPosition(470, 35);
 	debugObjects.push_back(m_buttonControls);
-	debugObjects.push_back(m_buttonColliders);
 
 	// Spawn enemy on right click
 	m_buttonSpawnEnemy = new sf::RectangleShape(sf::Vector2f(25, 25));
@@ -180,7 +170,7 @@ DebugWindow::DebugWindow()
 
 	m_valueSelected = new sf::Text("<-", *font, 25);
 	m_valueSelected->setFillColor(sf::Color::Black);
-	m_valueSelected->setPosition(350, m_valueSelectedYPos);
+	m_valueSelected->setPosition(350, float(m_valueSelectedYPos));
 	debugObjects.push_back(m_valueSelected);
 
 	m_values = new sf::Text("", *font, 25);
@@ -191,6 +181,8 @@ DebugWindow::DebugWindow()
 
 DebugWindow::~DebugWindow()
 {
+	delete font;
+	font = nullptr;
 	// Deallocating memory
 	for (auto& itr : debugObjects)
 	{

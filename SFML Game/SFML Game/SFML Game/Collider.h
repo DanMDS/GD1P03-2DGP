@@ -2,7 +2,11 @@
 #include <vector>
 
 #pragma once
-
+/*
+	Class: collider
+	Description: Easily handles colliders for objects that create them in their constructors
+	Written by: Daniel Bolleboom
+*/
 class Collider
 {
 private:
@@ -11,6 +15,10 @@ private:
 	sf::Color* m_colliderColour;
 
 public:
+	// Keeping these public since getting and setting with methods
+	// would make this way more tedious than it needs to be, plus 
+	// players and enemies need to change these bools a lot
+	
 	// Booleans for player and enemy movement
 	bool m_colTop;
 	bool m_colBottom;
@@ -32,7 +40,9 @@ public:
 	void DrawColliders(sf::RenderWindow* _window, bool _draw);
 	void MoveCollider(sf::Vector2f _pos);
 	void UpdateColliders(int* _levelIndex);
-	int GetSize();
+
+	// Getters
+	int GetSize() { return boundsVec.size(); };
 
 	Collider(sf::Vector2f _colDim, bool _level = false);
 	~Collider();

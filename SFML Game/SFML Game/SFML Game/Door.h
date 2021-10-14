@@ -20,11 +20,12 @@ public:
 	void Update(bool _levelEnd, sf::Vector2f _playerPos, Player* _player, std::vector<Enemy*> _enemies);
 	void DoorLock();
 
-	bool DoorIsOpen();
-	
-	sf::Sprite* GetSprite();
-	sf::Vector2f GetDoorPosition();
+	// Getters
+	bool DoorIsOpen()				{ return !m_locked;						};
+	sf::Sprite* GetSprite()			{ return m_intSprite;					};
+	sf::Vector2f GetDoorPosition()	{ return m_intSprite->getPosition();	};
 
-	Door(sf::Vector2f _levelDim);
+	// Constructor/destructor
+	Door(sf::Vector2i _levelDim);
 	~Door();
 };

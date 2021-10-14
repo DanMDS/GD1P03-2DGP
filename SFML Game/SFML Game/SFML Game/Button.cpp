@@ -1,25 +1,21 @@
 #include "Button.h"
 #include <iostream>
 
-bool Button::IsPressed()
-{
-	return m_isPressed;
-}
-
+/*
+	Function: Update()
+	Returns: void
+	Parametres: none
+	Description: Updates sprite and m_isPressed boolean when player interacts with it,
+		virtual function inherited from interactable
+*/
 void Button::Update()
 {
 	// Setting to pressed when pressed
 	if (m_interacted && !m_isPressed)
 	{
-		std::cout << "button pressed";
 		m_intSprite->setTexture(*m_buttonTextureDown);
 		m_isPressed = true;
 	}
-}
-
-sf::Sprite* Button::GetSprite()
-{
-	return m_intSprite;
 }
 
 Button::Button(sf::Vector2f _pos)

@@ -1,8 +1,6 @@
 #include "Manager.h"
 #include <iostream>
 
-// Declaring rectangle and colour for screen transition
-
 bool Manager::CollisionBulletEnemy(Bullet _bullet, Enemy _enemy)
 {
 	// Checking enemy to bullet collisions
@@ -16,16 +14,16 @@ bool Manager::CollisionBulletEnemy(Bullet _bullet, Enemy _enemy)
 float Manager::GetPlayerDistance(sf::Vector2f* _playerPos, sf::Vector2f* _entityPos)
 {
 	// Getting player distance from a point
-	int xDifference = _playerPos->x - _entityPos->x;
-	int yDifference = _playerPos->y - _entityPos->y;
+	int xDifference = int(_playerPos->x - _entityPos->x);
+	int yDifference = int(_playerPos->y - _entityPos->y);
 
-	return sqrt(abs(xDifference) ^ 2 + abs(yDifference) ^ 2);
+	return static_cast<float>(sqrt(abs(xDifference) ^ 2 + abs(yDifference) ^ 2));
 }
 
 void Manager::ChangeLevel(int _index)
 {
 	// Checking what next level should be, placing enemies and buttons accordingly
-	if (level->levelIndex >= 0 && _index == -4)
+	if (level->GetLevelIndex() >= 0 && _index == -4)
 	{
 		m_levelsCompleted += 1;
 	}
@@ -54,7 +52,7 @@ void Manager::ChangeLevel(int _index)
 	{
 		for (itInteracts = interacts.begin(); itInteracts != interacts.end(); itInteracts++)
 		{
-			if (!(*itInteracts)->m_isDoor)
+			if (!(*itInteracts)->GetIsDoor())
 			{
 				delete* itInteracts;
 				*itInteracts = nullptr;
@@ -65,7 +63,7 @@ void Manager::ChangeLevel(int _index)
 	}
 
 	// Placing enemies depending of level index
-	switch (level->levelIndex)
+	switch (level->GetLevelIndex())
 	{
 	case -3:
 		// Start screen
@@ -538,19 +536,6 @@ void Manager::RunProgram()
 		// Setting zoom levels for after hit effect
 		window->setView(*zoom);
 
-		if (m_showDebug)
-		{
-			windowDebug->setVisible(true);
-			window->setMouseCursorVisible(true);
-			windowDebug->setMouseCursorVisible(true);
-		}
-		else
-		{
-			windowDebug->setVisible(false);
-			window->setMouseCursorVisible(false);
-			windowDebug->setMouseCursorVisible(false);
-		}
-
 		if (player->m_zoomed)
 		{
 			zoom->setCenter(sf::Vector2f(1280 / 2, 720 / 2));
@@ -603,47 +588,51 @@ void Manager::RunProgram()
 				{
 					for (auto& itr : interacts)
 					{
-						if (itr->Interact(player->GetPlayerPosition(), itr->GetInteractPos()) && itr->m_interacted == false)
+						if (itr->Interact(player->GetPlayerPosition(), itr->GetInteractPos()) && itr->GetInteracted() == false)
 						{
-							if (itr->m_isDoor && level->levelIndex != -3 && level->LevelEndCheck(enemies.size(), interacts))
+							if (itr->GetIsDoor() && level->GetLevelIndex() != -3 && level->LevelEndCheck(enemies.size(), interacts))
 							{
-								m_soundDoor->play();
+								soundManager->PlaySoundDoor();
 								isTrans = true;
 							}
-							else if (level->levelIndex == -1)
+							else if (level->GetLevelIndex() == -1)
 							{
-								m_soundDoor->play();
+								soundManager->PlaySoundDoor();
 								player->ResetPlayerState();
-								itr->m_interacted = true;
+								itr->SetInteracted(true);
 								isTrans = true;
 							}
 							else
 							{
-								m_soundButton->play();
-								itr->m_interacted = true;
+								soundManager->PlaySoundButton();
+								itr->SetInteracted(true);
 							}
 						}
 					}
 				}
 
+				// M: Muting/unmuting music
+				if (event.key.code == sf::Keyboard::M)
+				{
+					m_isMusic = !m_isMusic;
+				}
+				soundManager->SetMusicVolume(m_isMusic ? 10.0f : 0.0f);
+
 				// Debug controls
 				if (event.key.code == sf::Keyboard::Escape)
 				{
+					windowDebug->setVisible(true);
+					window->setMouseCursorVisible(true);
+					windowDebug->setMouseCursorVisible(true);
 					m_showDebug = !m_showDebug;
 				}
 
-				if (debug->m_debugControls)
+				if (debug->GetDebugControls())
 				{
 					// T: Run change level event to change to a random level and reset the players position
 					if (event.key.code == sf::Keyboard::T)
 					{
 						ChangeLevel(-4);
-					}
-
-					// R: Check if the level can be ended by running the check method
-					if (event.key.code == sf::Keyboard::R)
-					{
-						std::cout << level->LevelEndCheck(enemies.size(), interacts);
 					}
 
 					// Numbers 0 - 9: Changing to specific level
@@ -693,9 +682,9 @@ void Manager::RunProgram()
 			// main menu buttons and debug enemy spawn
 			if (event.type == sf::Event::MouseButtonPressed)
 			{
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && debug->m_spawnEnemy)
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && debug->GetSpawnEnemy() && enemies.size() < 20)
 				{
-					if (debug->m_shootingEnemy)
+					if (debug->GetShootingEnemy())
 					{
 						enemy = new Enemy("sprites/enemy.png", sf::Vector2f(mousePos), true);
 						enemies.push_back(enemy);
@@ -707,11 +696,11 @@ void Manager::RunProgram()
 					}
 				}
 
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && level->levelIndex == -3)
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && level->GetLevelIndex() == -3)
 				{
 					if (m_beginButton->getGlobalBounds().contains(window->mapPixelToCoords(sf::Mouse::getPosition(*window))))
 					{
-						m_soundDoor->play();
+						soundManager->PlaySoundDoor();
 						isTrans = true;
 					}
 					else if (m_endButton->getGlobalBounds().contains(window->mapPixelToCoords(sf::Mouse::getPosition(*window))))
@@ -725,13 +714,12 @@ void Manager::RunProgram()
 		// Changing level, random if not on death screen
 		if (alpha == 255 && !player->IsDead())
 		{
-			if (level->levelIndex == -1)
+			if (level->GetLevelIndex() == -1)
 			{
 				ChangeLevel(-3);
 			}
-			else if (level->levelIndex == -3)
+			else if (level->GetLevelIndex() == -3)
 			{
-				printf("test");
 				ChangeLevel(-2);
 			}
 			else
@@ -741,11 +729,11 @@ void Manager::RunProgram()
 		}
 
 		// Death event
-		if (player->IsDead() && level->levelIndex != -1)
+		if (player->IsDead() && level->GetLevelIndex() != -1)
 		{
 			if (!isTrans)
 			{
-				m_soundLose->play();
+				soundManager->PlaySoundLose();
 			}
 			isTrans = true;
 			if (alpha == 255)
@@ -755,7 +743,7 @@ void Manager::RunProgram()
 		}
 
 		// Returning to main menu
-		if (level->levelIndex == -1 && alpha == 255 && level->LevelEndCheck(enemies.size(), interacts))
+		if (level->GetLevelIndex() == -1 && alpha == 255 && level->LevelEndCheck(enemies.size(), interacts))
 		{
 			ChangeLevel(-3);
 		}
@@ -765,12 +753,12 @@ void Manager::RunProgram()
 		{
 			if (player->clock.getElapsedTime().asMilliseconds() - player->shootTimer.asMilliseconds() > m_fireDelayPlayer)
 			{
-				if (level->levelIndex != -3)
+				if (level->GetLevelIndex() != -3)
 				{
-					m_soundShootPlayer->play();
+					soundManager->PlaySoundShootPlayer();
 				}
 				player->shootTimer = player->clock.getElapsedTime();
-				bullet = new Bullet(m_bulletSpeedPlayer, true, player->GetPlayerPosition(), sf::Vector2f(mousePos));
+				bullet = new Bullet(float(m_bulletSpeedPlayer), true, player->GetPlayerPosition(), sf::Vector2f(mousePos));
 				bullets.push_back(bullet);
 			}
 		}
@@ -778,12 +766,12 @@ void Manager::RunProgram()
 		// Enemy shooting
 		for (auto& itr : enemies)
 		{
-			if (itr->m_shoot)
+			if (itr->GetEnemyShoot())
 			{
-				m_soundShootEnemy->play();
-				bullet = new Bullet(3.0f + (m_levelsCompleted * 0.3), false, itr->GetEnemyPosition(), player->GetPlayerPosition());
+				soundManager->PlaySoundShootEnemy();
+				bullet = new Bullet(float(3.0f + (m_levelsCompleted * 0.3)), false, itr->GetEnemyPosition(), player->GetPlayerPosition());
 				bullets.push_back(bullet);
-				itr->m_shoot = false;
+				itr->SetEnemyShoot(false);
 			}
 		}
 
@@ -809,7 +797,7 @@ void Manager::RunProgram()
 					delete temp;
 					temp = nullptr;
 					bullets.erase(itBullets);
-					m_soundHitWall->play();
+					soundManager->PlaySoundHitWall();
 					break;
 				}
 			}
@@ -821,14 +809,14 @@ void Manager::RunProgram()
 			{
 				particleManager = new ParticleManager(sf::Color::Red, (*itBullets)->GetSprite()->getPosition(), 5);
 				particleManagerVec.push_back(particleManager);
-				if (!player->IsInv() && !isTrans && level->levelIndex != -2)
+				if (!player->IsInv() && !isTrans && level->GetLevelIndex() != -2)
 				{
 					player->UpdateInv(zoom);
 				}
 				delete *itBullets;
 				*itBullets = nullptr;
 				bullets.erase(itBullets);
-				m_soundHitPlayer->play();
+				soundManager->PlaySoundHitPlayer();
 				break;
 			}
 		}
@@ -849,7 +837,7 @@ void Manager::RunProgram()
 					enemies.erase(itEnemies);
 					bullets.erase(itBullets);
 					collision = true;
-					m_soundHitEnemy->play();
+					soundManager->PlaySoundHitEnemy();
 					break;
 				}
 			}
@@ -861,14 +849,14 @@ void Manager::RunProgram()
 			CollisionWall(*itEnemies, level);
 			if (player->GetSprite()->getGlobalBounds().intersects((*itEnemies)->GetSprite()->getGlobalBounds()) && !isTrans)
 			{
-				if (player->IsInv() && level->levelIndex != -2)
+				if (player->IsInv() && level->GetLevelIndex() != -2)
 				{
-					(*itEnemies)->m_playerCollision = true;
+					(*itEnemies)->SetPlayerCollision(true);
 				}
 				else
 				{
-					m_soundHitPlayer->play();
-					if (level->levelIndex != -2)
+					soundManager->PlaySoundHitEnemy();
+					if (level->GetLevelIndex() != -2)
 					{
 						if (!isTrans)
 						{
@@ -883,7 +871,7 @@ void Manager::RunProgram()
 			}
 			else
 			{
-				(*itEnemies)->m_playerCollision = false;
+				(*itEnemies)->SetPlayerCollision(false);
 			}
 
 			for (itEnemies2 = enemies.begin(); itEnemies2 != enemies.end(); itEnemies2++)
@@ -903,59 +891,68 @@ void Manager::RunProgram()
 		CollisionWall(player, level);
 		
 		// Checking debug window event
-		while (windowDebug->pollEvent(eventDebug))
+		while (m_showDebug)
 		{
-			debug->Update(windowDebug, sf::Vector2f(mousePos), (eventDebug.type == sf::Event::MouseButtonPressed && eventDebug.key.code == sf::Mouse::Left), m_fireDelayPlayer, player->PlayerGetSpeed(), m_bulletSpeedPlayer);
-
-			if (eventDebug.type == sf::Event::Closed)
+			windowDebug->clear();
+			debug->Draw(windowDebug);
+			while (windowDebug->pollEvent(eventDebug))
 			{
-				m_showDebug = false;
-			}
+				debug->Update(windowDebug, sf::Vector2f(mousePos), (eventDebug.type == sf::Event::MouseButtonPressed && eventDebug.key.code == sf::Mouse::Left), m_fireDelayPlayer, player->PlayerGetSpeed(), m_bulletSpeedPlayer);
 
-			if (eventDebug.type == sf::Event::KeyPressed && debug->m_valueChanging)
-			{
-				if (eventDebug.key.code == sf::Keyboard::Space)
+				if (eventDebug.type == sf::Event::Closed)
 				{
-					if (debug->m_valueSelectedYPos == 390)
+					windowDebug->setVisible(false);
+					window->setMouseCursorVisible(false);
+					windowDebug->setMouseCursorVisible(false);
+					m_showDebug = false;
+				}
+
+				if (eventDebug.type == sf::Event::KeyPressed && debug->GetValueChanging())
+				{
+					if (eventDebug.key.code == sf::Keyboard::Space)
 					{
-						debug->m_valueSelectedYPos = 330;
+						if (debug->GetValueSelectedPos() == 390)
+						{
+							debug->SetValueSelectedPos(330);
+						}
+						else
+						{
+							debug->SetValueSelectedPos(debug->GetValueSelectedPos() + 30);
+						}
 					}
-					else
+					if (eventDebug.key.code == sf::Keyboard::Up && debug->GetValueSelectedPos() == 330 && m_fireDelayPlayer < 2000)
 					{
-						debug->m_valueSelectedYPos += 30;
+						m_fireDelayPlayer += 10;
 					}
-				}
-				if (eventDebug.key.code == sf::Keyboard::Up && debug->m_valueSelectedYPos == 330 && m_fireDelayPlayer < 2000)
-				{
-					m_fireDelayPlayer += 10;
-				}
-				if (eventDebug.key.code == sf::Keyboard::Down && debug->m_valueSelectedYPos == 330 && m_fireDelayPlayer > 100)
-				{
-					m_fireDelayPlayer -= 10;
-				}
+					if (eventDebug.key.code == sf::Keyboard::Down && debug->GetValueSelectedPos() == 330 && m_fireDelayPlayer > 100)
+					{
+						m_fireDelayPlayer -= 10;
+					}
 
-				if (eventDebug.key.code == sf::Keyboard::Up && debug->m_valueSelectedYPos == 360 && player->PlayerGetSpeed() < 8)
-				{
-					player->PlayerSetSpeed(player->PlayerGetSpeed() + 1);
-				}
-				if (eventDebug.key.code == sf::Keyboard::Down && debug->m_valueSelectedYPos == 360 && player->PlayerGetSpeed() > 1)
-				{
-					player->PlayerSetSpeed(player->PlayerGetSpeed() - 1);
-				}
+					if (eventDebug.key.code == sf::Keyboard::Up && debug->GetValueSelectedPos() == 360 && player->PlayerGetSpeed() < 8)
+					{
+						player->PlayerSetSpeed(1);
+					}
+					if (eventDebug.key.code == sf::Keyboard::Down && debug->GetValueSelectedPos() == 360 && player->PlayerGetSpeed() > 1)
+					{
+						player->PlayerSetSpeed(-1);
+					}
 
-				if (eventDebug.key.code == sf::Keyboard::Up && debug->m_valueSelectedYPos == 390)
-				{
-					m_bulletSpeedPlayer += 1;
-				}
-				if (eventDebug.key.code == sf::Keyboard::Down && debug->m_valueSelectedYPos == 390)
-				{
-					m_bulletSpeedPlayer -= 1;
+					if (eventDebug.key.code == sf::Keyboard::Up && debug->GetValueSelectedPos() == 390 && m_bulletSpeedPlayer < 20)
+					{
+						m_bulletSpeedPlayer += 1;
+					}
+					if (eventDebug.key.code == sf::Keyboard::Down && debug->GetValueSelectedPos() == 390 && m_bulletSpeedPlayer > 1)
+					{
+						m_bulletSpeedPlayer -= 1;
+					}
 				}
 			}
+			windowDebug->display();
 		}
 
 		// Updating objects where needed
-		if (!isTrans && level->levelIndex != -1)
+		if (!isTrans && level->GetLevelIndex() != -1)
 		{
 			door->Update(level->LevelEndCheck(enemies.size(), interacts), player->GetPlayerPosition(), player, enemies);
 		}
@@ -966,7 +963,7 @@ void Manager::RunProgram()
 
 		if (arrowForwards)
 		{
-			arrowMove += 0.2;
+			arrowMove += 0.2f;
 			if (arrowMove >= 3.1)
 			{
 				arrowForwards = false;
@@ -974,7 +971,7 @@ void Manager::RunProgram()
 		}
 		else
 		{
-			arrowMove -= 0.2;
+			arrowMove -= 0.2f;
 			if (arrowMove <= -3.1)
 			{
 				arrowForwards = true;
@@ -984,15 +981,12 @@ void Manager::RunProgram()
 
 		// Drawing everything
 		window->clear();
-		windowDebug->clear();
-
-		debug->Draw(windowDebug);
 
 		level->Draw(window);
 
-		if (level->levelIndex != -3)
+		if (level->GetLevelIndex() != -3)
 		{
-			if (door->DoorIsOpen() && level->levelIndex != -1)
+			if (door->DoorIsOpen() && level->GetLevelIndex() != -1)
 			{
 				window->draw(*arrow);
 			}
@@ -1019,33 +1013,33 @@ void Manager::RunProgram()
 
 			// Drawing colliders if enabled
 
-			level->GetCollider()->DrawColliders(window, debug->m_showColliders);
+			level->GetCollider()->DrawColliders(window, debug->GetShowColliders());
 
 			for (auto& itr : interacts)
 			{
 				window->draw(*itr->GetSprite());
-				if (itr->m_isDoor)
+				if (itr->GetIsDoor())
 				{
 					if (enemies.size() == 0 && itr->Interact(player->GetPlayerPosition(), itr->GetInteractPos()))
 					{
 						window->draw(*player->GetInteractSprite());
 					}
 				}
-				else if (itr->Interact(player->GetPlayerPosition(), itr->GetInteractPos()) && itr->m_interacted == false)
+				else if (itr->Interact(player->GetPlayerPosition(), itr->GetInteractPos()) && itr->GetInteracted() == false)
 				{
 					window->draw(*player->GetInteractSprite());
 				}
 			}
 
-			player->GetCollider()->DrawColliders(window, debug->m_showColliders);
+			player->GetCollider()->DrawColliders(window, debug->GetShowColliders());
 			window->draw(*player->GetSprite());
 
 			for (auto& itr : enemies)
 			{
-				itr->GetCollider()->DrawColliders(window, debug->m_showColliders);
+				itr->GetCollider()->DrawColliders(window, debug->GetShowColliders());
 			}
 
-			if (level->levelIndex >= 0 || level->levelIndex == -2)
+			if (level->GetLevelIndex() >= 0 || level->GetLevelIndex() == -2)
 			{
 				i = 0;
 				for (auto& itr : hearts)
@@ -1059,7 +1053,7 @@ void Manager::RunProgram()
 					{
 						itr->setTexture(*heartNullTexture);
 					}
-					itr->setPosition(150 + 40 * i, 19);
+					itr->setPosition(float(150 + 40 * i), 19.0f);
 					window->draw(*itr);
 				}
 
@@ -1070,7 +1064,7 @@ void Manager::RunProgram()
 			}
 		}
 
-		if (level->levelIndex == -1)
+		if (level->GetLevelIndex() == -1)
 		{
 			if (m_levelsCompleted > m_highScore)
 			{
@@ -1089,7 +1083,7 @@ void Manager::RunProgram()
 			}
 		}
 
-		if (level->levelIndex == -3)
+		if (level->GetLevelIndex() == -3)
 		{
 			window->draw(*m_beginButton);
 			window->draw(*m_endButton);
@@ -1114,39 +1108,6 @@ void Manager::RunProgram()
 			}
 		}
 	}
-
-	// Deallocating memory
-	for (auto& itr : particleManagerVec)
-	{
-		delete itr;
-		itr = nullptr;
-	}
-	particleManagerVec.clear();
-
-	for (auto& itr : enemies)
-	{
-		delete itr;
-		itr = nullptr;
-	}
-	enemies.clear();
-
-	for (auto& itr : bullets)
-	{
-		delete itr;
-		itr = nullptr;
-	}
-	bullets.clear();
-
-	for (auto& itr : interacts)
-	{
-		delete itr;
-		itr = nullptr;
-	}
-
-	delete level, player, debug;
-	level = nullptr;
-	player = nullptr;
-	debug = nullptr;
 }
 
 Manager::Manager()
@@ -1171,16 +1132,13 @@ Manager::Manager()
 	// Setting high score variable from 'highscore.xml' file
 	fileIn.open("highscore.xml");
 
-	if (!fileIn)
-	{
-		printf("test");
-	}
-
 	m_highScore = 0;
 
 	fileIn >> m_highScore;
 
-	std::cout << m_highScore;
+	// Creating sound object
+	soundManager = new SoundManager();
+
 	// Creating player object, setting sprite and start position
 	player = new Player("sprites/player.png", playerDefaultPos);
 
@@ -1197,80 +1155,13 @@ Manager::Manager()
 	bullet = nullptr;
 
 	// Creating door object
-	door = new Door(sf::Vector2f(m_windowDimX, m_windowDimY));
+	door = new Door(sf::Vector2i(m_windowDimX, m_windowDimY));
 	interacts.push_back(door);
 
 	// Creating HUD object
 	hud = new Hud();
 
-	// Creating sound objects
-	m_bufferHitEnemy = new sf::SoundBuffer();
-	if (!m_bufferHitEnemy->loadFromFile("sounds/hit_enemy.wav"))
-	{
-		printf("Error: loading sound 'hit enemy'");
-	}
-	m_soundHitEnemy = new sf::Sound();
-	m_soundHitEnemy->setBuffer(*m_bufferHitEnemy);
-	m_soundHitEnemy->setVolume(50.0f);
-
-	m_bufferHitPlayer = new sf::SoundBuffer();
-	if (!m_bufferHitPlayer->loadFromFile("sounds/hit_player.wav"))
-	{
-		printf("Error: loading sound 'hit player'");
-	}
-	m_soundHitPlayer = new sf::Sound();
-	m_soundHitPlayer->setBuffer(*m_bufferHitPlayer);
-	m_soundHitPlayer->setVolume(50.0f);
-
-	m_bufferHitWall = new sf::SoundBuffer();
-	if (!m_bufferHitWall->loadFromFile("sounds/hit_wall.wav"))
-	{
-		printf("Error: loading sound 'hit player'");
-	}
-	m_soundHitWall = new sf::Sound();
-	m_soundHitWall->setBuffer(*m_bufferHitWall);
-
-	m_bufferButton = new sf::SoundBuffer();
-	if (!m_bufferButton->loadFromFile("sounds/button.wav"))
-	{
-		printf("Error: loading sound 'hit player'");
-	}
-	m_soundButton = new sf::Sound();
-	m_soundButton->setBuffer(*m_bufferButton);
-
-	m_bufferDoor = new sf::SoundBuffer();
-	if (!m_bufferDoor->loadFromFile("sounds/transition.wav"))
-	{
-		printf("Error: loading sound 'hit player'");
-	}
-	m_soundDoor = new sf::Sound();
-	m_soundDoor->setBuffer(*m_bufferDoor);
-
-	m_bufferShootPlayer = new sf::SoundBuffer();
-	if (!m_bufferShootPlayer->loadFromFile("sounds/shoot_player.wav"))
-	{
-		printf("Error: loading sound 'hit player'");
-	}
-	m_soundShootPlayer = new sf::Sound();
-	m_soundShootPlayer->setBuffer(*m_bufferShootPlayer);
-
-	m_bufferShootEnemy = new sf::SoundBuffer();
-	if (!m_bufferShootEnemy->loadFromFile("sounds/shoot_enemy.wav"))
-	{
-		printf("Error: loading sound 'hit player'");
-	}
-	m_soundShootEnemy = new sf::Sound();
-	m_soundShootEnemy->setBuffer(*m_bufferShootEnemy);
-	m_soundShootEnemy->setVolume(50.0f);
-
-
-	m_bufferLose = new sf::SoundBuffer();
-	if (!m_bufferLose->loadFromFile("sounds/lose.wav"))
-	{
-		printf("Error: loading sound 'hit player'");
-	}
-	m_soundLose = new sf::Sound();
-	m_soundLose->setBuffer(*m_bufferLose);
+	m_isMusic = true;
 
 	// Creating render window in 720p, setting style to only be able to close, not resise or maximise
 	window = new sf::RenderWindow(sf::VideoMode(1280, 720), "SFML Game", sf::Style::Close);
@@ -1358,14 +1249,71 @@ Manager::Manager()
 
 Manager::~Manager()
 {
+	// Stopping music
+	soundManager->StopSounds();
+
+	// Allowing sounds to close properly
+	fadeClock.restart();
+
+	// while (fadeClock.getElapsedTime().asMilliseconds() < 1000) {}
+
 	// Setting high score in file
-	fileOut.open("highscore.txt");
+	fileOut.open("highscore.xml");
 	fileOut << m_highScore;
 	fileOut.close();
 	fileIn.close();
 
 	// Deallocating memory
-	delete zoom, arrow, arrowImage, arrowTexture, heart, heartImage, heartTexture, window, windowDebug, debug, particleManager, hud;
+
+	// Clearing vectors
+	for (auto& itr : particleManagerVec)
+	{
+		delete itr;
+		itr = nullptr;
+	}
+	particleManagerVec.clear();
+
+	for (auto& itr : enemies)
+	{
+		delete itr;
+		itr = nullptr;
+	}
+	enemies.clear();
+
+	for (auto& itr : bullets)
+	{
+		delete itr;
+		itr = nullptr;
+	}
+	bullets.clear();
+
+	for (auto& itr : interacts)
+	{
+		delete itr;
+		itr = nullptr;
+	}
+
+	// Deleting individual class objects and arrow/heart textures, images and sprites
+	delete trans;
+	delete level;
+	delete player;
+	delete zoom;
+	delete arrow;
+	delete arrowImage;
+	delete arrowTexture;
+	delete heart;
+	delete heartImage;
+	delete heartTexture;
+	delete window;
+	delete windowDebug;
+	delete hud;
+	delete soundManager;
+	delete debug;
+
+	trans = nullptr;
+	player = nullptr;
+	level = nullptr;
+	button = nullptr;
 	zoom = nullptr;
 	arrow = nullptr;
 	arrowImage = nullptr;
@@ -1376,6 +1324,6 @@ Manager::~Manager()
 	window = nullptr;
 	windowDebug = nullptr;
 	debug = nullptr;
-	particleManager = nullptr;
 	hud = nullptr;
+	soundManager = nullptr;
 }

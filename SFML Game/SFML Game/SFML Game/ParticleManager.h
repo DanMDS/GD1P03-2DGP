@@ -14,7 +14,8 @@ public:
 	// Methods
 	bool IsFinished();
 
-	std::vector<Particle*> GetParticles();
+	// Getters
+	std::vector<Particle*> GetParticles() { return particlesVec; };
 
 	ParticleManager(sf::Color _colour, sf::Vector2f _pos, int _amount);
 	~ParticleManager();

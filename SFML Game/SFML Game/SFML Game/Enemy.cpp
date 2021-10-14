@@ -41,21 +41,13 @@ Enemy::~Enemy()
 	delete m_enemySprite;
 }
 
-sf::Sprite* Enemy::GetSprite()
-{
-	return m_enemySprite;
-}
-
-sf::Vector2f Enemy::GetEnemyPosition()
-{
-	return m_enemyPos;
-}
-
-Collider* Enemy::GetCollider()
-{
-	return m_enemyCol;
-}
-
+/*
+	Function: UpdateEnemy()
+	Returns: void
+	Parametres:sf::Vector2f _movePos
+	Summary: Checks if the enemy is a shooting one or not. If it is, run the move function. If it isn't, set
+		the shoot timer
+*/
 void Enemy::UpdateEnemy(sf::Vector2f _movePos)
 {
 	// Moving enemy or updating shoot timer depending on shooting boolean
@@ -71,6 +63,13 @@ void Enemy::UpdateEnemy(sf::Vector2f _movePos)
 	}
 }
 
+/*
+	Function: MoveEnemy()
+	Returns: void
+	Parametres: sf::Vector2f _movePos
+	Summary: Calculates move position by getting x and y speed separately depending on different between
+		enemy position and player position
+*/
 void Enemy::MoveEnemy(sf::Vector2f _movePos)
 {
 	// Moving enemy towards player if not colliding

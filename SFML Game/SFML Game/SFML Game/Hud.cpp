@@ -1,6 +1,12 @@
 #include "Hud.h"
 #include <string>
 
+/*
+	Function: Draw()
+	Returns: void
+	Parametres: sf::RenderWindow* _window
+	Summary: Draws all hud objects in the hudObjects vector
+*/
 void Hud::Draw(sf::RenderWindow* _window)
 {
 	// Drawing objects
@@ -10,6 +16,12 @@ void Hud::Draw(sf::RenderWindow* _window)
 	}
 }
 
+/*
+	Function: UpdateHud()
+	Returns: void
+	Parametres: int _level
+	Summary: Updates text in level counter
+*/
 void Hud::UpdateHud(int _level)
 {
 	// Updating level counter
