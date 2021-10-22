@@ -1,0 +1,3 @@
+D:\GD1P03-GP\SFML Week 2 Exercises\Release\SFML Exercises Week 2.exe
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Paint Tool\Release\SFML Paint Tool.exe
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Setup 2\Release\INI Parser.exe
