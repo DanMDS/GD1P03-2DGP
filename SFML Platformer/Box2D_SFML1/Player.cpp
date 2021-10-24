@@ -2,11 +2,11 @@
 
 Player::Player(b2Vec2 _pos, b2World* m_world, const float& _scale)
 {
+	tag = "player";
+
 	m_grounded = false;
 	m_jumpPower = 15.0f;
-	m_speed = 0.0f;
-	m_speedMax = 10.0f;
-	m_speedInc = 1.0f;
+	m_speed = 50.0f;
 
 	if (!m_texture->loadFromFile("sprites/player.png"))
 	{
@@ -41,14 +41,6 @@ void Player::Jump(float _power)
 	box2d->SetVelocity(b2Vec2(box2d->GetVelocity().x, -_power));
 }
 
-void Player::Move(float _speed)
-{
-	if ((_speed < 0 && box2d->GetVelocity().x > _speed) || (_speed > 0 && box2d->GetVelocity().x < _speed))
-	{
-		box2d->SetVelocity(b2Vec2(_speed, box2d->GetVelocity().y));
-	}
-}
-
 void Player::PlayerControls(bool _grounded)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && _grounded)
@@ -58,17 +50,30 @@ void Player::PlayerControls(bool _grounded)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		m_speed = (m_speed > -m_speedMax) ? m_speed - m_speedInc : m_speed;
-		Move(m_speed);
+		printf("test");
+		if (box2d->GetVelocity().x > -m_speed / 4)
+		{
+			box2d->GetBody()->ApplyForce(b2Vec2(-m_speed, box2d->GetVelocity().y), box2d->GetBody()->GetPosition(), true);
+		}
+		else
+		{
+			box2d->GetBody()->SetLinearVelocity(b2Vec2(-m_speed / 4, box2d->GetVelocity().y));
+		}
 	}
 	else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		m_speed = (m_speed < m_speedMax) ? m_speed + m_speedInc : m_speed;
-		Move(m_speed);
+		if (box2d->GetVelocity().x < m_speed / 4)
+		{
+			box2d->GetBody()->ApplyForce(b2Vec2(m_speed, box2d->GetVelocity().y), box2d->GetBody()->GetPosition(), true);
+		}
+		else
+		{
+			box2d->GetBody()->SetLinearVelocity(b2Vec2(m_speed / 4, box2d->GetVelocity().y));
+		}
 	}
 
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		m_speed = box2d->GetVelocity().x;
+		box2d->GetBody()->SetLinearVelocity(b2Vec2(box2d->GetVelocity().x, box2d->GetVelocity().y));
 	}
 }

@@ -11,7 +11,7 @@ private:
 	Box2d* box2d;
 
 public:
-	LevelObstacle(b2Vec2 _pos, b2World* _world, const float& _scale);
+	LevelObstacle(sf::Vector2f _dimensions, b2Vec2 _pos, b2World* _world, const float& _scale);
 	~LevelObstacle();
 
 	void Update();

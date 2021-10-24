@@ -11,8 +11,6 @@ private:
 	bool m_grounded;
 	float m_jumpPower;
 	float m_speed;
-	float m_speedMax;
-	float m_speedInc;
 
 public:
 
@@ -21,10 +19,9 @@ public:
 
 	void Update();
 	void Jump(float _power);
-	void Move(float _speed);
 	void PlayerControls(bool _grounded);
 
-	void SetGrounded(bool _bool)	{ m_grounded = _bool;	};
+	void SetGrounded(bool _bool)	{ m_grounded = _bool;				};
 
-	Box2d* GetB2d()					{ return box2d;			};
+	Box2d* GetB2d()					{ return box2d;						};
 };

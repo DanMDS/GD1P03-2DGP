@@ -21,6 +21,7 @@ public:
 
 	void SetVelocity(b2Vec2 _vel)	{ m_body->SetLinearVelocity(_vel);		};
 	b2Vec2 GetVelocity()			{ return m_body->GetLinearVelocity();	};
+	b2Body* GetBody()				{ return m_body;						};
 
 	void Update();
 };
