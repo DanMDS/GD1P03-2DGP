@@ -60,6 +60,7 @@ GrapplePoint::~GrapplePoint()
 bool GrapplePoint::CanGrapple()
 {
 	// Checking if player is close enough to grapple
+
 	int playerX = m_player->GetSprite()->getPosition().x / m_scale;
 	int playerY = m_player->GetSprite()->getPosition().y / m_scale;
 
@@ -133,8 +134,7 @@ void GrapplePoint::Update(sf::RenderWindow* _window)
 		_window->draw(*m_line);
 	}
 
-	if ((m_selectionCircle->getGlobalBounds().contains(_window->mapPixelToCoords(sf::Mouse::getPosition(*_window)))
-		&& CanGrapple()) || m_grappling)
+	if (CanGrapple() || m_grappling)
 	{
 		_window->draw(*m_selectionCircle);
 	}

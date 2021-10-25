@@ -1,16 +1,11 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (Box2D_SFML1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   GrapplePoint.cpp
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1\GrapplePoint.cpp(63,14): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
 C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1\GrapplePoint.cpp(64,14): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1\GrapplePoint.cpp(66,15): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1\GrapplePoint.cpp(65,14): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
           with
           [
               T=float
@@ -20,8 +15,10 @@ C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1
           [
               T=float
           ]
-C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1\GrapplePoint.cpp(69,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  Player.cpp
-  main.cpp
-  Generating Code...
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1\GrapplePoint.cpp(68,15): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1\GrapplePoint.cpp(70,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Box2D_SFML1.vcxproj -> C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\x64\Debug\SFML Platformer.exe

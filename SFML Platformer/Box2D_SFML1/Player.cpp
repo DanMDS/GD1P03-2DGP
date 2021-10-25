@@ -50,7 +50,6 @@ void Player::PlayerControls(bool _grounded)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		printf("test");
 		if (box2d->GetVelocity().x > -m_speed / 4)
 		{
 			box2d->GetBody()->ApplyForce(b2Vec2(-m_speed, box2d->GetVelocity().y), box2d->GetBody()->GetPosition(), true);
