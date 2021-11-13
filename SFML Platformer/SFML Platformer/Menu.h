@@ -25,6 +25,9 @@ private:
 	sf::Vector2f viewCenter;
 	sf::View* view;
 
+	// Timer for time trials
+	float m_timer;
+
 	bool inMenu;
 	bool mouseDown;
 	bool (*m_levelsCompleted)[5];
@@ -71,12 +74,13 @@ public:
 	void Exit();
 	void Draw();
 
-	void EnableMenu()					{ inMenu = true;						};
-	void UnlockTrials()					{ m_timeTrialsUnlocked = true;			};
-	void SetTrialComplete(int _index)	{ (*m_timeTrialComplete)[_index] = true;	}
+	void EnableMenu()					{ inMenu = true;							};
+	void UnlockTrials()					{ m_timeTrialsUnlocked = true;				};
+	void SetTrialComplete(int _index)	{ (*m_timeTrialComplete)[_index] = true;	};
+	void UpdateTimer()					{ m_timer += window->get
 
-	bool InMenu()						{ return inMenu;						};
-	bool TimeTrialsActive()				{ return m_timeTrialsActive;			};
+	bool InMenu()						{ return inMenu;							};
+	bool TimeTrialsActive()				{ return m_timeTrialsActive;				};
 
 	int RunMenu();
 };

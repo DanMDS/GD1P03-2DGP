@@ -23,6 +23,7 @@ LevelManager::LevelManager(sf::RenderWindow* _window, std::vector<GrapplePoint*>
 	m_timerText.setFillColor(sf::Color::Green);
 	m_timerText.setOutlineColor(sf::Color::Black);
 	m_timerText.setOutlineThickness(2);
+	m_timer = 0.0f;
 
 	// Setting tutorial text, loaded from files
 	levelText.setString("null");
@@ -258,6 +259,8 @@ void LevelManager::ChangeLevel(int _index)
 		m_menu->EnableMenu();
 		return;
 	}
+	
+	m_timer = 20.0f;
 
 	if (m_levelIndex > *m_currentLevel) { *m_currentLevel = m_levelIndex; }
 
@@ -385,7 +388,7 @@ void LevelManager::Level4()
 	levelText.setString("Level 4");
 	levelText.setPosition(sf::Vector2f(0, 100));
 
-	player->SetStartPos(b2Vec2(0, -600));
+	player->SetStartPos(b2Vec2(0, 0));
 
 	player->SetPosBounds(b2Vec2(-25, -2000), b2Vec2(500, 25));
 
@@ -419,7 +422,7 @@ void LevelManager::Level5()
 	levelText.setString("Level 5");
 	levelText.setPosition(sf::Vector2f(0, 100));
 
-	player->SetStartPos(b2Vec2(0, -2100));
+	player->SetStartPos(b2Vec2(0, 0));
 
 	player->SetPosBounds(b2Vec2(-500, -500), b2Vec2(500, 25));
 

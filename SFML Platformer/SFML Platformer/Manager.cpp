@@ -32,9 +32,9 @@ Manager::Manager()
 		m_iniIn.ignore(100, '\n');
 		m_iniIn >> m_currentLevel;
 		m_iniIn.ignore(100, '\n');
-		for (auto b : m_timeTrialComplete)
+		for (int i = 0; i < 5; i++)
 		{
-			m_iniIn >> b;
+			m_iniIn >> m_timeTrialComplete[i];
 		}
 	}
 
@@ -89,17 +89,17 @@ Manager::~Manager()
 	if (m_iniOut.is_open())
 	{
 		m_iniOut << m_levelsUnlocked - 1
-			<< "//Levels Completed\n"
+			<< " // Levels Completed\n"
 			<< m_timeTrialsUnlocked
-			<< "//Time Trials Unlocked\n"
+			<< " // Time Trials Unlocked\n"
 			<< m_currentLevel
-			<< "//Current Level\n";
+			<< " // Current Level\n";
 
 		for (int i = 0; i < 5; i++)
 		{
 			m_iniOut << m_timeTrialComplete[i] << " ";
 		}
-		m_iniOut << "//Time Trials Completed\n";
+		m_iniOut << "// Time Trials Completed\n";
 	}
 
 	// Deallocating memory

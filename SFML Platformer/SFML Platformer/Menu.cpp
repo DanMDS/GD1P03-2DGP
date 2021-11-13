@@ -44,8 +44,9 @@ Menu::Menu(sf::RenderWindow* _window, bool _timeTrialsUnlocked, sf::View* _view,
 		std::cout << "Error loading star image";
 	}
 	m_starSprite->setTexture(*m_starTexture);
-	m_starSprite->setOrigin(sf::Vector2f(m_starSprite->getGlobalBounds().width / 2, m_starSprite->getGlobalBounds().height / 2));
-
+	m_starSprite->setOrigin(sf::Vector2f(0, m_starSprite->getGlobalBounds().height / 2));
+	
+	lockImage = new sf::Image();
 	lockImage = new sf::Image();
 	lockTexture = new sf::Texture();
 	lockSprite = new sf::Sprite();
@@ -271,18 +272,6 @@ void Menu::Exit()
 
 void Menu::Draw()
 {
-	for (auto itr : menuMain)
-	{
-		window->draw(itr);
-	}
-	for (auto itr : menuLevelSelect)
-	{
-		window->draw(itr);
-	}
-	lockSprite->setPosition(sf::Vector2f(menuMain[1].getPosition().x + menuMain[1].getGlobalBounds().width + 10,
-		menuMain[1].getPosition().y + menuMain[1].getGlobalBounds().height / 2));
-	if (!m_timeTrialsUnlocked) { window->draw(*lockSprite); }
-
 	for (int i = 0; i < 5; i++)
 	{
 		if (!(*m_levelsCompleted)[i])
@@ -299,6 +288,18 @@ void Menu::Draw()
 			window->draw(*m_starSprite);
 		}
 	}
+
+	for (auto itr : menuMain)
+	{
+		window->draw(itr);
+	}
+	for (auto itr : menuLevelSelect)
+	{
+		window->draw(itr);
+	}
+	lockSprite->setPosition(sf::Vector2f(menuMain[1].getPosition().x + menuMain[1].getGlobalBounds().width + 10,
+		menuMain[1].getPosition().y + menuMain[1].getGlobalBounds().height / 2));
+	if (!m_timeTrialsUnlocked) { window->draw(*lockSprite); }
 }
 
 int Menu::RunMenu()
