@@ -1,0 +1,39 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (Box2D_SFML1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Box2d.cpp
+  GrapplePoint.cpp
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1\GrapplePoint.cpp(64,14): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1\GrapplePoint.cpp(65,14): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1\GrapplePoint.cpp(67,15): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1\GrapplePoint.cpp(68,15): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1\GrapplePoint.cpp(70,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  LevelManager.cpp
+  LevelObstacle.cpp
+  main.cpp
+  Obstacle.cpp
+  ParticleManager.cpp
+  Particles.cpp
+  Player.cpp
+  Object.cpp
+  Rocket.cpp
+C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\Box2D_SFML1\Rocket.cpp(38,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 460 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  Box2D_SFML1.vcxproj -> C:\Users\danbo\OneDrive\Documents\GitHub\GD1P03-2DGP\SFML Platformer\x64\Release\SFML Platformer.exe
