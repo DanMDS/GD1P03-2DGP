@@ -1,9 +1,23 @@
 #include "LevelManager.h"
 
-LevelManager::LevelManager(sf::RenderWindow* _window, std::vector<GrapplePoint*>* _grappleVec, std::vector<Object*>* _levelObjVec, std::vector<Object*>* _objVec, std::vector<Turret*>* _turretVec, bool(*_levelsCompleted)[5], int* _currentLevel, Menu* _menu, Player* _player, b2World* _world, const float& _scale)
+LevelManager::LevelManager(sf::RenderWindow* _window, 
+	std::vector<GrapplePoint*>* _grappleVec, 
+	std::vector<Object*>* _levelObjVec, 
+	std::vector<Object*>* _objVec, 
+	std::vector<Turret*>* _turretVec, 
+	int* _levelsCompleted, 
+	int* _currentLevel,
+	int* _turretShootCooldown,
+	int* _turretAlertDist,
+	int* _rocketSpeed,
+	SoundManager* _soundManager,
+	Menu* _menu, 
+	Player* _player, 
+	b2World* _world, 
+	const float& _scale)
 {
-	// Setting pointers and references
-	m_levelIndex = 1;
+	// Setting references and level index variable
+	m_levelIndex = *_currentLevel;
 	levelObjVec = _levelObjVec;
 	objVec = _objVec;
 	grappleVec = _grappleVec;
@@ -13,8 +27,12 @@ LevelManager::LevelManager(sf::RenderWindow* _window, std::vector<GrapplePoint*>
 	m_scale = _scale;
 	window = _window;
 	m_currentLevel = _currentLevel;
-	m_levelsCompleted = _levelsCompleted;
+	m_levelsUnlocked = _levelsCompleted;
 	m_menu = _menu;
+	m_turretShootCooldown = _turretShootCooldown;
+	m_turretAlertDist = _turretAlertDist;
+	m_rocketSpeed = _rocketSpeed;
+	m_soundManager = _soundManager;
 
 	// Setting up timer
 	m_timerText.setString("Timer: " + std::to_string(m_timer));
@@ -242,11 +260,14 @@ void LevelManager::ChangeLevel(int _index)
 	turretVec->clear();
 	grappleVec->clear();
 
-	(*m_levelsCompleted)[_index] = true;
-
 	if (_index == -1)
 	{
-		m_levelIndex += 1;
+		if (m_levelIndex == *m_currentLevel) { *m_levelsUnlocked += 1; }
+		m_levelIndex += 1;		
+	}
+	else if (_index == -2)
+	{
+		m_levelIndex = *m_currentLevel;
 	}
 	else
 	{
@@ -305,11 +326,11 @@ void LevelManager::Level1()
 	levelObjVec->push_back(new LevelObstacle(sf::Vector2f(100, 100),	b2Vec2(3100, -270), world, m_scale));
 	levelObjVec->push_back(new LevelObstacle(sf::Vector2f(1000, 100),	b2Vec2(5250, -330), world, m_scale));
 
-	grappleVec->push_back(new GrapplePoint(player, b2Vec2(3100, -200), world, m_scale));
+	grappleVec->push_back(new GrapplePoint(player, b2Vec2(3100, -200), m_soundManager, world, m_scale));
 
-	turretVec->push_back(new Turret(player, sf::Vector2f(5000, -250), objVec, 500, 500));
-	turretVec->push_back(new Turret(player, sf::Vector2f(5250, -250), objVec, 500, 500));
-	turretVec->push_back(new Turret(player, sf::Vector2f(5500, -250), objVec, 500, 500));
+	turretVec->push_back(new Turret(player, sf::Vector2f(5000, -250), objVec, m_turretShootCooldown, m_turretAlertDist, m_rocketSpeed, m_soundManager));
+	turretVec->push_back(new Turret(player, sf::Vector2f(5250, -250), objVec, m_turretShootCooldown, m_turretAlertDist, m_rocketSpeed, m_soundManager));
+	turretVec->push_back(new Turret(player, sf::Vector2f(5500, -250), objVec, m_turretShootCooldown, m_turretAlertDist, m_rocketSpeed, m_soundManager));
 
 	for (auto& itr : *grappleVec)
 	{
@@ -339,10 +360,10 @@ void LevelManager::Level2()
 	levelObjVec->push_back(new LevelObstacle(sf::Vector2f(100, 100),	b2Vec2(3250, -650), world, m_scale));
 	levelObjVec->push_back(new LevelObstacle(sf::Vector2f(1000, 100),	b2Vec2(4250, -300), world, m_scale));
 
-	grappleVec->push_back(new GrapplePoint(player, b2Vec2(2500, -630), world, m_scale));
-	grappleVec->push_back(new GrapplePoint(player, b2Vec2(3250, -580), world, m_scale));
+	grappleVec->push_back(new GrapplePoint(player, b2Vec2(2500, -630), m_soundManager, world, m_scale));
+	grappleVec->push_back(new GrapplePoint(player, b2Vec2(3250, -580), m_soundManager, world, m_scale));
 
-	turretVec->push_back(new Turret(player, sf::Vector2f(1000, 180), objVec, 500, 500));
+	turretVec->push_back(new Turret(player, sf::Vector2f(1000, 180), objVec, m_turretShootCooldown, m_turretAlertDist, m_rocketSpeed, m_soundManager));
 
 	for (auto& itr : *grappleVec)
 	{
@@ -376,11 +397,6 @@ void LevelManager::Level3()
 	levelObjVec->push_back(new LevelObstacle(sf::Vector2f(100, 300),	b2Vec2(2600, -800),		world, m_scale, true));
 	levelObjVec->push_back(new LevelObstacle(sf::Vector2f(100, 300),	b2Vec2(3000, -1100),	world, m_scale, true));
 	levelObjVec->push_back(new LevelObstacle(sf::Vector2f(100, 300),	b2Vec2(2600, -1100),	world, m_scale));
-
-	for (auto& itr : *grappleVec)
-	{
-		levelObjVec->push_back(itr);
-	}
 }
 
 void LevelManager::Level4()
@@ -409,7 +425,7 @@ void LevelManager::Level4()
 	levelObjVec->push_back(new LevelObstacle(sf::Vector2f(1200, 100),	b2Vec2(100, 200),	world, m_scale, true));
 	levelObjVec->push_back(new LevelObstacle(sf::Vector2f(100, 100),	b2Vec2(850, -200),	world, m_scale));
 
-	grappleVec->push_back(new GrapplePoint(player, b2Vec2(850, -130), world, m_scale));
+	grappleVec->push_back(new GrapplePoint(player, b2Vec2(850, -130), m_soundManager, world, m_scale));
 
 	for (auto& itr : *grappleVec)
 	{
@@ -451,18 +467,11 @@ void LevelManager::Level5()
 	levelObjVec->push_back(new LevelObstacle(sf::Vector2f(100, 100), b2Vec2(100, -2950), world, m_scale, true));
 	levelObjVec->push_back(new LevelObstacle(sf::Vector2f(100, 100), b2Vec2(-100, -2950), world, m_scale, true));
 
-	turretVec->push_back(new Turret(player, sf::Vector2f(300, -120), objVec, 500, 500));
-	turretVec->push_back(new Turret(player, sf::Vector2f(350, -120), objVec, 500, 500));
-	turretVec->push_back(new Turret(player, sf::Vector2f(400, -120), objVec, 500, 500));
+	turretVec->push_back(new Turret(player, sf::Vector2f(300, -120), objVec, m_turretShootCooldown, m_turretAlertDist, m_rocketSpeed, m_soundManager));
+	turretVec->push_back(new Turret(player, sf::Vector2f(350, -120), objVec, m_turretShootCooldown, m_turretAlertDist, m_rocketSpeed, m_soundManager));
+	turretVec->push_back(new Turret(player, sf::Vector2f(400, -120), objVec, m_turretShootCooldown, m_turretAlertDist, m_rocketSpeed, m_soundManager));
 
-	turretVec->push_back(new Turret(player, sf::Vector2f(-300, -120), objVec, 500, 500));
-	turretVec->push_back(new Turret(player, sf::Vector2f(-350, -120), objVec, 500, 500));
-	turretVec->push_back(new Turret(player, sf::Vector2f(-400, -120), objVec, 500, 500));
-
-	grappleVec->push_back(new GrapplePoint(player, b2Vec2(3100, -200), world, m_scale));
-
-	for (auto& itr : *grappleVec)
-	{
-		levelObjVec->push_back(itr);
-	}
+	turretVec->push_back(new Turret(player, sf::Vector2f(-300, -120), objVec, m_turretShootCooldown, m_turretAlertDist, m_rocketSpeed, m_soundManager));
+	turretVec->push_back(new Turret(player, sf::Vector2f(-350, -120), objVec, m_turretShootCooldown, m_turretAlertDist, m_rocketSpeed, m_soundManager));
+	turretVec->push_back(new Turret(player, sf::Vector2f(-400, -120), objVec, m_turretShootCooldown, m_turretAlertDist, m_rocketSpeed, m_soundManager));
 }

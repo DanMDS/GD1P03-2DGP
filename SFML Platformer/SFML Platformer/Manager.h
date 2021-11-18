@@ -9,6 +9,8 @@
 #include "LevelManager.h"
 #include "Menu.h"
 #include "Goal.h"
+#include "Debug.h"
+#include "SoundManager.h"
 
 #pragma once
 
@@ -18,6 +20,10 @@ private:
 	Player* player;
 	Goal* goal;
 	Goal* checkpoint;
+
+	Debug* debug;
+
+	SoundManager* m_soundManager;
 
 	bool canJump;
 	bool deleteThis;
@@ -44,13 +50,31 @@ private:
 
 	Menu* menu;
 
+	int m_rocketSpeed;
+	int m_turretShootCooldown;
+	int m_turretAlertDist;
+
 	std::ifstream m_iniIn;
 	std::ofstream m_iniOut;
 	int m_levelsUnlocked;
 	bool m_timeTrialsUnlocked;
-	bool m_levelsCompletedArr[5];
 	bool m_timeTrialComplete[5];
 	int m_currentLevel;
+
+	sf::Clock clock;
+	sf::Clock m_trialClock;
+	sf::Time m_shootTimer;
+	sf::Time m_trialTimer;
+	int m_shootCooldown;
+	float m_trialTime;
+
+	sf::Font m_font;
+	sf::Text m_timerText;
+
+	std::ifstream m_soundIn;
+	std::ofstream m_soundOut;
+	int m_soundVolume;
+	int m_musicVolume;
 
 public:
 	Manager();

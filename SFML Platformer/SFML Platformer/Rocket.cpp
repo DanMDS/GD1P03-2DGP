@@ -1,10 +1,12 @@
 #include "Rocket.h"
 #include <iostream>
 
-Rocket::Rocket(sf::Vector2f _targetPos, sf::Vector2f _startPos, Player* _player)
+Rocket::Rocket(sf::Vector2f _targetPos, sf::Vector2f _startPos, Player* _player, int _speed)
 {
 	m_player = _player;
 	startPos = _startPos;
+
+	m_speed = _speed;
 
 	m_power = 2.5f;
 
@@ -20,8 +22,6 @@ Rocket::Rocket(sf::Vector2f _targetPos, sf::Vector2f _startPos, Player* _player)
 	m_sprite->setTexture(*m_texture);
 	m_sprite->setOrigin(sf::Vector2f(m_sprite->getGlobalBounds().width / 2, m_sprite->getGlobalBounds().height / 2));
 	m_sprite->setPosition(startPos);
-
-	m_speed = 5;
 
 	// Calculating bullet vector, only once since direction won't change
 	int xDifference = int(_targetPos.x - startPos.x);

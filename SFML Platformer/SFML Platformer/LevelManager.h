@@ -13,7 +13,7 @@
 class LevelManager : public Object
 {
 private:
-	bool (*m_levelsCompleted)[5];
+	int* m_levelsUnlocked;
 	bool* m_timeTrialsUnlocked;
 	int* m_currentLevel;
 	int m_levelIndex;
@@ -41,14 +41,24 @@ private:
 	float m_timer;
 	sf::Text m_timerText;
 
+	int* m_turretShootCooldown;
+	int* m_turretAlertDist;
+	int* m_rocketSpeed;
+
+	SoundManager* m_soundManager;
+
 public:
 	LevelManager(sf::RenderWindow* _window,
 		std::vector<GrapplePoint*>* _grappleVec,
 		std::vector<Object*>* _levelObjVec,
 		std::vector<Object*>* _objVec,
 		std::vector<Turret*>* _turretVec,
-		bool(*_levelsCompleted)[5],
+		int* _levelsUnlocked,
 		int* _currentLevel,
+		int* _turretShootCooldown,
+		int* _turretAlertDist,
+		int* _rocketSpeed,
+		SoundManager* _soundManager,
 		Menu* _menu,
 		Player* _player, 
 		b2World* _world, 

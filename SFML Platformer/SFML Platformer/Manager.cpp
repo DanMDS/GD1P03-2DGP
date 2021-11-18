@@ -2,24 +2,40 @@
 
 Manager::Manager()
 {
-	// Initialising window
+	// Initialising main and debug windows
 	window = new sf::RenderWindow(sf::VideoMode(1920, 1080), "deez nuts", sf::Style::Fullscreen);
+	window->setVerticalSyncEnabled(true);
 	window->setFramerateLimit(60);
 	view = window->getView();
 	view.zoom(1);
 	window->setView(view);
 
-	// Initialising bool arrays
-	for (auto b : m_levelsCompletedArr)
-	{
-		b = false;
-	}
-	/*for (auto b : m_timeTrialComplete)
-	{
-		b = false;
-	}*/
+	// Initialising debug variables to 0 since they will get set in the debugs constructor
+	m_rocketSpeed = 0;
+	m_turretAlertDist = 0;
+	m_turretShootCooldown = 0;
 
-	m_iniIn.open("files/initialisation.ini");
+	// Initialsing bool to avoid warnings
+	m_timeTrialsUnlocked = false;
+
+	// Setting up time trial timer
+	if (!m_font.loadFromFile("ARIAL.ttf"))
+	{
+		std::cout << "Error loading font";
+	}
+	m_timerText.setString("null");
+	m_timerText.setFont(m_font);
+	m_timerText.setCharacterSize(25);
+	m_timerText.setFillColor(sf::Color::Green);
+	m_timerText.setOutlineColor(sf::Color::Black);
+	m_timerText.setOutlineThickness(2);
+
+	m_trialTime = 20.0f;
+
+	m_shootCooldown = 500;
+
+	// Loading progress from file
+	m_iniIn.open("files/progress.ini");
 	if (!m_iniIn.is_open())
 	{
 		std::cout << "Error loading initialisation file";
@@ -36,19 +52,28 @@ Manager::Manager()
 		{
 			m_iniIn >> m_timeTrialComplete[i];
 		}
+		m_iniIn.ignore(100, '\n');
+		m_iniIn >> m_soundVolume;
+		m_iniIn.ignore(100, '\n');
+		m_iniIn >> m_musicVolume;
 	}
 
 	m_levelsUnlocked += 1;
 	std::cout << "Levels unlocked: " << m_levelsUnlocked << "\n";
 
-	for (int i = 0; i < m_levelsUnlocked; i++)
+	// Loading sound settings from file
+	m_soundIn.open("files/sound.ini");
+	if (m_soundIn.is_open())
 	{
-		m_levelsCompletedArr[i] = true;
+		m_soundIn >> m_soundVolume;
+		m_soundIn.ignore(100, '\n');
+		m_soundIn >> m_musicVolume;
 	}
-
-	// Initialising other variables
-	m_levelsUnlocked = 0;
-	m_timeTrialsUnlocked = false;
+	else
+	{
+		std::cout << "Error opening sound settings file";
+	}
+	m_soundIn.close();
 
 	contSet.antialiasingLevel = 8;
 
@@ -56,50 +81,66 @@ Manager::Manager()
 	changeLevel = false;
 	deleteThis = false;
 
+	m_soundManager = new SoundManager(&m_soundVolume, &m_musicVolume);
+
 	// Creating world
 	m_scale = 30.0f;
 	b2Vec2 m_Gravity(0.0f, 50.0f);
 	world = new b2World(m_Gravity);
-	contactListener = new PlayerContactListener();
+	contactListener = new PlayerContactListener(m_soundManager);
 	world->SetContactListener(contactListener);
 
-	// Initialising class object
-	player = new Player(b2Vec2(300, 400), world, m_scale);
+	// Initialising class objects
+	player = new Player(b2Vec2(300, 400), m_soundManager, world, m_scale);
 	ObjVec.push_back(player);
 
-	menu = new Menu(window, m_timeTrialsUnlocked, &view, &m_levelsCompletedArr, &m_timeTrialComplete, &m_currentLevel);
+	menu = new Menu(window, m_timeTrialsUnlocked, &view, &m_levelsUnlocked, &m_timeTrialComplete, &m_currentLevel, m_soundManager, &m_soundVolume, &m_musicVolume);
 
-	levelManager = new LevelManager(window, &grappleVec, &levelObjVec, &ObjVec, &turretVec, &m_levelsCompletedArr, &m_currentLevel, menu, player, world, m_scale);
+	levelManager = new LevelManager(window, &grappleVec, &levelObjVec, &ObjVec, &turretVec, &m_levelsUnlocked, &m_currentLevel, &m_turretShootCooldown, &m_turretAlertDist, &m_rocketSpeed, m_soundManager, menu, player, world, m_scale);
 
-	goal = new Goal(sf::Vector2f(0, 0), player, levelManager, &partVec);
-	checkpoint = new Goal(sf::Vector2f(0, 0), player, levelManager, &partVec, true);
+	goal = new Goal(sf::Vector2f(0, 0), player, levelManager, &partVec, &m_timeTrialComplete, m_soundManager);
+	checkpoint = new Goal(sf::Vector2f(0, 0), player, levelManager, &partVec, &m_timeTrialComplete, m_soundManager, true);
+
+	m_shootTimer = clock.getElapsedTime();
+
+	m_trialTimer = clock.getElapsedTime();
+	
+	debug = new Debug(player, &m_turretShootCooldown, &m_turretAlertDist, &m_shootCooldown, &m_rocketSpeed);
 }
 
 Manager::~Manager()
 {
 	// Updating initialisation file
-	m_levelsUnlocked = 0;
-	for (auto b : m_levelsCompletedArr)
-	{
-		m_levelsUnlocked += b;
-	}
+	m_iniOut.open("files/progress.ini");
 
-	m_iniOut.open("files/initialisation.ini");
+	if (m_levelsUnlocked >= 5)
+	{
+		m_timeTrialsUnlocked = true;
+	}
 
 	if (m_iniOut.is_open())
 	{
-		m_iniOut << m_levelsUnlocked - 1
-			<< " // Levels Completed\n"
-			<< m_timeTrialsUnlocked
-			<< " // Time Trials Unlocked\n"
-			<< m_currentLevel
-			<< " // Current Level\n";
+		m_iniOut 
+			<< m_levelsUnlocked - 1 << " // Levels Completed\n"
+			<< m_timeTrialsUnlocked << " // Time Trials Unlocked\n"
+			<< m_currentLevel << " // Current Level\n";
 
 		for (int i = 0; i < 5; i++)
 		{
 			m_iniOut << m_timeTrialComplete[i] << " ";
 		}
 		m_iniOut << "// Time Trials Completed\n";
+	}
+	else
+	{
+		std::cout << "Error opening progress initialisation file";
+	}
+	m_iniOut.close();
+
+	m_soundOut.open("files/sound.ini");
+	if (m_soundOut.is_open())
+	{
+		m_soundOut << m_soundVolume << " // Sound Volume\n" << m_musicVolume << " // Music Volume";
 	}
 
 	// Deallocating memory
@@ -111,6 +152,8 @@ Manager::~Manager()
 	delete checkpoint;
 	delete world;
 	delete contactListener;
+	delete debug;
+	delete m_soundManager;
 
 	window = nullptr;
 	player = nullptr;
@@ -120,6 +163,8 @@ Manager::~Manager()
 	checkpoint = nullptr;
 	world = nullptr;
 	contactListener = nullptr;
+	debug = nullptr;
+	m_soundManager = nullptr;
 }
 
 void Manager::RunGame()
@@ -151,10 +196,6 @@ void Manager::RunGame()
 
 			if (event.type == sf::Event::MouseButtonPressed)
 			{
-				if (event.mouseButton.button == sf::Mouse::Left)
-				{
-					ObjVec.push_back(new Rocket(mousePos, player->GetSprite()->getPosition(), player));
-				}
 				if (event.mouseButton.button == sf::Mouse::Right)
 				{
 					for (auto& itr : grappleVec)
@@ -194,20 +235,40 @@ void Manager::RunGame()
 					player->Transition(false);
 					player->GetTrans()->setScale(200, 200);
 				}
+
+				if (event.key.code == sf::Keyboard::P)
+				{
+					debug->OpenWindow();
+				}
 			}
 		}
-		mousePos = window->mapPixelToCoords(sf::Vector2i(sf::Mouse::getPosition(*window)));
-		
-		//if (player->IsMidTrans() && !player->isTransDone())
-		//{
-		//	changeLevel = true;
-		//}
 
-		//if (player->IsMidTrans() && changeLevel && player->isTransDone())
-		//{
-		//	levelManager->ChangeLevel(-1);
-		//	changeLevel = false;
-		//}
+		mousePos = window->mapPixelToCoords(sf::Vector2i(sf::Mouse::getPosition(*window)));
+
+		// Shooting
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && clock.getElapsedTime().asMilliseconds() - m_shootTimer.asMilliseconds() > m_shootCooldown)
+		{
+			m_shootTimer = clock.getElapsedTime();
+			m_soundManager->PlaySoundShootPlayer();
+			ObjVec.push_back(new Rocket(mousePos, player->GetSprite()->getPosition(), player, m_rocketSpeed));
+		}
+
+		// Setting up time trials
+		checkpoint->IsTimeTrialActive(menu->TimeTrialsActive());
+		goal->IsTimeTrialActive(menu->TimeTrialsActive());
+
+		// Setting timer for time trials
+		if (m_trialTime - m_trialClock.getElapsedTime().asSeconds() - m_trialTimer.asSeconds() <= 0 && menu->TimeTrialsActive() && !player->IsDead())
+		{
+			m_trialClock.restart();
+			player->Transition(true);
+		}
+
+		if (player->GetB2d()->GetBody()->GetType() == b2_kinematicBody)
+		{
+			m_trialClock.restart();
+			m_trialTimer = m_trialClock.getElapsedTime();
+		}
 
 		// Enabling menu
 		if (menu->InMenu()) { levelManager->ChangeLevel(menu->RunMenu()); }
@@ -261,6 +322,7 @@ void Manager::RunGame()
 					if ((*ObjVecIt)->GetSprite()->getGlobalBounds().intersects(itr->GetShape()->getGlobalBounds()))
 					{
 						deleteThis = true;
+						m_soundManager->PlaySoundExlode();
 						partVec.push_back(new ParticleManager((sf::Color::Red), (*ObjVecIt)->GetSprite()->getPosition(), 10));
 						partVec.push_back(new ParticleManager((sf::Color::Yellow), (*ObjVecIt)->GetSprite()->getPosition(), 5));
 					}
@@ -347,6 +409,16 @@ void Manager::RunGame()
 			window->draw(*player->GetTrans());
 		}
 		window->draw(*player->GetSprite());
+
+		/*if (int(m_trialTime - m_trialClock.getElapsedTime().asSeconds() - m_trialTimer.asSeconds() + 1 == 3 && m_playTimerSound1)
+		{
+
+		}*/
+
+		m_timerText.setString("Time remaining: " + std::to_string(int(m_trialTime - m_trialClock.getElapsedTime().asSeconds() - m_trialTimer.asSeconds() + 1)));
+		m_timerText.setPosition(sf::Vector2f(view.getCenter().x - 900, view.getCenter().y - 500));
+
+		if (menu->TimeTrialsActive()) { window->draw(m_timerText); }
 
 		window->display();
 

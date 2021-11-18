@@ -137,6 +137,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Box2d.cpp" />
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="GrapplePoint.cpp" />
     <ClCompile Include="LevelManager.cpp" />
@@ -144,17 +145,21 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="OptionButton.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="Particles.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Rocket.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Turret.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Box2d.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="GrapplePoint.h" />
+    <ClInclude Include="OptionButton.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="Menu.h" />
@@ -165,6 +170,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Rocket.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Tag Enum.h" />
     <ClInclude Include="Turret.h" />
   </ItemGroup>

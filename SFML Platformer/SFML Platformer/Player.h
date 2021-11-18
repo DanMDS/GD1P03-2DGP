@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Box2d.h"
 #include "Object.h"
+#include "SoundManager.h"
 
 #pragma once
 
@@ -9,7 +10,7 @@ class Player : public Object
 private:
 	bool m_grounded;
 	float m_jumpPower;
-	float m_speed;
+	int m_speed;
 	b2Vec2 m_explodeDir;
 	float m_explodeDist;
 	float m_explodeMag;
@@ -17,19 +18,18 @@ private:
 	sf::CircleShape* m_trans;
 	bool m_isDead;
 	bool m_transDone;
-	float m_maxSpeed;
+	int m_maxSpeed;
 	b2Vec2 m_posBoundsMax;
 	b2Vec2 m_posBoundsMin;
 
 	sf::Clock clock;
 	sf::Time jumpTime;
-	sf::Time shootTime;
-	sf::Time levelTime;
 	float m_jumpCooldown;
-	float m_shootCooldown; // <-- not set yet
+
+	SoundManager* m_soundManager;
 
 public:
-	Player(b2Vec2 _pos, b2World* m_world, const float& _scale);
+	Player(b2Vec2 _pos, SoundManager* _soundManager, b2World* m_world, const float& _scale);
 	~Player();
 
 	void Update();
@@ -42,6 +42,8 @@ public:
 
 	void SetPosBounds(b2Vec2 _posA, b2Vec2 _posB)	{ m_posBoundsMin = _posA;	m_posBoundsMax = _posB;		};
 	void SetGrounded(bool _bool)					{ m_grounded = _bool;									};
+	void SetMaxSpeed(int _speed)					{ m_maxSpeed = _speed;									};
+	void SetAcceleration(int _speed)				{ m_speed = _speed;										};
 
 	bool isTransDone()								{ return m_transDone;									};
 	bool IsDead()									{ return m_isDead;										};

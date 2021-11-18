@@ -2,6 +2,7 @@
 #include <box2d/box2d.h>
 #include "Player.h"
 #include "Object.h"
+#include "SoundManager.h"
 
 #pragma once
 
@@ -28,8 +29,10 @@ private:
 	b2DistanceJointDef* distanceDef;
 	b2DistanceJoint* distanceJoint;
 
+	SoundManager* m_soundManager;
+
 public:
-	GrapplePoint(Player* _player, b2Vec2 _pos, b2World* m_world, const float& _scale);
+	GrapplePoint(Player* _player, b2Vec2 _pos, SoundManager* _soundManager, b2World* m_world, const float& _scale);
 	~GrapplePoint();
 
 	bool CanGrapple();

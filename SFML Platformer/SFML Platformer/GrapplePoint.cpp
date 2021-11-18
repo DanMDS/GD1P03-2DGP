@@ -1,10 +1,11 @@
 #include "GrapplePoint.h"
 #include <iostream>
 
-GrapplePoint::GrapplePoint(Player* _player, b2Vec2 _pos, b2World* m_world, const float& _scale)
+GrapplePoint::GrapplePoint(Player* _player, b2Vec2 _pos, SoundManager* _soundManager, b2World* m_world, const float& _scale)
 {
 	tag = Tag::GrapplePoint;
 	world = m_world;
+	m_soundManager = _soundManager;
 
 	m_scale = _scale;
 
@@ -84,7 +85,7 @@ void GrapplePoint::GrappleStart()
 {
 	if (CanGrapple())
 	{
-		printf("grapple start;");
+		m_soundManager->PlaySoundGrappleStart();
 		distanceDef = new b2DistanceJointDef();
 
 		distanceDef->Initialize(box2d->GetBody(),
@@ -109,7 +110,7 @@ void GrapplePoint::GrappleEnd()
 {
 	if (m_grappling)
 	{
-		printf("grapple end;");
+		m_soundManager->PlaySoundGrappleEnd();
 		world->DestroyJoint(distanceJoint);
 		m_grappling = false;
 	}

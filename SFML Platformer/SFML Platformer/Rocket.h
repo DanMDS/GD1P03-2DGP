@@ -11,12 +11,12 @@ class Rocket : public Object
 private:
 	sf::Vector2f m_bulletVector;
 	sf::Vector2f startPos;
-	float m_speed;
+	int m_speed;
 	Player* m_player;
 	float m_power;
 
 public:
-	Rocket(sf::Vector2f _targetPos, sf::Vector2f _startPos, Player* _player);
+	Rocket(sf::Vector2f _targetPos, sf::Vector2f _startPos, Player* _player, int _speed);
 	~Rocket();
 
 	void Update();

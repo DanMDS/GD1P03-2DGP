@@ -1,7 +1,15 @@
 #include "Menu.h"
 #include <iostream>
 
-Menu::Menu(sf::RenderWindow* _window, bool _timeTrialsUnlocked, sf::View* _view, bool (*_levelsCompleted)[5], bool(*_timeTrialComplete)[5], int* _currentLevel)
+Menu::Menu(sf::RenderWindow* _window, 
+	bool _timeTrialsUnlocked, 
+	sf::View* _view, 
+	int* levelsUnlocked, 
+	bool(*_timeTrialComplete)[5], 
+	int* _currentLevel, 
+	SoundManager* _soundManager,
+	int* _soundVolume,
+	int* _musicVolume)
 {
 	currentMenu = CurrentMenu::Main;
 
@@ -11,11 +19,19 @@ Menu::Menu(sf::RenderWindow* _window, bool _timeTrialsUnlocked, sf::View* _view,
 
 	m_timeTrialComplete = _timeTrialComplete;
 
+	m_soundVolume = _soundVolume;
+	m_musicVolume = _musicVolume;
+
+	m_buttonVec.push_back(new OptionButton(sf::Vector2f(0, 500), font, *m_soundVolume, 10, 0, 100, "Sound Volume: ", 0));
+	m_buttonVec.push_back(new OptionButton(sf::Vector2f(0, 500), font, *m_musicVolume, 10, 0, 100, "Music Volume: ", 1));
+
 	mouseDown = false;
 
 	index = 0;
 
-	m_levelsCompleted = _levelsCompleted;
+	m_levelsUnlocked = levelsUnlocked;
+
+	m_soundManager = _soundManager;
 
 	window = _window;
 	view = _view;
@@ -106,6 +122,21 @@ Menu::Menu(sf::RenderWindow* _window, bool _timeTrialsUnlocked, sf::View* _view,
 		menuMain[1].setFillColor(sf::Color(200, 200, 200));
 		menuMain[1].setOutlineColor(sf::Color(200, 200, 200));
 	}
+
+	m_tickTexture = new sf::Texture();
+	m_tickBoxTexture = new sf::Texture();
+	m_tickSprite = new sf::Sprite();
+
+	if (!m_tickTexture->loadFromFile("sprites/tick.png"))
+	{
+		std::cout << "Error loading tick sprite";
+	}
+	if (!m_tickBoxTexture->loadFromFile("sprites/box.png"))
+	{
+		std::cout << "Error loading tick sprite";
+	}
+	m_tickSprite->setTexture(*m_tickBoxTexture);
+	m_tickSprite->setPosition(sf::Vector2f(menuMain[1].getPosition().x + menuMain[1].getGlobalBounds().width + m_tickSprite->getGlobalBounds().width, menuMain[1].getPosition().y + 10));
 }
 
 Menu::~Menu()
@@ -173,13 +204,18 @@ void Menu::Main()
 			menuMain[i].setFillColor(sf::Color::Green);
 			if (mouseDown)
 			{
+				m_soundManager->PlaySoundMenu();
 				switch (i)
 				{
 				case 0:
-					Play(*m_currentLevel);
+					Play(m_timeTrialsUnlocked ? 1 : *m_currentLevel);
 					break;
 				case 1:
-					if (m_timeTrialsUnlocked) { currentMenu = CurrentMenu::Trials; }
+					if (m_timeTrialsUnlocked) 
+					{ 
+						m_timeTrialsActive = !m_timeTrialsActive; 
+						m_tickSprite->setTexture(m_timeTrialsActive ? *m_tickTexture : *m_tickBoxTexture);
+					}
 					break;
 				case 2:
 					currentMenu = CurrentMenu::LevelSelect;
@@ -206,7 +242,7 @@ void Menu::Main()
 
 void Menu::Play(int _index)
 {
-	index =_index;
+	index = _index;
 	inMenu = false;
 }
 
@@ -221,7 +257,7 @@ void Menu::LevelSelect()
 	// Checking if menu buttons have been pressed or hovered over, changing colours and running levels accordingly
 	for (int i = 0; i < 5; i++)
 	{
-		if ((*m_levelsCompleted)[i])
+		if (i < *m_levelsUnlocked)
 		{
 			if (menuLevelSelect[i].getGlobalBounds().contains(sf::Vector2f(float(mousePos.x - int(window->getSize().x)), float(mousePos.y))))
 			{
@@ -274,7 +310,7 @@ void Menu::Draw()
 {
 	for (int i = 0; i < 5; i++)
 	{
-		if (!(*m_levelsCompleted)[i])
+		if (i + 1 > *m_levelsUnlocked)
 		{
 			lockSprite->setPosition(sf::Vector2f(menuLevelSelect[i].getPosition().x + menuLevelSelect[i].getGlobalBounds().width + 10,
 				menuLevelSelect[i].getPosition().y + menuLevelSelect[i].getGlobalBounds().height / 2));
@@ -287,6 +323,8 @@ void Menu::Draw()
 				menuLevelSelect[i].getPosition().y + menuLevelSelect[i].getGlobalBounds().height / 2));
 			window->draw(*m_starSprite);
 		}
+
+		if (m_timeTrialsUnlocked) { window->draw(*m_tickSprite); }
 	}
 
 	for (auto itr : menuMain)
@@ -300,6 +338,11 @@ void Menu::Draw()
 	lockSprite->setPosition(sf::Vector2f(menuMain[1].getPosition().x + menuMain[1].getGlobalBounds().width + 10,
 		menuMain[1].getPosition().y + menuMain[1].getGlobalBounds().height / 2));
 	if (!m_timeTrialsUnlocked) { window->draw(*lockSprite); }
+
+	for (auto& itr : m_buttonVec)
+	{
+		itr->Draw(window);
+	}
 }
 
 int Menu::RunMenu()
@@ -331,6 +374,11 @@ int Menu::RunMenu()
 				if (event.mouseButton.button == sf::Mouse::Left)
 				{
 					mouseDown = true;
+
+					*m_soundVolume = *m_buttonVec[0]->CheckButton(sf::Vector2f(mousePos.x, mousePos.y));
+					*m_musicVolume = *m_buttonVec[1]->CheckButton(sf::Vector2f(mousePos.x, mousePos.y));
+
+					m_soundManager->UpdateVolume();
 				}
 			}
 

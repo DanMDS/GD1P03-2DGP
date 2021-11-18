@@ -1,4 +1,8 @@
 #include <SFML/Graphics.hpp>
+#include <fstream>
+#include "SoundManager.h"
+#include "ParticleManager.h"
+#include "OptionButton.h"
 
 #pragma once
 
@@ -17,6 +21,10 @@ private:
 	sf::Texture* m_starTexture;
 	sf::Sprite* m_starSprite;
 
+	sf::Texture* m_tickTexture;
+	sf::Texture* m_tickBoxTexture;
+	sf::Sprite* m_tickSprite;
+
 	sf::RectangleShape* trans;
 
 	sf::RenderWindow* window;
@@ -25,12 +33,9 @@ private:
 	sf::Vector2f viewCenter;
 	sf::View* view;
 
-	// Timer for time trials
-	float m_timer;
-
 	bool inMenu;
 	bool mouseDown;
-	bool (*m_levelsCompleted)[5];
+	int* m_levelsUnlocked;
 	bool m_timeTrialsUnlocked;
 	bool m_timeTrialsActive;
 	bool (*m_timeTrialComplete)[5];
@@ -43,7 +48,12 @@ private:
 	int index;
 	int* m_currentLevel;
 
+	int* m_soundVolume;
+	int* m_musicVolume;
+
 	float windowSpeed;
+
+	std::vector<OptionButton*> m_buttonVec;
 
 	enum class CurrentMenu
 	{
@@ -55,13 +65,18 @@ private:
 
 	CurrentMenu currentMenu;
 
+	SoundManager* m_soundManager;
+
 public:
-	Menu(sf::RenderWindow* _window, 
-		bool _timeTrials, 
-		sf::View* _view, 
-		bool(*_levelsCompleted)[5],
+	Menu(sf::RenderWindow* _window,
+		bool _timeTrials,
+		sf::View* _view,
+		int* levelsUnlocked,
 		bool(*_timeTrialComplete)[5],
-		int* _currentLevel);
+		int* _currentLevel,
+		SoundManager* _soundManager,
+		int* _soundVolume,
+		int* _musicVolume);
 	~Menu();
 
 	void MoveWindow(sf::Vector2f _pos);
@@ -77,7 +92,6 @@ public:
 	void EnableMenu()					{ inMenu = true;							};
 	void UnlockTrials()					{ m_timeTrialsUnlocked = true;				};
 	void SetTrialComplete(int _index)	{ (*m_timeTrialComplete)[_index] = true;	};
-	void UpdateTimer()					{ m_timer += window->get
 
 	bool InMenu()						{ return inMenu;							};
 	bool TimeTrialsActive()				{ return m_timeTrialsActive;				};

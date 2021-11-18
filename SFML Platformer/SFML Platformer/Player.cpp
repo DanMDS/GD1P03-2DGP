@@ -1,11 +1,13 @@
 #include "Player.h"
 
-Player::Player(b2Vec2 _pos, b2World* m_world, const float& _scale)
+Player::Player(b2Vec2 _pos, SoundManager* _soundManager, b2World* m_world, const float& _scale)
 {
 	tag = Tag::Player;
 
 	m_posBoundsMax = b2Vec2(0, 0);
 	m_posBoundsMin = b2Vec2(0, 0);
+
+	m_soundManager = _soundManager;
 
 	m_scale = _scale;
 
@@ -49,8 +51,7 @@ Player::Player(b2Vec2 _pos, b2World* m_world, const float& _scale)
 
 Player::~Player()
 {
-	delete box2d;
-	box2d = nullptr;
+
 }
 
 void Player::Update()
@@ -61,6 +62,8 @@ void Player::Update()
 	box2d->Update();
 	m_sprite->setPosition(m_colliderBounds->getPosition());
 	m_sprite->setRotation(m_colliderBounds->getRotation());
+
+
 
 	// If not transitioning, do player movement
 	if (!m_isDead)
@@ -191,6 +194,9 @@ void Player::Transition(bool _dead)
 	// Setting rotation to fixed and body type to kinematic so that the player doesn't move during the transition
 	box2d->GetBody()->SetFixedRotation(true);
 	box2d->GetBody()->SetType(b2_kinematicBody);
+
+	// Playing win/lose sound
+	_dead ? m_soundManager->PlaySoundDie() : m_soundManager->PlaySoundWin();
 }
 
 void Player::SetStartPos(b2Vec2 _pos, bool _checkpoint)

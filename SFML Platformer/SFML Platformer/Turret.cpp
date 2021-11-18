@@ -1,8 +1,12 @@
 #include "Turret.h"
 
-Turret::Turret(Player* _player, sf::Vector2f _turretPos, std::vector<Object*>* _objVec, float _fireRate, float _alertDist)
+Turret::Turret(Player* _player, sf::Vector2f _turretPos, std::vector<Object*>* _objVec, int* _fireRate, int* _alertDist, int* _rocketSpeed, SoundManager* _soundManager)
 {
 	m_objVec = _objVec;
+
+	m_rocketSpeed = _rocketSpeed;
+
+	m_soundManager = _soundManager;
 
 	m_image = new sf::Image();
 	if (!m_image->loadFromFile("sprites/turret.png"))
@@ -59,11 +63,11 @@ void Turret::Shoot()
 
 	m_gunSpr->setRotation((atan2(sideOpp, sideAdj) * (180.0f / b2_pi)) + (270.0f / b2_pi));		// Setting rotation and size
 
-	if (m_clock.getElapsedTime().asMilliseconds() - m_time.asMilliseconds() > m_fireRate)
+	if (m_clock.getElapsedTime().asMilliseconds() - m_time.asMilliseconds() > *m_fireRate)
 	{
 		// Shoot
-		m_objVec->push_back(new Rocket(m_player->GetSprite()->getPosition(), m_sprite->getPosition(), m_player));
-
+		m_objVec->push_back(new Rocket(m_player->GetSprite()->getPosition(), m_sprite->getPosition(), m_player, *m_rocketSpeed));
+		m_soundManager->PlaySoundShootEnemy();
 		m_time = m_clock.getElapsedTime();
 	}
 }
@@ -79,7 +83,7 @@ void Turret::Update()
 		+ ((m_playerPos.y - m_sprite->getPosition().y) * (m_playerPos.y - m_sprite->getPosition().y)));
 
 	// If player is close enough, shoot
-	if (m_playerDist < m_alertDist)
+	if (m_playerDist < *m_alertDist)
 	{
 		Shoot();
 	}
